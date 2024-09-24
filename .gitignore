@@ -1,0 +1,12 @@
+# python
+*.pyc
+
+# environment
+.envrc
+.venv/
+
+# generated static
+/static/
+
+# database
+db.sqlite3
