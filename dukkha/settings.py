@@ -70,6 +70,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "dukkha.wsgi.application"
 
+AUTH_USER_MODEL = "main.User"
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
