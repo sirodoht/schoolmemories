@@ -1,6 +1,6 @@
 # dukkha
 
-custom websites.
+Custom websites without too much suffering.
 
 ## Development
 
