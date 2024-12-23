@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from pathlib import Path
+from urllib import parse
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +22,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-ull%3!yhq@7*&lmn_k#*nc6xz#whympri=p^6$0gfbj^bmy-n="
+SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-ull%3!yhq@7*&lmn_k#*nc6xz#whympr")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG") == "1"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    f".{os.getenv('DOMAIN_NAME')}",
+]
 
 
 # Application definition
@@ -75,11 +81,20 @@ AUTH_USER_MODEL = "main.User"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+database_url = os.getenv("DATABASE_URL", "")
+database_url = parse.urlparse(database_url)
+# e.g. postgres://dukkha:password@127.0.0.1:5432/dukkha
+database_name = database_url.path[1:]  # url.path is '/dukkha'
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": parse.unquote(database_name or ""),
+        "USER": parse.unquote(database_url.username or ""),
+        "PASSWORD": parse.unquote(database_url.password or ""),
+        "HOST": database_url.hostname,
+        "PORT": database_url.port or "",
+        "CONN_MAX_AGE": 500,
+    },
 }
 
 
@@ -118,6 +133,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "static"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
