@@ -1,0 +1,13 @@
+{{ domain_name }} {
+	route {
+		file_server /static/* {
+			root /var/www/dukkha
+		}
+		reverse_proxy 127.0.0.1:5002
+	}
+	encode zstd gzip
+	log {
+		output stdout
+		format console
+	}
+}

@@ -1,0 +1,20 @@
+[Unit]
+Description=dukkha
+After=network.target
+
+[Service]
+Type=simple
+User=deploy
+Group=www-data
+WorkingDirectory=/var/www/dukkha
+ExecStart=/var/www/dukkha/.venv/bin/gunicorn -b 127.0.0.1:5002 -w 4 --access-logfile - dukkha.wsgi
+ExecReload=/bin/kill -HUP $MAINPID
+Environment="DATABASE_URL={{ database_url }}"
+Environment="DEBUG={{ debug }}"
+Environment="DOMAIN_NAME={{ domain_name }}"
+Environment="SECRET_KEY={{ secret_key }}"
+TimeoutSec=15
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

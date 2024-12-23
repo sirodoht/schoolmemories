@@ -1,0 +1,25 @@
+# inventory.yaml
+
+# Server IP and user with ssh access
+export ANSIBLE_HOST=
+export ANSIBLE_USER=root
+
+
+# vars.yaml
+
+# Domain name and email for Caddy
+export DOMAIN_NAME=
+
+# Show exceptions and tracebacks on errors
+# 1: show
+# 0: don't show
+export DEBUG=1
+
+# Used by Django to encrypt session login cookies
+export SECRET_KEY=
+
+# PostgreSQL database password
+export POSTGRES_PASSWORD=password
+
+# PostgreSQL database connection string
+export DATABASE_URL=postgres://dukkha:password@localhost:5432/dukkha
