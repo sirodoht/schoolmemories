@@ -15,11 +15,7 @@ class User(AbstractUser):
         ],
         error_messages={"unique": "A user with that username already exists."},
     )
-    email = models.EmailField(
-        blank=True,
-        null=True,
-        help_text="Optional, but also the only way to recover password if forgotten.",
-    )
+    email = models.EmailField(unique=True)
     title = models.CharField(max_length=500, blank=True, null=True)
 
     def __str__(self):
