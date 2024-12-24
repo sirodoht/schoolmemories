@@ -30,6 +30,7 @@ DEBUG = os.getenv("DEBUG") == "1"
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
+    ".dukkhalocal.pub",
     f".{os.getenv('DOMAIN_NAME')}",
 ]
 
@@ -77,6 +78,12 @@ TEMPLATES = [
 WSGI_APPLICATION = "dukkha.wsgi.application"
 
 AUTH_USER_MODEL = "main.User"
+
+LOGIN_REDIRECT_URL = "index"
+LOGOUT_REDIRECT_URL = "index"
+
+SESSION_COOKIE_AGE = 31449600  # 60 * 60 * 24 * 7 * 52 = 1 year in seconds
+
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
