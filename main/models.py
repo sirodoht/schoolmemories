@@ -16,7 +16,7 @@ class User(AbstractUser):
         error_messages={"unique": "A user with that username already exists."},
     )
     email = models.EmailField(unique=True)
-    title = models.CharField(max_length=500, blank=True, null=True)
+    website_title = models.CharField(max_length=500, blank=True, null=True)
 
     def __str__(self):
         return self.username
