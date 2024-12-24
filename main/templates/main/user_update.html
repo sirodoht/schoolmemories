@@ -1,0 +1,15 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Settings — dukkha.pub{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Settings</h1>
+
+    <form method="post">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <input type="submit" value="Save">
+    </form>
+</main>
+{% endblock content %}

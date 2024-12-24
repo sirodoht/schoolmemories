@@ -1,12 +1,15 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView as DjLogoutView
+from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 
-from main import forms
+from main import forms, models
 
 
 def index(request):
@@ -34,3 +37,23 @@ class Logout(DjLogoutView):
     def dispatch(self, request, *args, **kwargs):
         messages.info(request, "logged out")
         return super().dispatch(request, *args, **kwargs)
+
+
+class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = models.User
+    fields = [
+        "username",
+        "email",
+        "website_title",
+    ]
+    template_name = "main/user_update.html"
+    success_message = "settings updated"
+    success_url = reverse_lazy("index")
+
+    def get_object(self):
+        return self.request.user
+
+
+@login_required
+def dashboard(request):
+    return render(request, "main/dashboard.html")
