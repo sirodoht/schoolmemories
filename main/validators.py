@@ -1,4 +1,5 @@
 from django.core import validators as dj_validators
+from django.core.exceptions import ValidationError
 
 
 class AlphanumericHyphenValidator(dj_validators.RegexValidator):
@@ -12,3 +13,8 @@ class HyphenOnlyValidator(dj_validators.RegexValidator):
     message = "Invalid value. Cannot be just hyphens."
     inverse_match = True
     flags = 0
+
+
+def validate_domain_name(value):
+    if "." not in value:
+        raise ValidationError("Invalid domain name")
