@@ -12,6 +12,7 @@ ExecReload=/bin/kill -HUP $MAINPID
 Environment="DATABASE_URL={{ database_url }}"
 Environment="DEBUG={{ debug }}"
 Environment="DOMAIN_NAME={{ domain_name }}"
+Environment="LOCALDEV={{ localdev }}"
 Environment="SECRET_KEY={{ secret_key }}"
 TimeoutSec=15
 Restart=always

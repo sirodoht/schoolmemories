@@ -1,5 +1,12 @@
 # Show exceptions and tracebacks on errors
+# 1: show
+# 0: don't show
 export DEBUG=1
+
+# Set localhost on settings instead of domain name
+# 1: set localhost
+# 0: set production domain name
+export LOCALDEV=1
 
 # Used by Django to encrypt session login cookies
 export SECRET_KEY=
