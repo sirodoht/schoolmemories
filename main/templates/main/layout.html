@@ -45,16 +45,30 @@
         </aside>
         {% endif %}
 
+        <!-- Logged in user, on account -->
+        {% if request.user.is_authenticated and request.subdomain == request.user.username %}
         <nav>
-            {% if request.user.is_authenticated %}
             <a href="{% url 'index' %}">Website</a>
             | <a href="{% url 'dashboard' %}">Dashboard</a>
-            {% else %}
-            <a href="{{ request.host }}{% url 'index' %}">Home</a>
+        </nav>
+        {% endif %}
+
+        <!-- Logged in user, on dashboard -->
+        {% if request.user.is_authenticated and not request.subdomain %}
+        <nav>
+            <a href="{% url 'index' %}">Website</a>
+            | <a href="{% url 'dashboard' %}">Dashboard</a>
+        </nav>
+        {% endif %}
+
+        <!-- Logged out, on landing -->
+        {% if not request.user.is_authenticated and not request.subdomain %}
+        <nav>
+            <a href="{% url 'index' %}">Home</a>
             | <a href="{% url 'user_create' %}">Sign up</a>
             | <a href="{% url 'login' %}">Log in</a>
-            {% endif %}
         </nav>
+        {% endif %}
 
         {% block content %}
         {% endblock content %}
