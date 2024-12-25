@@ -43,6 +43,12 @@ Run Python linting with:
 uv run ruff check --fix
 ```
 
+Run Djade Django HTML formatting with:
+
+```sh
+uv run djade main/templates/**/*.html
+```
+
 ## Deploy
 
 Every commit on branch `main` auto-deploys using GitHub Actions. To deploy manually:
