@@ -7,11 +7,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView as DjLogoutView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from main import forms, models
 
@@ -131,6 +132,9 @@ class PageCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 class PageDetail(DetailView):
     model = models.Page
 
+    def get_success_url(self):
+        return reverse("page_detail", args=(self.object.slug,))
+
     def get_queryset(self):
         return models.Page.objects.filter(user__username=self.request.subdomain)
 
@@ -143,3 +147,48 @@ class PageDetail(DetailView):
             )
 
         return context
+
+
+class PageUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    model = models.Page
+    fields = ["title", "slug", "body"]
+    success_message = "page updated"
+    template_name = "main/page_update.html"
+
+    def get_success_url(self):
+        return reverse("page_detail", args=(self.object.slug,))
+
+    def get_queryset(self):
+        return models.Page.objects.filter(user__username=self.request.subdomain)
+
+    def form_valid(self, form):
+        if (
+            models.Page.objects.filter(
+                user=self.request.user, slug=form.cleaned_data.get("slug")
+            )
+            .exclude(id=self.object.id)
+            .exists()
+        ):
+            form.add_error("slug", "This slug is already defined as one of your pages.")
+            return self.render_to_response(self.get_context_data(form=form))
+        return super().form_valid(form)
+
+    def dispatch(self, request, *args, **kwargs):
+        page = self.get_object()
+        if request.user != page.user:
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
+
+class PageDelete(LoginRequiredMixin, DeleteView):
+    model = models.Page
+    success_url = reverse_lazy("index")
+
+    def get_queryset(self):
+        return models.Page.objects.filter(user__username=self.request.subdomain)
+
+    def dispatch(self, request, *args, **kwargs):
+        page = self.get_object()
+        if request.user != page.user:
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)

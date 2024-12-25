@@ -5,8 +5,14 @@
         <title>{% block title %}dukkha{% endblock %}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-            body { font-family: sans-serif; line-height: 1.5; }
-            nav, main { max-width: 500px; margin: 0 auto; }
+            :root {
+                --link-color: #1175e2;
+            }
+            body { font-family: sans-serif; line-height: 1.5; margin: 0; }
+            h1 { font-weight: normal; margin: 16px 0 8px; }
+            a { color: var(--link-color); text-decoration: none; }
+            a:hover { text-decoration: underline; }
+            nav, main { max-width: 500px; margin: 0 auto; margin: 8px auto; }
             aside { max-width: 500px; margin: 0 auto 12px; border: 1px dashed black; padding: 0 8px; }
             label { display: block; }
             input[type="text"],
@@ -18,7 +24,15 @@
             }
             .helptext { color: #757575; }
             .form-inline { display: inline-block; }
-            .form-inline input[type="submit"] { border: none; background: unset; color: blue; padding: 0; font-size: 16px; text-decoration: underline; cursor: pointer; }
+            .form-inline input[type="submit"] {
+                border: none;
+                background: unset;
+                color: var(--link-color);
+                padding: 0;
+                font-size: 16px;
+                cursor: pointer;
+            }
+            .form-inline input[type="submit"]:hover { text-decoration: underline; }
         </style>
     </head>
 
@@ -32,10 +46,11 @@
         {% endif %}
 
         <nav>
-            <a href="{{ request.host }}{% url 'index' %}">Home</a>
             {% if request.user.is_authenticated %}
+            <a href="{% url 'index' %}">Website</a>
             | <a href="{% url 'dashboard' %}">Dashboard</a>
             {% else %}
+            <a href="{{ request.host }}{% url 'index' %}">Home</a>
             | <a href="{% url 'user_create' %}">Sign up</a>
             | <a href="{% url 'login' %}">Log in</a>
             {% endif %}

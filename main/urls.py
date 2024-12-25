@@ -25,4 +25,6 @@ urlpatterns += [
 urlpatterns += [
     path("new/page/", views.PageCreate.as_view(), name="page_create"),
     path("<slug:slug>/", views.PageDetail.as_view(), name="page_detail"),
+    path("<slug:slug>/edit/", views.PageUpdate.as_view(), name="page_update"),
+    path("<slug:slug>/delete/", views.PageDelete.as_view(), name="page_delete"),
 ]

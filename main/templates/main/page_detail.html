@@ -3,18 +3,25 @@
 {% block title %}{{ page.title }} — {{ account_user.website_title }}{% endblock %}
 
 {% block content %}
-<main>
-    {% if account_user.website_title %}
-    <div style="margin: 8px auto auto;">
-        <a href="{% url 'index' %}">{{ account_user.website_title }}</a>
-    </div>
+<nav>
+    <a href="{% url 'index' %}">Home</a>
+    |
+    {% for page in page_list %}
+    <a href="{% url 'page_detail' page.slug %}">{{ page.title }}</a>
+    {% if not forloop.last %}
+    |
     {% endif %}
+    {% endfor %}
+</nav>
 
+<main>
     <h1>{{ page.title }}</h1>
 
     {% if request.user.is_authenticated and request.subdomain == user.username %}
-    <div>
+    <div style="color: #757575;">
         Last updated on <time datetime="{{ page.updated_at|date:'Y-m-d' }}">{{ page.updated_at|date:'F j, Y' }}</time>
+        | <a href="{% url 'page_update' page.slug %}">Edit page</a>
+        | <a href="{% url 'page_delete' page.slug %}">Del</a>
     </div>
     {% endif %}
 

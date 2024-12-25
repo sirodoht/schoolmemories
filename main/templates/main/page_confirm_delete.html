@@ -1,0 +1,13 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Deleting {{ page.title }}{% endblock %}
+
+{% block content %}
+<main class="delete">
+    <h1>Confirm delete {{ page.title }}?</h1>
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" value="Yes, delete permanently">
+    </form>
+</main>
+{% endblock %}
