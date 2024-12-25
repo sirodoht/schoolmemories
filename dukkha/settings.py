@@ -27,12 +27,19 @@ SECRET_KEY = os.getenv("SECRET_KEY", "django-insecure-ull%3!yhq@7*&lmn_k#*nc6xz#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG") == "1"
 
+# Enable when developing locally
+LOCALDEV = os.getenv("LOCALDEV") == "1"
+
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
     ".dukkhalocal.pub",
     f".{os.getenv('DOMAIN_NAME')}",
 ]
+
+CANONICAL_HOST = os.getenv("DOMAIN_NAME", "dukkha.pub")
+if LOCALDEV:
+    CANONICAL_HOST = "dukkhalocal.pub:8000"
 
 
 # Application definition
@@ -55,6 +62,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "main.middleware.host_middleware",
 ]
 
 ROOT_URLCONF = "dukkha.urls"
@@ -83,6 +91,7 @@ LOGIN_REDIRECT_URL = "index"
 LOGOUT_REDIRECT_URL = "index"
 
 SESSION_COOKIE_AGE = 31449600  # 60 * 60 * 24 * 7 * 52 = 1 year in seconds
+SESSION_COOKIE_DOMAIN = CANONICAL_HOST.split(":")[0]  # session visible in subdomains
 
 
 # Database
