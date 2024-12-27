@@ -25,15 +25,15 @@ def host_middleware(get_response):
         canonical_parts = settings.CANONICAL_HOST.split(".")
         logger.debug(f"{settings.CANONICAL_HOST=}")
 
-        # [1] Handle dukkha.pub landing and dashboard pages.
-        # Don't set request.subdomain, return immediately.
+        # [1] Handle dukkha.pub landing and dashboard pages. All dashboard pages (ie.
+        # all user account settings etc.) are on the root domain.
+        # Strategy: don't set request.subdomain, return immediately.
         if host == settings.CANONICAL_HOST:
             logger.debug("host == settings.CANONICAL_HOST, return")
             return get_response(request)
 
         # [2] Handle <subdomain>.dukkha.pub pages.
-        # Set subdomain to given subdomain.
-        # Note: lists indexes are different because CANONICAL_HOST has no subdomain.
+        # Strategy: Set subdomain to given subdomain.
         elif (
             len(host_parts) == 3
             and host_parts[1] == canonical_parts[0]  # should be "dukkha"
@@ -77,10 +77,12 @@ def host_middleware(get_response):
             request.account_user = models.User.objects.get(custom_domain=host)
             request.subdomain = request.account_user.username
 
-        # [4] Bad request
+        # [4] Local Caddy requests for TLS ask
+        elif host == "localhost:5000":
+            return get_response(request)
+
+        # [5] Bad request
         else:
             return HttpResponseBadRequest()
-
-        return get_response(request)
 
     return middleware
