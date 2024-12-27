@@ -50,37 +50,35 @@ def host_middleware(get_response):
             request.subdomain = host_parts[0]
 
             # Check if subdomain exists.
-            if models.User.objects.filter(username=request.subdomain).exists():
-                request.account_user = models.User.objects.get(
-                    username=request.subdomain
-                )
-
-                # Redirect to custom urls for cases:
-                # * Logged out / anon users
-                # * Logged in but on other user's subdomain
-                if not request.user.is_authenticated or (
-                    request.user.is_authenticated
-                    and request.user.username != request.subdomain
-                ):
-                    redir_domain = ""
-
-                    # User has set custom domain
-                    if request.account_user.custom_domain:
-                        redir_domain = (
-                            request.account_user.custom_domain + request.path_info
-                        )
-
-                    # Prepend double slashes to indicate other domain if there is no
-                    # protocol prefix.
-                    if redir_domain and "://" not in redir_domain:
-                        redir_domain = "//" + redir_domain
-
-                    if redir_domain:
-                        return redirect(redir_domain)
-
-                return get_response(request)
-            else:
+            if not models.User.objects.filter(username=request.subdomain).exists():
                 raise Http404()
+
+            request.account_user = models.User.objects.get(username=request.subdomain)
+
+            # Redirect to custom urls for cases:
+            # * Logged out / anon users
+            # * Logged in but on other user's subdomain
+            if not request.user.is_authenticated or (
+                request.user.is_authenticated
+                and request.user.username != request.subdomain
+            ):
+                redir_domain = ""
+
+                # User has set custom domain
+                if request.account_user.custom_domain:
+                    redir_domain = (
+                        request.account_user.custom_domain + request.path_info
+                    )
+
+                # Prepend double slashes to indicate other domain if there is no
+                # protocol prefix.
+                if redir_domain and "://" not in redir_domain:
+                    redir_domain = "//" + redir_domain
+
+                if redir_domain:
+                    return redirect(redir_domain)
+
+            return get_response(request)
 
         # [4] Custom domain case
         elif models.User.objects.filter(custom_domain=host).exists():
