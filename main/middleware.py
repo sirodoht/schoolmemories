@@ -78,7 +78,7 @@ def host_middleware(get_response):
             request.subdomain = request.account_user.username
 
         # [4] Local Caddy requests for TLS ask
-        elif host == "localhost:5000":
+        elif host == "127.0.0.1:5000":
             return get_response(request)
 
         # [5] Bad request
