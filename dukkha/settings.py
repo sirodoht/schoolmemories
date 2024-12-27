@@ -35,6 +35,7 @@ ALLOWED_HOSTS = [
     "localhost",
     ".dukkhalocal.pub",
     f".{os.getenv('DOMAIN_NAME')}",
+    "*",
 ]
 
 CANONICAL_HOST = os.getenv("DOMAIN_NAME", "dukkha.pub")
