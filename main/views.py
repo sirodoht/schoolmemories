@@ -89,7 +89,7 @@ def domain_check(request):
         return HttpResponse()
 
     # Subdomain case, can only by <username>.dukkha.pub
-    if url.split(".") != 3:
+    if len(url.split(".")) != 3:
         raise PermissionDenied()
 
     username = url.split(".")[0]
