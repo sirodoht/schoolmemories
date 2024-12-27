@@ -128,6 +128,7 @@ class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         "username",
         "email",
         "website_title",
+        "custom_domain",
     ]
     template_name = "main/user_update.html"
     success_message = "settings updated"
