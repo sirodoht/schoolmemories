@@ -1,9 +1,15 @@
-{{ domain_name }} {
+{
+	on_demand_tls {
+		ask https://{{ domain_name }}/accounts/domain/
+	}
+}
+
+dukkha.pub {
 	route {
 		file_server /static/* {
 			root /var/www/dukkha
 		}
-		reverse_proxy 127.0.0.1:5002
+		reverse_proxy 127.0.0.1:5000
 	}
 	encode zstd gzip
 	log {
