@@ -8,7 +8,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView as DjLogoutView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseRedirect
+from django.http import (
+    HttpResponse,
+    HttpResponseRedirect,
+)
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import DetailView
@@ -67,6 +70,18 @@ def index(request):
 
     # Landing site as non-logged-in user
     return render(request, "main/landing.html")
+
+
+def domain_check(request):
+    """
+    This view returns 200 if domain given exists as custom domain in any user account.
+    """
+    url = request.GET.get("domain")
+    if not url:
+        raise PermissionDenied()
+    if not models.User.objects.filter(custom_domain=url).exists():
+        raise PermissionDenied()
+    return HttpResponse()
 
 
 class UserCreate(CreateView):

@@ -19,6 +19,7 @@ urlpatterns += [
         name="user_create",
     ),
     path("accounts/edit/", views.UserUpdate.as_view(), name="user_update"),
+    path("accounts/domain/", views.domain_check, name="domain_check"),
 ]
 
 # pages - needs to be last due to <slug>
