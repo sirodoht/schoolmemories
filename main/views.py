@@ -76,12 +76,23 @@ def domain_check(request):
     """
     This view returns 200 if domain given exists as custom domain in any user account.
     """
-    # url = request.GET.get("domain")
-    # if not url:
-    #     raise PermissionDenied()
-    # if not models.User.objects.filter(custom_domain=url).exists():
-    #     raise PermissionDenied()
-    return HttpResponse()
+    url = request.GET.get("domain")
+    if not url:
+        raise PermissionDenied()
+
+    # Custom domain case, can by anything
+    if models.User.objects.filter(custom_domain=url).exists():
+        return HttpResponse()
+
+    # Subdomain case, can only by <username>.dukkha.pub
+    if url.split(".") != 3:
+        raise PermissionDenied()
+
+    username = url.split(".")[0]
+    if models.User.objects.filter(username=username).exists():
+        return HttpResponse()
+
+    raise PermissionDenied()
 
 
 class UserCreate(CreateView):
