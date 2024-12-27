@@ -45,7 +45,7 @@
         </aside>
         {% endif %}
 
-        <!-- Logged in user, on account -->
+        {# Logged in user, on account #}
         {% if request.user.is_authenticated and request.subdomain == request.user.username %}
         <nav>
             <a href="{% url 'index' %}">Website</a>
@@ -53,7 +53,7 @@
         </nav>
         {% endif %}
 
-        <!-- Logged in user, on dashboard -->
+        {# Logged in user, on dashboard #}
         {% if request.user.is_authenticated and not request.subdomain %}
         <nav>
             <a href="{% url 'index' %}">Website</a>
@@ -61,7 +61,7 @@
         </nav>
         {% endif %}
 
-        <!-- Logged out, on landing -->
+        {# Logged out, on landing #}
         {% if not request.user.is_authenticated and not request.subdomain %}
         <nav>
             <a href="{% url 'index' %}">Home</a>
