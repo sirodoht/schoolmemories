@@ -78,7 +78,7 @@ def host_middleware(get_response):
                     if redir_domain:
                         return redirect(redir_domain)
 
-                    return get_response(request)
+                return get_response(request)
             else:
                 raise Http404()
 
