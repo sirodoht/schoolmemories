@@ -101,9 +101,9 @@ def domain_check(request):
 
 class UserCreate(CreateView):
     form_class = forms.UserCreationForm
+    success_message = "welcome :)"
     success_url = reverse_lazy("index")
     template_name = "main/user_create.html"
-    success_message = "welcome :)"
 
     def form_valid(self, form):
         self.object = form.save()
@@ -123,19 +123,20 @@ class Logout(DjLogoutView):
 
 
 class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
-    model = models.User
-    fields = [
-        "username",
-        "email",
-        "website_title",
-        "custom_domain",
-    ]
-    template_name = "main/user_update.html"
+    form_class = forms.UserUpdateForm
     success_message = "settings updated"
-    success_url = reverse_lazy("index")
+    success_url = reverse_lazy("user_update")
+    template_name = "main/user_update.html"
 
     def get_object(self):
         return self.request.user
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields["home"].queryset = models.Page.objects.filter(
+            user=self.request.user
+        )
+        return form
 
 
 @login_required

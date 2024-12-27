@@ -24,6 +24,9 @@ class User(AbstractUser):
         null=True,
         validators=[validators.validate_domain_name],
     )
+    home = models.ForeignKey(
+        "Page", on_delete=models.SET_NULL, null=True, related_name="home"
+    )
 
     def __str__(self):
         return self.username
