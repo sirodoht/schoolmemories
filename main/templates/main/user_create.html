@@ -57,6 +57,18 @@
         {% csrf_token %}
 
         <input type="submit" value="Sign up">
+
+        <p id="js-certificate" style="display: none; color: #757575; border: 1px dashed #757575; padding: 4px 8px;">
+            Issuing certificate for subdomain... (this will take 6 seconds)
+        </p>
     </form>
 </main>
 {% endblock content %}
+
+{% block scripts %}
+<script>
+    document.querySelector('form').onsubmit = function (event) {
+        document.getElementById('js-certificate').style.display = 'block';
+    };
+</script>
+{% endblock %}
