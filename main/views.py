@@ -80,6 +80,10 @@ def domain_check(request):
     if not url:
         raise PermissionDenied()
 
+    # Landing case
+    if url == settings.CANONICAL_HOST:
+        return HttpResponse()
+
     # Custom domain case, can by anything
     if models.User.objects.filter(custom_domain=url).exists():
         return HttpResponse()
