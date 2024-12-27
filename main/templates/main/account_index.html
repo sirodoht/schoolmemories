@@ -5,7 +5,9 @@
 {% block content %}
 <nav>
     <a href="{% url 'index' %}">Home</a>
+    {% if page_list %}
     |
+    {% endif %}
     {% for page in page_list %}
     <a href="{% url 'page_detail' page.slug %}">{{ page.title }}</a>
     {% if not forloop.last %}
@@ -24,6 +26,10 @@
         {% for page in page_list %}
         <li>
             <a href="{% url 'page_detail' page.slug %}">{{ page.title }}</a>
+        </li>
+        {% empty %}
+        <li>
+            <em>(empty)</em>
         </li>
         {% endfor %}
     </ul>
