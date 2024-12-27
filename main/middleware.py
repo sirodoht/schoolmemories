@@ -29,16 +29,24 @@ def host_middleware(get_response):
         # all user account settings etc.) are on the root domain.
         # Strategy: don't set request.subdomain, return immediately.
         if host == settings.CANONICAL_HOST:
+            logger.debug("host midd case [1]")
             logger.debug("host == settings.CANONICAL_HOST, return")
             return get_response(request)
 
-        # [2] Handle <subdomain>.dukkha.pub pages.
+        # [2] Local Caddy requests for TLS ask
+        elif host == "127.0.0.1:5000":
+            logger.debug("host midd case [2]")
+            return get_response(request)
+
+        # [3] Handle <subdomain>.dukkha.pub pages.
         # Strategy: Set subdomain to given subdomain.
         elif (
             len(host_parts) == 3
             and host_parts[1] == canonical_parts[0]  # should be "dukkha"
             and host_parts[2] == canonical_parts[1]  # should be "blog"
         ):
+            logger.debug("host midd case [3]")
+
             request.subdomain = host_parts[0]
 
             # Check if subdomain exists.
@@ -69,16 +77,16 @@ def host_middleware(get_response):
 
                     if redir_domain:
                         return redirect(redir_domain)
+
+                    return get_response(request)
             else:
                 raise Http404()
 
-        # [3] Custom domain case
+        # [4] Custom domain case
         elif models.User.objects.filter(custom_domain=host).exists():
+            logger.debug("host midd case [4]")
             request.account_user = models.User.objects.get(custom_domain=host)
             request.subdomain = request.account_user.username
-
-        # [4] Local Caddy requests for TLS ask
-        elif host == "127.0.0.1:5000":
             return get_response(request)
 
         # [5] Bad request
