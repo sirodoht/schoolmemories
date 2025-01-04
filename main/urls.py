@@ -6,6 +6,7 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("dashboard/", views.dashboard, name="dashboard"),
     path("landing/", views.landing, name="landing"),
+    path("css/update/", views.CSSUpdate.as_view(), name="css_update"),
 ]
 
 

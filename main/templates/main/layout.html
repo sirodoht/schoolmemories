@@ -14,6 +14,7 @@
             a:hover { text-decoration: underline; }
             nav, main { max-width: 500px; margin: 0 auto; margin: 16px auto; }
             aside { max-width: 500px; margin: 8px auto; border: 1px dashed black; padding: 0 8px; }
+            img { width: 100%; }
             label { display: block; }
             input[type="text"],
             input[type="email"],
@@ -22,6 +23,7 @@
                 width: 100%;
                 box-sizing: border-box;
             }
+            textarea { width: 100%; }
             .helptext { color: #757575; }
             .form-inline { display: inline-block; }
             .form-inline input[type="submit"] {
@@ -33,6 +35,10 @@
                 cursor: pointer;
             }
             .form-inline input[type="submit"]:hover { text-decoration: underline; }
+        </style>
+
+        <style>
+            {{ request.custom_css }}
         </style>
     </head>
 
@@ -47,18 +53,18 @@
 
         {# Logged in user, on account #}
         {% if request.user.is_authenticated and request.subdomain == request.user.username %}
-        <nav>
-            <a href="{% url 'index' %}">Website</a>
-            | <a href="{% url 'dashboard' %}">Dashboard</a>
-        </nav>
+        <div style="background: white; text-align: center; box-shadow: 0 -5px 8px rgba(0, 0, 0, 0.5);">
+            <a style="color: black; margin-right: 16px;" href="{% url 'index' %}">Website</a>
+            <a style="color: black;" href="{{ canonical_url }}{% url 'dashboard' %}">Dashboard</a>
+        </div>
         {% endif %}
 
         {# Logged in user, on dashboard #}
         {% if request.user.is_authenticated and not request.subdomain %}
-        <nav>
-            <a href="{% url 'index' %}">Website</a>
-            | <a href="{% url 'dashboard' %}">Dashboard</a>
-        </nav>
+        <div style="background: white; text-align: center; box-shadow: 0 -5px 8px rgba(0, 0, 0, 0.5);">
+            <a style="color: black; margin-right: 16px;" href="{% url 'index' %}">Website</a>
+            <a style="color: black;" href="{{ canonical_url }}{% url 'dashboard' %}">Dashboard</a>
+        </div>
         {% endif %}
 
         {# Logged out, on landing #}

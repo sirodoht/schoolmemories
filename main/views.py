@@ -6,7 +6,6 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView as DjLogoutView
-from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import PermissionDenied
 from django.http import (
     HttpResponse,
@@ -38,17 +37,33 @@ def index(request):
         logger.debug("reader visit")
         logger.debug(f"{request.subdomain=}")
         if models.User.objects.filter(username=request.subdomain).exists():
-            return render(
-                request,
-                "main/account_index.html",
-                {
-                    "subdomain": request.subdomain,
-                    "account_user": request.account_user,
-                    "page_list": models.Page.objects.filter(
-                        user=request.account_user
-                    ).defer("body"),
-                },
-            )
+            if request.account_user.home:
+                return render(
+                    request,
+                    "main/page_detail.html",
+                    {
+                        "canonical_url": f"{settings.PROTOCOL}//{settings.CANONICAL_HOST}",
+                        "page": request.account_user.home,
+                        "subdomain": request.subdomain,
+                        "account_user": request.account_user,
+                        "page_list": models.Page.objects.filter(
+                            user=request.account_user
+                        ).defer("body"),
+                    },
+                )
+            else:
+                return render(
+                    request,
+                    "main/account_index.html",
+                    {
+                        "canonical_url": f"{settings.PROTOCOL}//{settings.CANONICAL_HOST}",
+                        "subdomain": request.subdomain,
+                        "account_user": request.account_user,
+                        "page_list": models.Page.objects.filter(
+                            user=request.account_user
+                        ).defer("body"),
+                    },
+                )
         else:
             return redirect("//" + settings.CANONICAL_HOST + reverse("index"))
     else:
@@ -122,9 +137,8 @@ class Logout(DjLogoutView):
         return super().dispatch(request, *args, **kwargs)
 
 
-class UserUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class UserUpdate(LoginRequiredMixin, UpdateView):
     form_class = forms.UserUpdateForm
-    success_message = "settings updated"
     success_url = reverse_lazy("user_update")
     template_name = "main/user_update.html"
 
@@ -144,14 +158,20 @@ def dashboard(request):
     if hasattr(request, "subdomain"):
         return redirect("//" + settings.CANONICAL_HOST + reverse("dashboard"))
 
-    return render(request, "main/dashboard.html")
+    return render(
+        request,
+        "main/dashboard.html",
+        {
+            "page_list": models.Page.objects.filter(user=request.user),
+            "blog_url": request.user.blog_url,
+        },
+    )
 
 
-class PageCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class PageCreate(LoginRequiredMixin, CreateView):
     model = models.Page
     fields = ["title", "slug", "body"]
     template_name = "main/page_create.html"
-    success_message = "'%(title)s' was created"
     success_url = reverse_lazy("index")
 
     def form_valid(self, form):
@@ -172,6 +192,7 @@ class PageDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["canonical_url"] = f"{settings.PROTOCOL}//{settings.CANONICAL_HOST}"
         if hasattr(self.request, "subdomain"):
             context["account_user"] = self.request.account_user
             context["page_list"] = models.Page.objects.filter(
@@ -181,10 +202,9 @@ class PageDetail(DetailView):
         return context
 
 
-class PageUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+class PageUpdate(LoginRequiredMixin, UpdateView):
     model = models.Page
     fields = ["title", "slug", "body"]
-    success_message = "page updated"
     template_name = "main/page_update.html"
 
     def get_success_url(self):
@@ -224,3 +244,13 @@ class PageDelete(LoginRequiredMixin, DeleteView):
         if request.user != page.user:
             raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
+
+
+class CSSUpdate(LoginRequiredMixin, UpdateView):
+    model = models.User
+    fields = ["custom_css"]
+    template_name = "main/custom_css.html"
+    success_url = reverse_lazy("css_update")
+
+    def get_object(self):
+        return self.request.user

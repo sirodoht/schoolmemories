@@ -29,6 +29,8 @@ def host_middleware(get_response):
         # all user account settings etc.) are on the root domain.
         # Strategy: don't set request.subdomain, return immediately.
         if host == settings.CANONICAL_HOST:
+            if request.user.is_authenticated:
+                request.custom_css = request.user.custom_css
             logger.debug("host midd case [1]")
             logger.debug("host == settings.CANONICAL_HOST, return")
             return get_response(request)
@@ -54,6 +56,7 @@ def host_middleware(get_response):
                 raise Http404()
 
             request.account_user = models.User.objects.get(username=request.subdomain)
+            request.custom_css = request.account_user.custom_css
 
             # Redirect to custom urls for cases:
             # * Logged out / anon users
@@ -84,6 +87,7 @@ def host_middleware(get_response):
         elif models.User.objects.filter(custom_domain=host).exists():
             logger.debug("host midd case [4]")
             request.account_user = models.User.objects.get(custom_domain=host)
+            request.custom_css = request.account_user.custom_css
             request.subdomain = request.account_user.username
             return get_response(request)
 
