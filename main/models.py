@@ -1,4 +1,5 @@
 import mistune
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -27,6 +28,11 @@ class User(AbstractUser):
     home = models.ForeignKey(
         "Page", on_delete=models.SET_NULL, null=True, related_name="home"
     )
+    custom_css = models.TextField("Custom CSS", blank=True, null=True)
+
+    @property
+    def blog_url(self):
+        return f"{settings.PROTOCOL}//{self.username}.{settings.CANONICAL_HOST}"
 
     def __str__(self):
         return self.username
