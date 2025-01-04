@@ -42,6 +42,10 @@ CANONICAL_HOST = os.getenv("DOMAIN_NAME", "dukkha.pub")
 if LOCALDEV:
     CANONICAL_HOST = "dukkhalocal.pub:8000"
 
+PROTOCOL = "https:"
+if LOCALDEV:
+    PROTOCOL = "http:"
+
 
 # Application definition
 
