@@ -1,0 +1,15 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Edit {{ form.name.value }} image{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Edit image</h1>
+
+    <form method="post">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <input type="submit" value="Save">
+    </form>
+</main>
+{% endblock %}

@@ -23,7 +23,26 @@ urlpatterns += [
     path("accounts/domain/", views.domain_check, name="domain_check"),
 ]
 
-# pages - needs to be last due to <slug>
+# Images
+urlpatterns += [
+    path("images/<slug:slug>.<slug:extension>", views.image_raw, name="image_raw"),
+    re_path(
+        r"^images/list/(?P<options>\?[\w\=]+)?$",  # e.g. images/ or images/?raw=true
+        views.ImageList.as_view(),
+        name="image_list",
+    ),
+    path("images/<slug:slug>/", views.ImageDetail.as_view(), name="image_detail"),
+    path("images/<slug:slug>/edit/", views.ImageUpdate.as_view(), name="image_update"),
+    path(
+        "images/<slug:slug>/delete/",
+        views.ImageDelete.as_view(),
+        name="image_delete",
+    ),
+]
+
+
+# Pages
+# This section needs to be last due to <slug> being the first word in the path
 urlpatterns += [
     path("new/page/", views.PageCreate.as_view(), name="page_create"),
     path("<slug:slug>/", views.PageDetail.as_view(), name="page_detail"),

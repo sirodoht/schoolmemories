@@ -1,0 +1,34 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}{{ image.name }}{% endblock %}
+
+{% block content %}
+<main>
+    <h1>{{ image.name }}</h1>
+
+    <div>
+        <a href="{% url 'image_list' %}">« all images</a>
+        — Uploaded on <time datetime="{{ image.uploaded_at|date:'Y-m-d' }}">{{ image.uploaded_at|date:'F j, Y' }}</time>
+        | <a href="{% url 'image_update' image.slug %}">Edit image</a>
+        | <a href="{% url 'image_delete' image.slug %}">Delete</a>
+    </div>
+
+    <p>
+        Use markdown syntax to add this image in a post:
+    </p>
+    <code>
+        ![{{ image.name }}]({{ image.get_raw_absolute_url }})
+    </code>
+
+    <p>
+        Markdown syntax for linkified image to full size version:
+    </p>
+    <code>
+        [![{{ image.name }}]({{ image.get_raw_absolute_url }})]({{ image.get_raw_absolute_url }})
+    </code>
+</main>
+
+<section style="text-align: center;">
+    <img src="{% url 'image_raw' image.slug image.extension %}" alt="{{ image.name }}" style="max-width: 1000px;">
+</section>
+{% endblock %}
