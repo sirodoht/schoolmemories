@@ -1,16 +1,17 @@
-from django.urls import include, path
+from django.urls import include, path, re_path
 
 from main import views
 
 urlpatterns = [
     path("", views.index, name="index"),
     path("dashboard/", views.dashboard, name="dashboard"),
-    path("landing/", views.landing, name="landing"),
+    path("dashboard/landing/", views.landing, name="landing"),
     path("css/update/", views.CSSUpdate.as_view(), name="css_update"),
+    path("dashboard/markdown/", views.markdown, name="markdown"),
 ]
 
 
-# user system
+# User system
 urlpatterns += [
     path("accounts/logout/", views.Logout.as_view(), name="logout"),
     path("accounts/", include("django.contrib.auth.urls")),
