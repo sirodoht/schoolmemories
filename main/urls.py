@@ -8,6 +8,7 @@ urlpatterns = [
     path("dashboard/landing/", views.landing, name="landing"),
     path("css/update/", views.CSSUpdate.as_view(), name="css_update"),
     path("dashboard/markdown/", views.markdown, name="markdown"),
+    path("contact/", views.Contact.as_view(), name="contact"),
 ]
 
 

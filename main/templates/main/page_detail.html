@@ -3,12 +3,8 @@
 {% block title %}{{ page.title }} — {{ account_user.website_title }}{% endblock %}
 
 {% block content %}
-<nav>
-    <a href="{% url 'index' %}">Home</a>
-    {% for page in page_list %}
-    <a href="{% url 'page_detail' page.slug %}">{{ page.title }}</a>
-    {% endfor %}
-</nav>
+
+{% include 'partials/nav.html' %}
 
 <main>
     <h1>{{ page.title }}</h1>

@@ -21,7 +21,14 @@ class UserUpdateForm(forms.ModelForm):
 
     class Meta:
         model = get_user_model()
-        fields = ["username", "email", "website_title", "custom_domain", "home"]
+        fields = [
+            "username",
+            "email",
+            "website_title",
+            "custom_domain",
+            "contact",
+            "home",
+        ]
 
 
 class MultipleFileInput(forms.ClearableFileInput):
@@ -48,3 +55,9 @@ class UploadImagesForm(forms.Form):
             dj_validators.FileExtensionValidator(["jpeg", "jpg", "png", "gif", "webp"])
         ],
     )
+
+
+class ContactForm(forms.Form):
+    name = forms.CharField()
+    email = forms.EmailField()
+    message = forms.CharField(widget=forms.Textarea)
