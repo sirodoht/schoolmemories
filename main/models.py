@@ -1,7 +1,10 @@
+import base64
+
 import mistune
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.urls import reverse
 
 from main import validators
 
@@ -60,3 +63,38 @@ class Page(models.Model):
 
     class Meta:
         unique_together = [["slug", "user"]]
+
+
+class Image(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=300)  # original filename
+    slug = models.CharField(max_length=300, unique=True)
+    data = models.BinaryField()
+    extension = models.CharField(max_length=10)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def filename(self):
+        return self.slug + "." + self.extension
+
+    @property
+    def data_as_base64(self):
+        return base64.b64encode(self.data).decode("utf-8")
+
+    @property
+    def data_size(self):
+        """Get image size in MB."""
+        return round(len(self.data) / (1024 * 1024), 2)
+
+    def get_raw_absolute_url(self):
+        path = reverse(
+            "image_raw", kwargs={"slug": self.slug, "extension": self.extension}
+        )
+        return f"{settings.PROTOCOL}//{settings.CANONICAL_HOST}{path}"
+
+    def get_absolute_url(self):
+        path = reverse("image_detail", kwargs={"slug": self.slug})
+        return f"{settings.PROTOCOL}//{settings.CANONICAL_HOST}{path}"
+
+    def __str__(self):
+        return self.name
