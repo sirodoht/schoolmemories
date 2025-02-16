@@ -11,7 +11,6 @@ urlpatterns = [
     path("contact/", views.Contact.as_view(), name="contact"),
 ]
 
-
 # User system
 urlpatterns += [
     path("accounts/logout/", views.Logout.as_view(), name="logout"),
@@ -42,6 +41,10 @@ urlpatterns += [
     ),
 ]
 
+# Memories
+urlpatterns += [
+    path("memories/submit/", views.MemoryCreate.as_view(), name="memory_create"),
+]
 
 # Pages
 # This section needs to be last due to <slug> being the first word in the path
