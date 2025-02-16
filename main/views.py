@@ -1,4 +1,3 @@
-import logging
 import uuid
 
 from django.conf import settings
@@ -16,12 +15,15 @@ from django.http import (
 )
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
-from django.views.generic import DetailView
-from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    FormView,
+    UpdateView,
+)
 
 from main import forms, models
-
-logger = logging.getLogger(__name__)
 
 
 @login_required
@@ -33,58 +35,31 @@ def landing(request):
 
 
 def index(request):
-    logger.debug("index begin")
-
     # Account site mode as reader/enduser
     if hasattr(request, "subdomain"):
-        logger.debug("reader visit")
-        logger.debug(f"{request.subdomain=}")
         if models.User.objects.filter(username=request.subdomain).exists():
-            if request.account_user.home:
-                return render(
-                    request,
-                    "main/page_detail.html",
-                    {
-                        "canonical_url": f"{settings.PROTOCOL}//{settings.CANONICAL_HOST}",
-                        "page": request.account_user.home,
-                        "subdomain": request.subdomain,
-                        "account_user": request.account_user,
-                        "page_list": models.Page.objects.filter(
-                            user=request.account_user
-                        ).defer("body"),
-                    },
-                )
-            else:
-                return render(
-                    request,
-                    "main/account_index.html",
-                    {
-                        "canonical_url": f"{settings.PROTOCOL}//{settings.CANONICAL_HOST}",
-                        "subdomain": request.subdomain,
-                        "account_user": request.account_user,
-                        "page_list": models.Page.objects.filter(
-                            user=request.account_user
-                        ).defer("body"),
-                    },
-                )
+            return render(
+                request,
+                "main/memory_list.html",
+                {
+                    "canonical_url": f"{settings.PROTOCOL}//{settings.CANONICAL_HOST}",
+                    "subdomain": request.subdomain,
+                    "account_user": request.account_user,
+                    "page_list": models.Page.objects.filter(
+                        user=request.account_user
+                    ).defer("body"),
+                    "memory_list": models.Memory.objects.all(),
+                },
+            )
         else:
             return redirect("//" + settings.CANONICAL_HOST + reverse("index"))
-    else:
-        logger.debug("not a reader visit")
-
-    logger.debug(f"{request.user.is_authenticated=}")
 
     # Account site as owner:
     # Redirect to "account_index" so that the requests gets a subdomain
     if request.user.is_authenticated:
-        logger.debug("owner visit")
         return redirect(
-            f'//{request.user.username}.{settings.CANONICAL_HOST}{reverse("index")}'
+            f"//{request.user.username}.{settings.CANONICAL_HOST}{reverse('index')}"
         )
-    else:
-        logger.debug("not an owner visit")
-
-    logger.debug("render landing")
 
     # Landing site as non-logged-in user
     return render(request, "main/landing.html")
@@ -418,3 +393,25 @@ class Contact(FormView):
                 user__username=self.request.subdomain
             )
         return context
+
+
+# Memories
+
+
+class MemoryCreate(FormView):
+    form_class = forms.MemoryForm
+    template_name = "main/memory_create.html"
+    success_url = reverse_lazy("dashboard")
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        if form.is_valid():
+            obj = form.save()
+            message = (
+                f"Your Submission ID is #{obj.id}. Note it down for future reference."
+            )
+            messages.success(self.request, message)
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
