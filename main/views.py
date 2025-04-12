@@ -75,11 +75,6 @@ class PageCreate(LoginRequiredMixin, CreateView):
     fields = ["title", "slug", "body"]
     template_name = "main/page_create.html"
 
-    # def form_valid(self, form):
-    #     self.object = form.save(commit=False)
-    #     self.object.save()
-    #     return HttpResponseRedirect(self.get_success_url())
-
     def get_success_url(self):
         return reverse("page_detail", args=(self.object.slug,))
 
@@ -250,3 +245,8 @@ class MemoryCreate(FormView):
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_list"] = models.Page.objects.all()
+        return context
