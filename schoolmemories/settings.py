@@ -32,10 +32,11 @@ LOCALDEV = os.getenv("LOCALDEV") == "1"
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
-    f"{os.getenv('DOMAIN_NAME')}",
+    "schoolmemories.01z.io",
+    "schoolmemories.org",
 ]
 
-CANONICAL_HOST = os.getenv("DOMAIN_NAME", "schoolmemories.org")
+CANONICAL_HOST = "schoolmemories.01z.io"
 if LOCALDEV:
     CANONICAL_HOST = "localhost:8000"
 
