@@ -63,29 +63,11 @@
     </head>
 
     <body>
-        {# Logged in user, on account #}
-        {% if request.user.is_authenticated and request.subdomain == request.user.username %}
+        {% if request.user.is_authenticated %}
         <div style="background: white; text-align: center; box-shadow: 0 -5px 8px rgba(0, 0, 0, 0.5);">
             <a style="color: black; margin-right: 16px;" href="{% url 'index' %}">Website</a>
             <a style="color: black;" href="{{ canonical_url }}{% url 'dashboard' %}">Dashboard</a>
         </div>
-        {% endif %}
-
-        {# Logged in user, on dashboard #}
-        {% if request.user.is_authenticated and not request.subdomain %}
-        <div style="background: white; text-align: center; box-shadow: 0 -5px 8px rgba(0, 0, 0, 0.5);">
-            <a style="color: black; margin-right: 16px;" href="{% url 'index' %}">Website</a>
-            <a style="color: black;" href="{{ canonical_url }}{% url 'dashboard' %}">Dashboard</a>
-        </div>
-        {% endif %}
-
-        {# Logged out, on landing #}
-        {% if not request.user.is_authenticated and not request.subdomain %}
-        <nav>
-            <a href="{% url 'index' %}">Home</a>
-            | <a href="{% url 'user_create' %}">Sign up</a>
-            | <a href="{% url 'login' %}">Log in</a>
-        </nav>
         {% endif %}
 
         {% if messages %}

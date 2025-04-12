@@ -1,6 +1,5 @@
 import uuid
 
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -10,9 +9,8 @@ from django.http import (
     Http404,
     HttpResponse,
     HttpResponseBadRequest,
-    HttpResponseRedirect,
 )
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import (
     CreateView,
@@ -30,9 +28,7 @@ def index(request):
         request,
         "main/memory_list.html",
         {
-            "page_list": models.Page.objects.filter(user=request.account_user).defer(
-                "body"
-            ),
+            "page_list": models.Page.objects.all().defer("body"),
             "memory_list": models.Memory.objects.all(),
         },
     )
@@ -52,13 +48,6 @@ class UserUpdate(LoginRequiredMixin, UpdateView):
     def get_object(self):
         return self.request.user
 
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-        form.fields["home"].queryset = models.Page.objects.filter(
-            user=self.request.user
-        )
-        return form
-
 
 class CSSUpdate(LoginRequiredMixin, UpdateView):
     model = models.User
@@ -66,22 +55,13 @@ class CSSUpdate(LoginRequiredMixin, UpdateView):
     template_name = "main/custom_css.html"
     success_url = reverse_lazy("css_update")
 
-    def get_object(self):
-        return self.request.user
-
 
 @login_required
 def dashboard(request):
-    if hasattr(request, "subdomain"):
-        return redirect("//" + settings.CANONICAL_HOST + reverse("dashboard"))
-
     return render(
         request,
         "main/dashboard.html",
-        {
-            "page_list": models.Page.objects.filter(user=request.user),
-            "blog_url": request.user.blog_url,
-        },
+        {"page_list": models.Page.objects.all()},
     )
 
 
@@ -93,11 +73,10 @@ class PageCreate(LoginRequiredMixin, CreateView):
     fields = ["title", "slug", "body"]
     template_name = "main/page_create.html"
 
-    def form_valid(self, form):
-        self.object = form.save(commit=False)
-        self.object.user = self.request.user
-        self.object.save()
-        return HttpResponseRedirect(self.get_success_url())
+    # def form_valid(self, form):
+    #     self.object = form.save(commit=False)
+    #     self.object.save()
+    #     return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
         return reverse("page_detail", args=(self.object.slug,))
@@ -109,30 +88,10 @@ class PageDetail(DetailView):
     def get_success_url(self):
         return reverse("page_detail", args=(self.object.slug,))
 
-    def get_queryset(self):
-        return models.Page.objects.filter(user__username=self.request.subdomain)
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["canonical_url"] = f"{settings.PROTOCOL}//{settings.CANONICAL_HOST}"
-        if hasattr(self.request, "subdomain"):
-            context["account_user"] = self.request.account_user
-            context["page_list"] = models.Page.objects.filter(
-                user__username=self.request.subdomain
-            )
+        context["page_list"] = models.Page.objects.all()
         return context
-
-    def dispatch(self, request, *args, **kwargs):
-        if hasattr(request, "subdomain"):
-            return super().dispatch(request, *args, **kwargs)
-
-        if request.user.is_authenticated:
-            subdomain = request.user.username
-            return redirect(
-                f"{settings.PROTOCOL}//{subdomain}.{settings.CANONICAL_HOST}{request.path}"
-            )
-        else:
-            return redirect("index")
 
 
 class PageUpdate(LoginRequiredMixin, UpdateView):
@@ -143,14 +102,9 @@ class PageUpdate(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse("page_detail", args=(self.object.slug,))
 
-    def get_queryset(self):
-        return models.Page.objects.filter(user__username=self.request.subdomain)
-
     def form_valid(self, form):
         if (
-            models.Page.objects.filter(
-                user=self.request.user, slug=form.cleaned_data.get("slug")
-            )
+            models.Page.objects.filter(slug=form.cleaned_data.get("slug"))
             .exclude(id=self.object.id)
             .exists()
         ):
@@ -158,25 +112,10 @@ class PageUpdate(LoginRequiredMixin, UpdateView):
             return self.render_to_response(self.get_context_data(form=form))
         return super().form_valid(form)
 
-    def dispatch(self, request, *args, **kwargs):
-        page = self.get_object()
-        if request.user != page.user:
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
-
 
 class PageDelete(LoginRequiredMixin, DeleteView):
     model = models.Page
     success_url = reverse_lazy("index")
-
-    def get_queryset(self):
-        return models.Page.objects.filter(user__username=self.request.subdomain)
-
-    def dispatch(self, request, *args, **kwargs):
-        page = self.get_object()
-        if request.user != page.user:
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
 
 
 # Images
@@ -309,11 +248,7 @@ class Contact(FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if hasattr(self.request, "subdomain"):
-            context["account_user"] = self.request.account_user
-            context["page_list"] = models.Page.objects.filter(
-                user__username=self.request.subdomain
-            )
+        context["page_list"] = models.Page.objects.all()
         return context
 
 
@@ -323,7 +258,7 @@ class Contact(FormView):
 class MemoryCreate(FormView):
     form_class = forms.MemoryForm
     template_name = "main/memory_create.html"
-    success_url = reverse_lazy("dashboard")
+    success_url = reverse_lazy("index")
 
     def post(self, request, *args, **kwargs):
         form_class = self.get_form_class()

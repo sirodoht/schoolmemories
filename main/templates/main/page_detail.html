@@ -1,6 +1,6 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}{{ page.title }} — {{ account_user.website_title }}{% endblock %}
+{% block title %}{{ page.title }}{% endblock %}
 
 {% block content %}
 
@@ -9,7 +9,7 @@
 <main>
     <h1>{{ page.title }}</h1>
 
-    {% if request.user.is_authenticated and request.subdomain == user.username %}
+    {% if request.user.is_authenticated %}
     <div style="color: #757575;">
         Last updated on <time datetime="{{ page.updated_at|date:'Y-m-d' }}">{{ page.updated_at|date:'F j, Y' }}</time>
         | <a href="{% url 'page_update' page.slug %}">Edit page</a>

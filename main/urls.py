@@ -5,9 +5,7 @@ from main import views
 urlpatterns = [
     path("", views.index, name="index"),
     path("dashboard/", views.dashboard, name="dashboard"),
-    path("dashboard/landing/", views.landing, name="landing"),
     path("css/update/", views.CSSUpdate.as_view(), name="css_update"),
-    path("dashboard/markdown/", views.markdown, name="markdown"),
     path("contact/", views.Contact.as_view(), name="contact"),
 ]
 
@@ -15,13 +13,7 @@ urlpatterns = [
 urlpatterns += [
     path("accounts/logout/", views.Logout.as_view(), name="logout"),
     path("accounts/", include("django.contrib.auth.urls")),
-    path(
-        "accounts/create/",
-        views.UserCreate.as_view(),
-        name="user_create",
-    ),
     path("accounts/edit/", views.UserUpdate.as_view(), name="user_update"),
-    path("accounts/domain/", views.domain_check, name="domain_check"),
 ]
 
 # Images
