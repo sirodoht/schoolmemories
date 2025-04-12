@@ -42,7 +42,7 @@
     - name: caddyfile
       ansible.builtin.template:
         src: Caddyfile.j2
-        dest: /etc/caddy/Caddyfile
+        dest: /etc/caddy/dukkha.caddy
         owner: root
         group: root
         mode: '0644'
@@ -73,33 +73,10 @@
         group: www-data
         recurse: yes
 
-    # postgresql setup
-    - name: pg user
-      community.general.postgresql_user:
-        name: dukkha
-        password: "{{ postgres_password }}"
-        expires: infinity
-        state: present
-      become_user: postgres
-    - name: pg database
-      community.general.postgresql_db:
-        name: dukkha
-        owner: dukkha
-        state: present
-      become_user: postgres
-    - name: pg permissions
-      community.postgresql.postgresql_privs:
-        db: dukkha
-        privs: ALL
-        objs: ALL_IN_SCHEMA
-        role: dukkha
-        grant_option: true
-      become_user: postgres
-
     # uv
     - name: uv
       ansible.builtin.shell:
-        cmd: curl -LsSf https://astral.sh/uv/0.5.11/install.sh  | sh
+        cmd: curl -LsSf https://astral.sh/uv/0.6.14/install.sh  | sh
       become_user: deploy
 
     # repository
