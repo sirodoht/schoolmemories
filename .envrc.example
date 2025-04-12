@@ -10,6 +10,3 @@ export LOCALDEV=1
 
 # Used by Django to encrypt session login cookies
 export SECRET_KEY=
-
-# PostgreSQL database connection string
-export DATABASE_URL=postgres://dukkha:@localhost:5432/dukkha

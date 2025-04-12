@@ -11,13 +11,7 @@
       ansible.builtin.apt:
         update_cache: yes
         name:
-          - build-essential
-          - clang
           - git
-          - libpq-dev
-          - postgresql
-          - python3-dev
-          - python3-psycopg2
           - rclone
           - vim
         state: present
@@ -42,7 +36,7 @@
     - name: caddyfile
       ansible.builtin.template:
         src: Caddyfile.j2
-        dest: /etc/caddy/dukkha.caddy
+        dest: /etc/caddy/schoolmemories.caddy
         owner: root
         group: root
         mode: '0644'
@@ -82,8 +76,8 @@
     # repository
     - name: clone
       ansible.builtin.git:
-        repo: git@github.com:sirodoht/dukkha.git
-        dest: /var/www/dukkha
+        repo: git@github.com:sirodoht/schoolmemories.git
+        dest: /var/www/schoolmemories
         version: main
         accept_hostkey: true
       become_user: deploy
@@ -91,8 +85,8 @@
     # systemd
     - name: systemd main service
       ansible.builtin.template:
-        src: dukkha.service.j2
-        dest: /etc/systemd/system/dukkha.service
+        src: schoolmemories.service.j2
+        dest: /etc/systemd/system/schoolmemories.service
         owner: root
         group: root
         mode: '0644'
@@ -101,11 +95,11 @@
         daemon_reload: true
     - name: systemd enable
       ansible.builtin.systemd:
-        name: dukkha
+        name: schoolmemories
         enabled: yes
     - name: systemd start
       ansible.builtin.systemd:
-        name: dukkha
+        name: schoolmemories
         state: restarted
 
     # deployment specific
@@ -114,7 +108,7 @@
         cmd: |
           source $HOME/.local/bin/env
           uv run manage.py collectstatic --no-input
-        chdir: /var/www/dukkha
+        chdir: /var/www/schoolmemories
       args:
         executable: /bin/bash
       become_user: deploy
@@ -122,15 +116,14 @@
       ansible.builtin.shell:
         cmd: |
           source $HOME/.local/bin/env
-          export DATABASE_URL={{ database_url }}
           uv run manage.py migrate --no-input
-        chdir: /var/www/dukkha
+        chdir: /var/www/schoolmemories
       args:
         executable: /bin/bash
       become_user: deploy
     - name: gunicorn restart
       ansible.builtin.systemd:
-        name: dukkha
+        name: schoolmemories
         state: restarted
     - name: caddy restart
       ansible.builtin.systemd:

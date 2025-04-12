@@ -1,29 +1,24 @@
-# dukkha
-
-Custom websites without too much suffering.
+# schoolmemories
 
 ## Development
 
 This is a standard [Django](https://docs.djangoproject.com/) application with
 [uv](https://github.com/astral-sh/uv).
 
-1. Set up a new postgresql database called `dukkha` with a user `dukkha` and no
-password.
-
-2. Setup environment variables with:
+1. Setup environment variables with:
 
 ```sh
 cp .envrc.example .envrc
 source .envrc
 ```
 
-3. Create database tables with:
+2. Create database tables with:
 
 ```sh
 uv run manage.py migrate
 ```
 
-4. Run development server with:
+3. Run development server with:
 
 ```sh
 uv run manage.py runserver
@@ -58,7 +53,3 @@ cd ansible/
 cp .envrc.example .envrc
 uv run ansible-playbook -v playbook.yaml
 ```
-
-## License
-
-Symbolic Public License
