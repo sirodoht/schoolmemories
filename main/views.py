@@ -4,7 +4,6 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView as DjLogoutView
-from django.core.exceptions import PermissionDenied
 from django.http import (
     Http404,
     HttpResponse,
@@ -54,6 +53,9 @@ class CSSUpdate(LoginRequiredMixin, UpdateView):
     fields = ["custom_css"]
     template_name = "main/custom_css.html"
     success_url = reverse_lazy("css_update")
+
+    def get_object(self):
+        return self.request.user
 
 
 @login_required
@@ -128,12 +130,7 @@ class ImageList(LoginRequiredMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["image_list"] = models.Image.objects.filter(user=self.request.user)
-
-        context["total_quota"] = 0
-        for image in models.Image.objects.filter(user=self.request.user):
-            context["total_quota"] += image.data_size
-        context["total_quota"] = round(context["total_quota"], 2)
+        context["image_list"] = models.Image.objects.all()
         return context
 
     def post(self, request, *args, **kwargs):
@@ -159,7 +156,6 @@ class ImageList(LoginRequiredMixin, FormView):
                     name=name,
                     data=data,
                     extension=self.extension,
-                    user=request.user,
                     slug=self.slug,
                 )
             return self.form_valid(form)
@@ -190,12 +186,6 @@ class ImageList(LoginRequiredMixin, FormView):
 class ImageDetail(LoginRequiredMixin, DetailView):
     model = models.Image
 
-    def dispatch(self, request, *args, **kwargs):
-        image = self.get_object()
-        if request.user != image.user:
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
-
 
 async def image_raw(request, slug, extension):
     image = await models.Image.objects.filter(slug=slug).afirst()
@@ -209,22 +199,10 @@ class ImageUpdate(LoginRequiredMixin, UpdateView):
     fields = ["name"]
     template_name = "main/image_edit.html"
 
-    def dispatch(self, request, *args, **kwargs):
-        image = self.get_object()
-        if request.user != image.user:
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
-
 
 class ImageDelete(LoginRequiredMixin, DeleteView):
     model = models.Image
     success_url = reverse_lazy("image_list")
-
-    def dispatch(self, request, *args, **kwargs):
-        image = self.get_object()
-        if request.user != image.user:
-            raise PermissionDenied()
-        return super().dispatch(request, *args, **kwargs)
 
 
 # Contact
