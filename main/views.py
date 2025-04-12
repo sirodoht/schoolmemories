@@ -2,7 +2,6 @@ import uuid
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView as DjLogoutView
@@ -26,94 +25,17 @@ from django.views.generic import (
 from main import forms, models
 
 
-@login_required
-def landing(request):
-    """
-    Landing view for the convenience of logged in users only.
-    """
-    return render(request, "main/landing.html")
-
-
 def index(request):
-    # Account site mode as reader/enduser
-    if hasattr(request, "subdomain"):
-        if models.User.objects.filter(username=request.subdomain).exists():
-            return render(
-                request,
-                "main/memory_list.html",
-                {
-                    "canonical_url": f"{settings.PROTOCOL}//{settings.CANONICAL_HOST}",
-                    "subdomain": request.subdomain,
-                    "account_user": request.account_user,
-                    "page_list": models.Page.objects.filter(
-                        user=request.account_user
-                    ).defer("body"),
-                    "memory_list": models.Memory.objects.all(),
-                },
-            )
-        else:
-            return redirect("//" + settings.CANONICAL_HOST + reverse("index"))
-
-    # Account site as owner:
-    # Redirect to "account_index" so that the requests gets a subdomain
-    if request.user.is_authenticated:
-        return redirect(
-            f"//{request.user.username}.{settings.CANONICAL_HOST}{reverse('index')}"
-        )
-
-    # Landing site as non-logged-in user
-    return render(request, "main/landing.html")
-
-
-def domain_check(request):
-    """
-    This view returns 200 if domain given exists as custom domain in any user account.
-    """
-    url = request.GET.get("domain")
-    if not url:
-        raise PermissionDenied()
-
-    # Landing case
-    if url == settings.CANONICAL_HOST:
-        return HttpResponse()
-
-    # Custom domain case, can by anything
-    if models.User.objects.filter(custom_domain=url).exists():
-        return HttpResponse()
-
-    # Subdomain case, can only by <username>.dukkha.pub
-    if len(url.split(".")) != 3:
-        raise PermissionDenied()
-
-    username = url.split(".")[0]
-    if models.User.objects.filter(username=username).exists():
-        return HttpResponse()
-
-    raise PermissionDenied()
-
-
-def markdown(request):
-    return render(request, "main/markdown.html")
-
-
-# Users and user settings
-
-
-class UserCreate(CreateView):
-    form_class = forms.UserCreationForm
-    success_message = "welcome :)"
-    success_url = reverse_lazy("index")
-    template_name = "main/user_create.html"
-
-    def form_valid(self, form):
-        self.object = form.save()
-        user = authenticate(
-            username=form.cleaned_data.get("username"),
-            password=form.cleaned_data.get("password1"),
-        )
-        login(self.request, user)
-        messages.success(self.request, self.success_message)
-        return HttpResponseRedirect(self.get_success_url())
+    return render(
+        request,
+        "main/memory_list.html",
+        {
+            "page_list": models.Page.objects.filter(user=request.account_user).defer(
+                "body"
+            ),
+            "memory_list": models.Memory.objects.all(),
+        },
+    )
 
 
 class Logout(DjLogoutView):
