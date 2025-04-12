@@ -34,4 +34,5 @@ jobs:
         ANSIBLE_HOST: ${{ vars.ANSIBLE_HOST }}
         ANSIBLE_USER: ${{ vars.ANSIBLE_USER }}
         DEBUG: ${{ vars.DEBUG }}
+        LOCALDEV: ${{ vars.LOCALDEV }}
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
