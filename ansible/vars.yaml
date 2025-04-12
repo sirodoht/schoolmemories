@@ -1,7 +1,4 @@
 ---
-database_url: "{{ lookup('env', 'DATABASE_URL') }}"
 debug: "{{ lookup('env', 'DEBUG') }}"
-domain_name: "{{ lookup('env', 'DOMAIN_NAME') }}"
 localdev: "{{ lookup('env', 'LOCALDEV') }}"
-postgres_password: "{{ lookup('env', 'POSTGRES_PASSWORD') }}"
 secret_key: "{{ lookup('env', 'SECRET_KEY') }}"
