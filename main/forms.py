@@ -10,7 +10,6 @@ class UserUpdateForm(forms.ModelForm):
         model = get_user_model()
         fields = [
             "email",
-            "website_title",
         ]
 
 

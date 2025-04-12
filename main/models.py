@@ -21,7 +21,6 @@ class User(AbstractUser):
         error_messages={"unique": "A user with that username already exists."},
     )
     email = models.EmailField(unique=True)
-    website_title = models.CharField(max_length=500, blank=True, null=True)
     custom_css = models.TextField("Custom CSS", blank=True, null=True)
 
     def __str__(self):
