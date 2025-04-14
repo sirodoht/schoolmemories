@@ -21,13 +21,6 @@ class User(AbstractUser):
         error_messages={"unique": "A user with that username already exists."},
     )
     email = models.EmailField(unique=True)
-    custom_css = models.TextField("Custom CSS", blank=True, null=True)
-    landing_body = models.TextField(blank=True, null=True)
-
-    @property
-    def landing_body_as_html(self):
-        markdown = mistune.create_markdown(plugins=["task_lists", "footnotes"])
-        return markdown(self.body)
 
     def __str__(self):
         return self.username

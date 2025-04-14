@@ -1,5 +1,7 @@
 <nav>
-    <a href="{% url 'index' %}">Home</a>
+    <a href="{% url 'index' %}">
+        School <span style="color: #7d350d;">Memories</span> that Matter
+    </a>
     {% for page in page_list %}
     <a href="{% url 'page_detail' page.slug %}">{{ page.title }}</a>
     {% endfor %}

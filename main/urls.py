@@ -5,7 +5,6 @@ from main import views
 urlpatterns = [
     path("", views.index, name="index"),
     path("dashboard/", views.dashboard, name="dashboard"),
-    path("css/update/", views.CSSUpdate.as_view(), name="css_update"),
     path("contact/", views.Contact.as_view(), name="contact"),
 ]
 

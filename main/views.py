@@ -48,16 +48,6 @@ class UserUpdate(LoginRequiredMixin, UpdateView):
         return self.request.user
 
 
-class CSSUpdate(LoginRequiredMixin, UpdateView):
-    model = models.User
-    fields = ["custom_css"]
-    template_name = "main/custom_css.html"
-    success_url = reverse_lazy("css_update")
-
-    def get_object(self):
-        return self.request.user
-
-
 @login_required
 def dashboard(request):
     return render(
