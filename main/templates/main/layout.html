@@ -14,9 +14,9 @@
 
     <body>
         {% if request.user.is_authenticated %}
-        <div style="background: white; text-align: center; box-shadow: 0 -5px 8px rgba(0, 0, 0, 0.5);">
-            <a style="color: black; margin-right: 16px;" href="{% url 'index' %}">Website</a>
-            <a style="color: black;" href="{{ canonical_url }}{% url 'dashboard' %}">Dashboard</a>
+        <div class="dashline">
+            <a href="{% url 'index' %}">Website</a>
+            <a href="{% url 'dashboard' %}">Dashboard</a>
         </div>
         {% endif %}
 

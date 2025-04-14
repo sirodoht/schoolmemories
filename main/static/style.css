@@ -1,9 +1,14 @@
 /* general */
-body { font-family: sans-serif; line-height: 1.5; margin: 0; background: #f9f4e9; }
+body { font-family: serif; line-height: 1.5; margin: 0; background: #f9f4e9; }
 h1 { font-weight: normal; margin: 16px 0 8px; }
 p { font-size: 19px; }
 a { color: #c6521e; text-decoration: none; }
 a:hover { text-decoration: underline; }
+
+/* dashboard nav */
+.dashline { background: white; text-align: center; box-shadow: 0 -5px 8px rgba(0, 0, 0, 0.5); }
+.dashline a { color: black; margin: 8px; font-family: sans-serif; }
+.dashline a:hover { text-decoration: none; background: #e6e6e6; }
 
 /* nav */
 nav {
@@ -16,6 +21,7 @@ nav a {
     margin: 8px 16px;
     text-decoration: none;
     color: #3c4858;
+    font-size: 17px;
 }
 nav a:hover {
     text-decoration: none;
@@ -36,6 +42,15 @@ input[type="password"] {
     width: 100%;
     box-sizing: border-box;
 }
+input[type="submit"] {
+    background: #5a6268;
+    border: 2px solid #6c757d;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    padding: 6px 12px;
+    font-size: 16px;
+}
 textarea { width: 100%; }
 .helptext { color: #757575; }
 .form-inline { display: inline-block; }
@@ -48,3 +63,50 @@ textarea { width: 100%; }
     cursor: pointer;
 }
 .form-inline input[type="submit"]:hover { text-decoration: underline; }
+
+/* memory list */
+.memory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+@media (max-width: 1024px) {
+    .memory-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+    .memory-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+    .memory-grid { grid-template-columns: 1fr; }
+}
+
+.memory-grid-item {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* background-color: rgba(84, 200, 232, 0.9); */
+    overflow: hidden;
+}
+.memory-grid-item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+}
+@media (max-width: 480px) {
+    .memory-grid-item { height: auto; min-height: 150px; }
+}
+
+.memory-grid-item-text {
+    overflow: auto;
+    max-height: 100%;
+    font-size: 14px;
+    line-height: 1.4;
+}

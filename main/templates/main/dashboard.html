@@ -3,7 +3,7 @@
 {% block title %}Dashboard — {{ request.user.username }}{% endblock %}
 
 {% block content %}
-<main>
+<main style="font-family: sans-serif;">
     <h1>Dashboard</h1>
 
     <div style="margin: 16px 0; line-height: 1.6;">
@@ -18,8 +18,11 @@
     </div>
 
     <div>
-        <strong>Pages</strong>
-        <ul>
+        <div>
+            <strong>Pages</strong>
+            (<a href="{% url 'page_create' %}">new page</a>)
+        </div>
+        <ul style="padding-left: 16px; margin: 8px 0;">
             {% for page in page_list %}
             <li>
                 <a href="{{ blog_url }}{% url 'page_detail' page.slug %}">{{ page.title }}</a>

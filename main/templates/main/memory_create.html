@@ -7,11 +7,73 @@
 {% include 'partials/nav.html' %}
 
 <main>
-    <h1>Submit a memory</h1>
-    <form method="post">
-        {{ form.as_p }}
-        {% csrf_token %}
-        <input type="submit" value="Save">
-    </form>
+    <div style="max-width: 800px;">
+        <h1>Submit a memory</h1>
+        <form method="post">
+            <p>
+                {{ form.gender.errors }}
+                {{ form.gender.label_tag }}
+                {{ form.gender }}
+            </p>
+
+            <p>
+                {{ form.country.errors }}
+                {{ form.country.label_tag }}
+                {{ form.country }}
+            </p>
+
+            <p>
+                {{ form.category.errors }}
+                {{ form.category.label_tag }}
+                {{ form.category }}
+            </p>
+
+            <p>
+                {{ form.tags.errors }}
+                {{ form.tags.label_tag }}
+                {{ form.tags }}
+            </p>
+
+            <p>
+                {{ form.school_grade.errors }}
+                {{ form.school_grade.label_tag }}
+                {{ form.school_grade }}
+            </p>
+
+            <p>
+                {{ form.school_type.errors }}
+                {{ form.school_type.label_tag }}
+                {{ form.school_type }}
+            </p>
+
+            <p>
+                {{ form.title.errors }}
+                {{ form.title.label_tag }}
+                {{ form.title }}
+            </p>
+
+            <p>
+                {{ form.body.errors }}
+                {{ form.body.label_tag }}
+                {{ form.body }}
+            </p>
+
+            <p>
+                {{ form.terms_of_service.errors }}
+                {{ form.terms_of_service.label_tag }}
+                {{ form.terms_of_service }}
+            </p>
+
+            <p>
+                {{ form.privacy_policy.errors }}
+                {{ form.privacy_policy.label_tag }}
+                {{ form.privacy_policy }}
+            </p>
+
+            {% csrf_token %}
+
+            <input type="submit" value="Submit memory">
+        </form>
+    </div>
 </main>
 {% endblock content %}

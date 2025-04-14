@@ -7,13 +7,15 @@
 {% include 'partials/nav.html' %}
 
 <main>
-    <h1>Contact</h1>
+    <div style="max-width: 600px;">
+        <h1>Contact</h1>
 
-    <form method="post">
-        {{ form.as_p }}
-        {% csrf_token %}
-        <input type="submit" value="Save">
-    </form>
+        <form method="post">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <input type="submit" value="Save">
+        </form>
+    </div>
 </main>
 
 {% endblock content %}
