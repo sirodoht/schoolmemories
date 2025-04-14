@@ -35,7 +35,8 @@ urlpatterns += [
 
 # Memories
 urlpatterns += [
-    path("memories/submit/", views.MemoryCreate.as_view(), name="memory_create"),
+    path("new/memory/", views.MemoryCreate.as_view(), name="memory_create"),
+    path("memories/<int:pk>/", views.MemoryDetail.as_view(), name="memory_detail"),
 ]
 
 # Pages

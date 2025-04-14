@@ -1,0 +1,35 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}{{ memory.title }} | School Memories{% endblock %}
+
+{% block content %}
+{% include 'partials/nav.html' %}
+<main>
+    <div class="memory-detail">
+        <h1>
+            <span style="color: #b1b1b1;">
+                #{{ memory.id }}
+            </span>
+            {{ memory.title }}
+        </h1>
+
+        <div class="memory-metadata">
+            <p><strong>Category:</strong> {{ memory.category }}</p>
+            <p><strong>Tags:</strong> {{ memory.tags }}</p>
+            <p><strong>Gender:</strong> {{ memory.get_gender_display }}</p>
+            <p><strong>Country:</strong> {{ memory.get_country_display }}</p>
+            <p><strong>School Grade:</strong> {{ memory.school_grade }}</p>
+            <p><strong>School Type:</strong> {{ memory.school_type }}</p>
+        </div>
+
+        <div class="memory-content">
+            <h2>Memory Content</h2>
+            <p>{{ memory.body|linebreaks }}</p>
+        </div>
+
+        <div class="memory-back">
+            <a href="{% url 'index' %}">Back to memories list</a>
+        </div>
+    </div>
+</main>
+{% endblock content %}

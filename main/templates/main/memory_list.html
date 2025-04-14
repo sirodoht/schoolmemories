@@ -7,19 +7,19 @@
 <main>
     <div class="memory-grid">
         {% for memory in memory_list %}
-        <div class="memory-grid-item">
+        <a href="{% url 'memory_detail' memory.id %}" class="memory-grid-item">
             <div class="memory-grid-item-text">
-                #{{ memory.id }} Title: {{ memory.title }}
-                <br>
-                {{ memory.category }}
-                / {{ memory.tags }}
-                / {{ memory.get_gender_display }}
-                / {{ memory.get_country_display }}
-                <p>
-                    {{ memory.school_grade }} grade at a {{ memory.school_type }} school.
-                </p>
+                <span style="color: #b1b1b1;">
+                    #{{ memory.id }}&nbsp;
+                </span>
+                {{ memory.title }}
             </div>
-        </div>
+            <div class="memory-grid-item-tags">
+                <div>
+                    {{ memory.get_country_display }}
+                </div>
+            </div>
+        </a>
         {% endfor %}
     </div>
 </main>

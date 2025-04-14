@@ -250,3 +250,13 @@ class MemoryCreate(FormView):
         context = super().get_context_data(**kwargs)
         context["page_list"] = models.Page.objects.all()
         return context
+
+
+class MemoryDetail(DetailView):
+    model = models.Memory
+    template_name = "main/memory_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_list"] = models.Page.objects.all()
+        return context
