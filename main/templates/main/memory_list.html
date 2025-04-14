@@ -1,12 +1,10 @@
 {% extends 'main/layout.html' %}
 
-{% block title %}School memories{% endblock %}
+{% block title %}School Memories That Matter{% endblock %}
 
 {% block content %}
 {% include 'partials/nav.html' %}
 <main>
-    <h1>School Memories</h1>
-
     <div class="memory-grid">
         {% for memory in memory_list %}
         <div class="memory-grid-item">
