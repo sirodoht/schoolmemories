@@ -61,3 +61,9 @@ class MemoryForm(forms.ModelForm):
             "title",
             "body",
         ]
+
+
+class SiteSettingsForm(forms.ModelForm):
+    class Meta:
+        model = models.SiteSettings
+        fields = ["introduction"]

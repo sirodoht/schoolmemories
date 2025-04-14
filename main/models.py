@@ -9,6 +9,28 @@ from django.urls import reverse
 from main import country, validators
 
 
+class SiteSettings(models.Model):
+    introduction = models.TextField(blank=True, null=True)
+
+    @property
+    def introduction_as_html(self):
+        markdown = mistune.create_markdown(plugins=["task_lists", "footnotes"])
+        return markdown(self.introduction)
+
+    class Meta:
+        verbose_name_plural = "Site Settings"
+
+    def save(self, *args, **kwargs):
+        # Ensure only one instance exists
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def load(cls):
+        obj, created = cls.objects.get_or_create(pk=1)
+        return obj
+
+
 class User(AbstractUser):
     username = models.CharField(
         max_length=150,

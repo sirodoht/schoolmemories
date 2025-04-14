@@ -13,6 +13,11 @@ urlpatterns += [
     path("accounts/logout/", views.Logout.as_view(), name="logout"),
     path("accounts/", include("django.contrib.auth.urls")),
     path("accounts/edit/", views.UserUpdate.as_view(), name="user_update"),
+    path(
+        "accounts/site-settings/",
+        views.SiteSettingsUpdate.as_view(),
+        name="site_settings",
+    ),
 ]
 
 # Images

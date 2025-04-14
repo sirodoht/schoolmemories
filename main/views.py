@@ -29,6 +29,7 @@ def index(request):
         {
             "page_list": models.Page.objects.all().defer("body"),
             "memory_list": models.Memory.objects.all(),
+            "site_settings": models.SiteSettings.objects.first(),
         },
     )
 
@@ -55,6 +56,16 @@ def dashboard(request):
         "main/dashboard.html",
         {"page_list": models.Page.objects.all()},
     )
+
+
+class SiteSettingsUpdate(LoginRequiredMixin, UpdateView):
+    model = models.SiteSettings
+    form_class = forms.SiteSettingsForm
+    template_name = "main/site_settings.html"
+    success_url = reverse_lazy("index")
+
+    def get_object(self):
+        return models.SiteSettings.load()
 
 
 # Pages

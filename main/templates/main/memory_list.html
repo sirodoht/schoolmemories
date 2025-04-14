@@ -5,6 +5,13 @@
 {% block content %}
 {% include 'partials/nav.html' %}
 <main>
+    <div>
+        [ <a href="{% url 'site_settings' %}">Edit</a> ]
+    </div>
+    <div>
+        {{ site_settings.introduction_as_html|safe }}
+    </div>
+
     <div class="memory-grid">
         {% for memory in memory_list %}
         <a href="{% url 'memory_detail' memory.id %}" class="memory-grid-item">

@@ -1,0 +1,15 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Site Settings{% endblock %}
+
+{% block content %}
+<main>
+    <h1>Site Settings</h1>
+
+    <form method="post">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <input type="submit" value="Save">
+    </form>
+</main>
+{% endblock content %}
