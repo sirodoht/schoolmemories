@@ -16,7 +16,9 @@ nav {
     margin: 16px auto;
     text-align: right;
     padding: 16px 0;
+    display: flex;
 }
+nav a:first-child { font-size: 22px; margin-right: auto; margin-left: 0; }
 nav a {
     margin: 8px 16px;
     text-decoration: none;
