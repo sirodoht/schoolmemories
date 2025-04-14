@@ -6,6 +6,31 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("dashboard/", views.dashboard, name="dashboard"),
     path("contact/", views.Contact.as_view(), name="contact"),
+    path(
+        "dashboard/introduction/",
+        views.IntroductionUpdate.as_view(),
+        name="introduction_update",
+    ),
+    path(
+        "dashboard/privacy-policy/",
+        views.PrivacyPolicyUpdate.as_view(),
+        name="privacy_policy_update",
+    ),
+    path(
+        "privacy-policy/",
+        views.PrivacyPolicy.as_view(),
+        name="privacy_policy",
+    ),
+    path(
+        "dashboard/terms-of-service/",
+        views.TermsOfServiceUpdate.as_view(),
+        name="terms_of_service_update",
+    ),
+    path(
+        "terms-of-service/",
+        views.TermsOfService.as_view(),
+        name="terms_of_service",
+    ),
 ]
 
 # User system
@@ -13,11 +38,6 @@ urlpatterns += [
     path("accounts/logout/", views.Logout.as_view(), name="logout"),
     path("accounts/", include("django.contrib.auth.urls")),
     path("accounts/edit/", views.UserUpdate.as_view(), name="user_update"),
-    path(
-        "accounts/site-settings/",
-        views.SiteSettingsUpdate.as_view(),
-        name="site_settings",
-    ),
 ]
 
 # Images

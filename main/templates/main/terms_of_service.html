@@ -1,0 +1,21 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Terms of Service{% endblock %}
+
+{% block content %}
+{% include 'partials/nav.html' %}
+
+<main>
+    <h1>Terms of Service</h1>
+
+    {% if request.user.is_authenticated %}
+    <div style="margin-bottom: 20px;">
+        [ <a href="{% url 'terms_of_service_update' %}">Edit</a> ]
+    </div>
+    {% endif %}
+
+    <div>
+        {{ site_settings.terms_of_service_as_html|safe }}
+    </div>
+</main>
+{% endblock content %}

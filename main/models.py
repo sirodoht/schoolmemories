@@ -11,11 +11,23 @@ from main import country, validators
 
 class SiteSettings(models.Model):
     introduction = models.TextField(blank=True, null=True)
+    terms_of_service = models.TextField(blank=True, null=True)
+    privacy_policy = models.TextField(blank=True, null=True)
 
     @property
     def introduction_as_html(self):
         markdown = mistune.create_markdown(plugins=["task_lists", "footnotes"])
         return markdown(self.introduction)
+
+    @property
+    def terms_of_service_as_html(self):
+        markdown = mistune.create_markdown(plugins=["task_lists", "footnotes"])
+        return markdown(self.terms_of_service)
+
+    @property
+    def privacy_policy_as_html(self):
+        markdown = mistune.create_markdown(plugins=["task_lists", "footnotes"])
+        return markdown(self.privacy_policy)
 
     class Meta:
         verbose_name_plural = "Site Settings"
@@ -106,8 +118,8 @@ class Memory(models.Model):
     COUNTRY_CHOICES = [(code, name) for code, name in country.COUNTRIES.items()]
     country = models.CharField(max_length=2, choices=COUNTRY_CHOICES)
     GENDER_CHOICES = [
-        ("M", "Male"),
         ("F", "Female"),
+        ("M", "Male"),
         ("O", "Other"),
         ("N", "Prefer not to say"),
     ]

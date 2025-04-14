@@ -4,7 +4,9 @@
 
 {% block content %}
 <main style="font-family: sans-serif;">
-    <h1>Dashboard</h1>
+    <div style="margin: 32px 0;">
+        <h1>Dashboard</h1>
+    </div>
 
     <div>
         <div>
@@ -25,9 +27,14 @@
     </div>
 
     <div style="margin: 16px 0; line-height: 1.6;">
+        <a href="{% url 'introduction_update' %}">Introduction</a>
+        <br><a href="{% url 'privacy_policy' %}">Privacy Policy</a>
+        <br><a href="{% url 'terms_of_service' %}">Terms of Service</a>
+    </div>
+
+    <div style="margin: 16px 0; line-height: 1.6;">
         <a href="{% url 'image_list' %}">Images</a>
         <br><a href="{% url 'user_update' %}">User Settings</a>
-        <br><a href="{% url 'site_settings' %}">Site Settings</a>
         <br><form method="post" action="{% url 'logout' %}" class="form-inline">
             {% csrf_token %}
             <input type="submit" value="Log out">

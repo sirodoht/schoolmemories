@@ -63,7 +63,19 @@ class MemoryForm(forms.ModelForm):
         ]
 
 
-class SiteSettingsForm(forms.ModelForm):
+class IntroductionForm(forms.ModelForm):
     class Meta:
         model = models.SiteSettings
         fields = ["introduction"]
+
+
+class PrivacyPolicyForm(forms.ModelForm):
+    class Meta:
+        model = models.SiteSettings
+        fields = ["privacy_policy"]
+
+
+class TermsOfServiceForm(forms.ModelForm):
+    class Meta:
+        model = models.SiteSettings
+        fields = ["terms_of_service"]

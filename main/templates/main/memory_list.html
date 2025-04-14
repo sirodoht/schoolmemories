@@ -6,7 +6,7 @@
 {% include 'partials/nav.html' %}
 <main>
     <div>
-        [ <a href="{% url 'site_settings' %}">Edit</a> ]
+        [ <a href="{% url 'introduction_update' %}">Edit</a> ]
     </div>
     <div>
         {{ site_settings.introduction_as_html|safe }}

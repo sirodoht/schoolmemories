@@ -16,6 +16,7 @@ from django.views.generic import (
     DeleteView,
     DetailView,
     FormView,
+    TemplateView,
     UpdateView,
 )
 
@@ -58,14 +59,65 @@ def dashboard(request):
     )
 
 
-class SiteSettingsUpdate(LoginRequiredMixin, UpdateView):
+# Static Pages
+
+
+class IntroductionUpdate(LoginRequiredMixin, UpdateView):
     model = models.SiteSettings
-    form_class = forms.SiteSettingsForm
-    template_name = "main/site_settings.html"
+    form_class = forms.IntroductionForm
+    template_name = "main/introduction_update.html"
     success_url = reverse_lazy("index")
 
     def get_object(self):
         return models.SiteSettings.load()
+
+
+class PrivacyPolicyUpdate(LoginRequiredMixin, UpdateView):
+    model = models.SiteSettings
+    form_class = forms.PrivacyPolicyForm
+    template_name = "main/privacy_policy_update.html"
+    success_url = reverse_lazy("privacy_policy")
+
+    def get_object(self):
+        return models.SiteSettings.load()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_list"] = models.Page.objects.all()
+        return context
+
+
+class PrivacyPolicy(TemplateView):
+    template_name = "main/privacy_policy.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["site_settings"] = models.SiteSettings.load()
+        return context
+
+
+class TermsOfServiceUpdate(LoginRequiredMixin, UpdateView):
+    model = models.SiteSettings
+    form_class = forms.TermsOfServiceForm
+    template_name = "main/terms_of_service_update.html"
+    success_url = reverse_lazy("terms_of_service")
+
+    def get_object(self):
+        return models.SiteSettings.load()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_list"] = models.Page.objects.all()
+        return context
+
+
+class TermsOfService(TemplateView):
+    template_name = "main/terms_of_service.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["site_settings"] = models.SiteSettings.load()
+        return context
 
 
 # Pages
@@ -238,6 +290,17 @@ class MemoryCreate(FormView):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         if form.is_valid():
+            if not form.cleaned_data.get("terms_of_service"):
+                form.add_error(
+                    "terms_of_service",
+                    "You must accept the Terms of Service to continue.",
+                )
+                return self.form_invalid(form)
+            if not form.cleaned_data.get("privacy_policy"):
+                form.add_error(
+                    "privacy_policy", "You must accept the Privacy Policy to continue."
+                )
+                return self.form_invalid(form)
             obj = form.save()
             message = (
                 f"Your Submission ID is #{obj.id}. Note it down for future reference."

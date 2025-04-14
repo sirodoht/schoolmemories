@@ -1,0 +1,17 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Editing Privacy Policy page{% endblock %}
+
+{% block content %}
+<main>
+    <div style="margin: 32px 0;">
+        <h1>Editing Privacy Policy page</h1>
+    </div>
+
+    <form method="post">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <input type="submit" value="Save">
+    </form>
+</main>
+{% endblock content %}

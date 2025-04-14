@@ -43,6 +43,17 @@ input[type="password"] {
     display: block;
     width: 100%;
     box-sizing: border-box;
+    border: 1px solid #ced4da;
+    padding: 6px;
+    font-size: 16px;
+}
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    color: #495057;
+    background-color: #fff;
+    outline: 0;
+    box-shadow: rgba(130, 115, 115, 0.3) 0px 0px 0px 3px;
 }
 input[type="submit"] {
     background: #5a6268;
@@ -53,7 +64,7 @@ input[type="submit"] {
     padding: 6px 12px;
     font-size: 16px;
 }
-textarea { width: 100%; }
+textarea { width: 100%; box-sizing: border-box; border: 1px solid #ced4da; }
 .helptext { color: #757575; }
 .form-inline { display: inline-block; }
 .form-inline input[type="submit"] {
