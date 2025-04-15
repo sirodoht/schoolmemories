@@ -7,9 +7,12 @@
 {% block content %}
 {% include 'partials/nav.html' %}
 <main>
+    {% if request.user.is_authenticated %}
     <div>
         [ <a href="{% url 'introduction_update' %}">Edit</a> ]
     </div>
+    {% endif %}
+
     <div>
         {{ site_settings.introduction_as_html|safe }}
     </div>
