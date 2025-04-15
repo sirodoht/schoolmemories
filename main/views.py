@@ -1,9 +1,11 @@
 import uuid
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LogoutView as DjLogoutView
+from django.core.mail import send_mail
 from django.http import (
     Http404,
     HttpResponse,
@@ -295,7 +297,22 @@ class Contact(FormView):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         if form.is_valid():
-            # TODO: Email account user with message info
+            superusers = models.User.objects.filter(is_superuser=True)
+            superuser_emails = [user.email for user in superusers if user.email]
+            if not superuser_emails:
+                return self.form_valid(form)
+
+            subject = f"[schoolmemories] Contact from {form.cleaned_data.get('name')}"
+            message = f"Name: {form.cleaned_data.get('name')}\n"
+            message += f"Email: {form.cleaned_data.get('email')}\n\n"
+            message += f"Message:\n{form.cleaned_data.get('message')}"
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                superuser_emails,
+            )
+
             messages.success(self.request, self.success_message)
             return self.form_valid(form)
         else:

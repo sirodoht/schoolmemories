@@ -147,3 +147,22 @@ STATIC_ROOT = BASE_DIR / "static"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# Email
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+if LOCALDEV:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_USE_TLS = True
+EMAIL_HOST = "smtp.postmarkapp.com"
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = 587
+
+DEFAULT_FROM_EMAIL = "School Memories That Matter <contact@schoolmemories.org>"
+EMAIL_FROM_HOST = "schoolmemories.org"
+SERVER_EMAIL = "School Memories Server <server@schoolmemories.org>"
+EMAIL_SUBJECT_PREFIX = "[schoolmemories] "
+
+ADMINS = [("Theodore Keloglou", "zf@sirodoht.com")]
