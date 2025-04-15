@@ -1,5 +1,7 @@
 {% extends 'main/layout.html' %}
 
+{% load main_filters %}
+
 {% block title %}School Memories That Matter{% endblock %}
 
 {% block content %}
@@ -10,6 +12,47 @@
     </div>
     <div>
         {{ site_settings.introduction_as_html|safe }}
+    </div>
+
+    <div class="filter-section">
+        <form method="get" action="{% url 'index' %}" class="filter-form">
+            <div class="filter-group">
+                <label for="country-filter">Filter by country:</label>
+                <select name="country" id="country-filter" onchange="this.form.submit()">
+                    <option value="">All Countries</option>
+                    {% for code, name in countries %}
+                    <option value="{{ code }}" {% if selected_country == code %}selected{% endif %}>{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="category-filter">Filter by category:</label>
+                <select name="category" id="category-filter" onchange="this.form.submit()">
+                    <option value="">All Categories</option>
+                    {% for category in categories %}
+                    <option value="{{ category }}" {% if selected_category == category %}selected{% endif %}>{{ category }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+
+        <div class="filter-results">
+            Showing {{ memory_list|length }} memories
+            {% if selected_country or selected_category %}
+                {% if selected_country and selected_category %}
+                    in {{ selected_category }} category from {{ selected_country|country_name }}
+                {% elif selected_country %}
+                    from {{ selected_country|country_name }}
+                {% elif selected_category %}
+                    in {{ selected_category }} category
+                {% endif %}
+            {% endif %}
+
+            {% if filters_active %}
+            (<a href="{% url 'index' %}">show all</a>)
+            {% endif %}
+        </div>
     </div>
 
     <div class="memory-grid">

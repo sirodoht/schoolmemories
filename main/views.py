@@ -24,13 +24,42 @@ from main import forms, models
 
 
 def index(request):
+    # filters
+    country_filter = request.GET.get("country", "")
+    category_filter = request.GET.get("category", "")
+    memories = models.Memory.objects.all()
+    if country_filter:
+        memories = memories.filter(country=country_filter)
+    if category_filter:
+        memories = memories.filter(category=category_filter)
+    filters_active = bool(country_filter or category_filter)
+
+    categories = (
+        models.Memory.objects.values_list("category", flat=True)
+        .distinct()
+        .order_by("category")
+    )
+
+    # exclude countries of which there are no memories
+    used_countries = models.Memory.objects.values_list("country", flat=True).distinct()
+    countries = [
+        (code, name)
+        for code, name in models.Memory.COUNTRY_CHOICES
+        if code in used_countries
+    ]
+
     return render(
         request,
         "main/memory_list.html",
         {
             "page_list": models.Page.objects.all().defer("body"),
-            "memory_list": models.Memory.objects.all(),
+            "memory_list": memories,
             "site_settings": models.SiteSettings.objects.first(),
+            "countries": countries,
+            "selected_country": country_filter,
+            "categories": categories,
+            "selected_category": category_filter,
+            "filters_active": filters_active,
         },
     )
 
