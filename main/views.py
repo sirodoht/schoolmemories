@@ -370,7 +370,8 @@ class MemoryCreate(FormView):
         obj = form.save()
         message = f"Your Submission ID is #{obj.id}. Note it down for future reference."
         messages.success(self.request, message)
-        self.send_notification_email(obj)
+        if not settings.LOCALDEV:
+            self.send_notification_email(obj)
         return self.form_valid(form)
 
     def send_notification_email(self, memory):
