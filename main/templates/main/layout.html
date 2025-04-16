@@ -28,13 +28,11 @@
         {% block content %}
         {% endblock content %}
 
-        {% block scripts %}
-        {% endblock scripts %}
-
         <footer>
             <p>All data on this site are licensed under <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0</a>.</p>
         </footer>
 
-        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+        {% block scripts %}
+        {% endblock scripts %}
     </body>
 </html>

@@ -76,10 +76,24 @@
 
             {% csrf_token %}
 
-            <div class="cf-turnstile" data-sitekey="0x4AAAAAABM4uMpeJqzaXTok" style="margin-bottom: 12px;"></div>
+            {% if enable_turnstile %}
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAABM4uMpeJqzaXTok" data-callback="turnstileCallback" style="margin-bottom: 12px;"></div>
+            <input type="hidden" name="turnstile_response" id="id_turnstile_response">
+            {% endif %}
 
             <input type="submit" value="Submit memory">
         </form>
     </div>
 </main>
 {% endblock content %}
+
+{% block scripts %}
+{% if enable_turnstile %}
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script>
+    function turnstileCallback(token) {
+        document.getElementById('id_turnstile_response').value = token;
+    }
+</script>
+{% endif %}
+{% endblock scripts %}

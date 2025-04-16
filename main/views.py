@@ -381,6 +381,7 @@ class MemoryCreate(FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["page_list"] = models.Page.objects.all()
+        context["enable_turnstile"] = bool(settings.TURNSTILE_SECRET)
         return context
 
 
