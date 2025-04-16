@@ -3,11 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 
 from main import models
 
-
-@admin.register(models.SiteSettings)
-class SiteSettingsAdmin(admin.ModelAdmin):
-    list_display = ("pk",)
-    fieldsets = ((None, {"fields": ("introduction",)}),)
+admin.site.site_header = "Admin Panel"
 
 
 @admin.register(models.User)
@@ -29,7 +25,7 @@ class PageAdmin(admin.ModelAdmin):
 class ImageAdmin(admin.ModelAdmin):
     list_display = ("name", "slug", "extension", "data_size", "uploaded_at")
     search_fields = ("name", "slug")
-    readonly_fields = ("uploaded_at", "data_size", "data_as_base64")
+    readonly_fields = ("uploaded_at", "data_size")
     list_filter = ("extension", "uploaded_at")
 
 
