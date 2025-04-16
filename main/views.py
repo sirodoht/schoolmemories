@@ -340,10 +340,12 @@ class MemoryCreate(FormView):
             return self.form_invalid(form)
 
         # check if spam
-        turnstile_token = request.POST.get("cf-turnstile-response")
-        if not self.verify_turnstile(turnstile_token, request.META.get("REMOTE_ADDR")):
-            form.add_error(None, "Captcha verification failed. Please try again.")
-            return self.form_invalid(form)
+        if settings.TURNSTILE_SECRET:
+            turnstile_token = form.cleaned_data.get("turnstile_response")
+            remote_ip = request.META.get("REMOTE_ADDR")
+            if not self.verify_turnstile(turnstile_token, remote_ip):
+                form.add_error(None, "Captcha verification failed. Please try again.")
+                return self.form_invalid(form)
 
         # process memory form data
         body_text = form.cleaned_data.get("body")
