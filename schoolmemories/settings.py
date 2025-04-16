@@ -36,6 +36,11 @@ ALLOWED_HOSTS = [
     "schoolmemories.org",
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://schoolmemories.01z.io",
+    "https://schoolmemories.org",
+]
+
 CANONICAL_HOST = "schoolmemories.01z.io"
 if LOCALDEV:
     CANONICAL_HOST = "localhost:8000"
