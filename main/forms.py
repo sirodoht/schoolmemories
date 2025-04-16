@@ -48,6 +48,7 @@ class ContactForm(forms.Form):
 class MemoryForm(forms.ModelForm):
     terms_of_service = forms.BooleanField()
     privacy_policy = forms.BooleanField()
+    cf_turnstile_response = forms.CharField()
 
     class Meta:
         model = models.Memory

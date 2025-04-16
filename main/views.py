@@ -339,25 +339,9 @@ class MemoryCreate(FormView):
         if not form.is_valid():
             return self.form_invalid(form)
 
-        # turnstile CAPTCHA
-        token = request.POST.get("cf-turnstile-response")
-        if not token:
-            form.add_error(None, "Captcha verification failed, missing token.")
-            return self.form_invalid(form)
-
-        data = {
-            "secret": settings.TURNSTILE_SECRET,
-            "response": token,
-            "remoteip": request.META.get("REMOTE_ADDR"),
-        }
-        try:
-            result = httpx.post(url=settings.TURNSTILE_URL, data=data, timeout=5.0)
-        except (httpx.RequestError, httpx.HTTPStatusError):
-            form.add_error(None, "Captcha verification failed due to a network error.")
-            return self.form_invalid(form)
-
-        if not result.json().get("success"):
-            form.add_error(None, "Captcha verification failed.")
+        turnstile_token = request.POST.get("cf-turnstile-response")
+        if not self.verify_turnstile(turnstile_token, request.META.get("REMOTE_ADDR")):
+            form.add_error(None, "Captcha verification failed. Please try again.")
             return self.form_invalid(form)
 
         # process memory form data
@@ -384,6 +368,15 @@ class MemoryCreate(FormView):
         message = f"Your Submission ID is #{obj.id}. Note it down for future reference."
         messages.success(self.request, message)
         return self.form_valid(form)
+
+    def verify_turnstile(self, token, remote_ip):
+        data = {
+            "secret": settings.TURNSTILE_SECRET,
+            "response": token,
+            "remoteip": remote_ip,
+        }
+        response = httpx.post(url=settings.TURNSTILE_URL, data=data, timeout=5.0)
+        return response.json().get("success", False)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
