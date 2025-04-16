@@ -23,3 +23,6 @@ export SECRET_KEY=
 # SMTP credentials
 export EMAIL_HOST_USER=
 export EMAIL_HOST_PASSWORD=
+
+# Turnstile
+export TURNSTILE_SECRET=

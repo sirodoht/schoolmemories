@@ -1,5 +1,6 @@
 import uuid
 
+import httpx
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -335,31 +336,54 @@ class MemoryCreate(FormView):
     def post(self, request, *args, **kwargs):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        if form.is_valid():
-            body_text = form.cleaned_data.get("body")
-            word_count = len(body_text.split())
-            if word_count > 300:
-                form.add_error("body", "Your memory cannot exceed 300 words.")
-                return self.form_invalid(form)
-            if not form.cleaned_data.get("terms_of_service"):
-                form.add_error(
-                    "terms_of_service",
-                    "You must accept the Terms of Service to continue.",
-                )
-                return self.form_invalid(form)
-            if not form.cleaned_data.get("privacy_policy"):
-                form.add_error(
-                    "privacy_policy", "You must accept the Privacy Policy to continue."
-                )
-                return self.form_invalid(form)
-            obj = form.save()
-            message = (
-                f"Your Submission ID is #{obj.id}. Note it down for future reference."
-            )
-            messages.success(self.request, message)
-            return self.form_valid(form)
-        else:
+        if not form.is_valid():
             return self.form_invalid(form)
+
+        # turnstile CAPTCHA
+        token = request.POST.get("cf-turnstile-response")
+        if not token:
+            form.add_error(None, "Captcha verification failed, missing token.")
+            return self.form_invalid(form)
+
+        data = {
+            "secret": settings.TURNSTILE_SECRET,
+            "response": token,
+            "remoteip": request.META.get("REMOTE_ADDR"),
+        }
+        try:
+            result = httpx.post(url=settings.TURNSTILE_URL, data=data, timeout=5.0)
+        except (httpx.RequestError, httpx.HTTPStatusError):
+            form.add_error(None, "Captcha verification failed due to a network error.")
+            return self.form_invalid(form)
+
+        if not result.json().get("success"):
+            form.add_error(None, "Captcha verification failed.")
+            return self.form_invalid(form)
+
+        # process memory form data
+        body_text = form.cleaned_data.get("body")
+        word_count = len(body_text.split())
+        if word_count > 300:
+            form.add_error("body", "Your memory cannot exceed 300 words.")
+            return self.form_invalid(form)
+
+        # check ToS and privacy policy
+        if not form.cleaned_data.get("terms_of_service"):
+            form.add_error(
+                "terms_of_service",
+                "You must accept the Terms of Service to continue.",
+            )
+            return self.form_invalid(form)
+        if not form.cleaned_data.get("privacy_policy"):
+            form.add_error(
+                "privacy_policy", "You must accept the Privacy Policy to continue."
+            )
+            return self.form_invalid(form)
+
+        obj = form.save()
+        message = f"Your Submission ID is #{obj.id}. Note it down for future reference."
+        messages.success(self.request, message)
+        return self.form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

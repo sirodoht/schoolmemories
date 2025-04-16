@@ -166,3 +166,10 @@ SERVER_EMAIL = "School Memories Server <server@schoolmemories.org>"
 EMAIL_SUBJECT_PREFIX = "[schoolmemories] "
 
 ADMINS = [("Theodore Keloglou", "zf@sirodoht.com")]
+
+
+# Cloudflare Turnstile
+# https://developers.cloudflare.com/turnstile/get-started/server-side-validation/
+
+TURNSTILE_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify"
+TURNSTILE_SECRET = os.getenv("TURNSTILE_SECRET")
