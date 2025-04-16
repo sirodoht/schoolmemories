@@ -370,7 +370,30 @@ class MemoryCreate(FormView):
         obj = form.save()
         message = f"Your Submission ID is #{obj.id}. Note it down for future reference."
         messages.success(self.request, message)
+        self.send_notification_email(obj)
         return self.form_valid(form)
+
+    def send_notification_email(self, memory):
+        superusers = models.User.objects.filter(is_superuser=True)
+        superuser_emails = [user.email for user in superusers if user.email]
+        if superuser_emails:
+            subject = f"[schoolmemories] New Memory Submission #{memory.id}"
+            message = "A new memory has been submitted:\n\n"
+            message += f"ID: {memory.id}\n"
+            message += f"Title: {memory.title}\n"
+            message += f"Country: {memory.get_country_display()}\n"
+            message += f"Gender: {memory.get_gender_display()}\n"
+            message += f"Category: {memory.category}\n"
+            message += f"Tags: {memory.tags}\n"
+            message += f"School Grade: {memory.school_grade}\n"
+            message += f"School Type: {memory.school_type}\n\n"
+            message += f"Body:\n{memory.body}"
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                superuser_emails,
+            )
 
     def verify_turnstile(self, token, remote_ip):
         data = {
