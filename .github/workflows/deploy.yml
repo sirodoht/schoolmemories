@@ -36,3 +36,4 @@ jobs:
         DEBUG: ${{ vars.DEBUG }}
         LOCALDEV: ${{ vars.LOCALDEV }}
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        TURNSTILE_SECRET: ${{ secrets.TURNSTILE_SECRET }}
