@@ -339,6 +339,7 @@ class MemoryCreate(FormView):
         if not form.is_valid():
             return self.form_invalid(form)
 
+        # check if spam
         turnstile_token = request.POST.get("cf-turnstile-response")
         if not self.verify_turnstile(turnstile_token, request.META.get("REMOTE_ADDR")):
             form.add_error(None, "Captcha verification failed. Please try again.")
