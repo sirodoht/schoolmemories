@@ -1,7 +1,7 @@
 /* general */
 body { font-family: serif; line-height: 1.5; margin: 0; background: #f9f4e9; }
 h1 { font-weight: normal; margin: 16px 0 8px; }
-p { font-size: 19px; }
+p, li { font-size: 19px; }
 a { color: #c6521e; text-decoration: none; }
 a:hover { text-decoration: underline; }
 
