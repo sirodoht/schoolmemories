@@ -120,6 +120,7 @@ class Memory(models.Model):
     GENDER_CHOICES = [
         ("F", "Female"),
         ("M", "Male"),
+        ("N", "Nonbinary"),
         ("O", "Other"),
         ("N", "Prefer not to say"),
     ]
