@@ -368,7 +368,7 @@ class MemoryCreate(FormView):
             return self.form_invalid(form)
 
         obj = form.save()
-        message = f"Your Submission ID is #{obj.id}. Note it down for future reference."
+        message = f"Thank you for your submission. Here’s your memory ID number #{obj.id}. Please, save this number in case you wish to reach out about sth concerning your memory in the future"
         messages.success(self.request, message)
         if settings.EMAIL_HOST_USER and settings.EMAIL_HOST_PASSWORD:
             self.send_notification_email(obj)
