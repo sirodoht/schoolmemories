@@ -11,56 +11,56 @@
         <h1>Submit a memory</h1>
         <form method="post">
             <p>
-                {{ form.gender.label_tag }}
+                <label for="id_gender">Gender <span style="color: red;">*</span></label>
                 {{ form.gender.errors }}
                 {{ form.gender }}
             </p>
 
             <p>
-                {{ form.country.label_tag }}
+                <label for="id_country">Country <span style="color: red;">*</span></label>
                 {{ form.country.errors }}
                 {{ form.country }}
             </p>
 
             <p>
-                {{ form.category.label_tag }}
+                <label for="id_category">Category <span style="color: red;">*</span></label>
                 {{ form.category.errors }}
                 {{ form.category }}
             </p>
 
             <p>
-                {{ form.tags.label_tag }}
+                <label for="id_tags">Tags <span style="color: red;">*</span></label>
                 {{ form.tags.errors }}
                 {{ form.tags }}
             </p>
 
             <p>
-                {{ form.school_grade.label_tag }}
+                <label for="id_school_grade">School Grade <span style="color: red;">*</span></label>
                 {{ form.school_grade.errors }}
                 {{ form.school_grade }}
             </p>
 
             <p>
-                {{ form.school_type.label_tag }}
+                <label for="id_school_type">School Type <span style="color: red;">*</span></label>
                 {{ form.school_type.errors }}
                 {{ form.school_type }}
             </p>
 
             <p>
-                {{ form.title.label_tag }}
+                <label for="id_title">Title <span style="color: red;">*</span></label>
                 {{ form.title.errors }}
                 {{ form.title }}
             </p>
 
             <p>
-                <label for="id_body">Memory content (max 300 words)</label>
+                <label for="id_body">Memory content (max 300 words) <span style="color: red;">*</span></label>
                 {{ form.body.errors }}
                 {{ form.body }}
             </p>
 
             <p>
                 <label for="id_terms_of_service">
-                    I agree with the <a href="{% url 'terms_of_service' %}" target="_blank">Terms of Service</a> <small>(open in a new tab)</small>
+                    I agree with the <a href="{% url 'terms_of_service' %}" target="_blank">Terms of Service</a> <small>(open in a new tab)</small> <span style="color: red;">*</span>
                 </label>
                 {{ form.terms_of_service.errors }}
                 {{ form.terms_of_service }}
@@ -68,7 +68,7 @@
 
             <p>
                 <label for="id_privacy_policy">
-                    I agree with the <a href="{% url 'privacy_policy' %}" target="_blank">Privacy Policy</a> <small>(open in a new tab)</small>
+                    I agree with the <a href="{% url 'privacy_policy' %}" target="_blank">Privacy Policy</a> <small>(open in a new tab)</small> <span style="color: red;">*</span>
                 </label>
                 {{ form.privacy_policy.errors }}
                 {{ form.privacy_policy }}
