@@ -109,36 +109,42 @@
                 </span>
             </p>
 
-            <p>
-                <label for="id_terms_of_service">
-                    I agree with the <a href="{% url 'terms_of_service' %}" target="_blank">Terms of Service</a>
-                    <small>(open in a new tab)</small> <span style="color: red;">*</span>
-                </label>
+            <div class="agreement-field">
                 {{ form.terms_of_service.errors }}
-                {{ form.terms_of_service }}
-            </p>
-
-            <p>
-                <label for="id_privacy_policy">
-                    I agree with the <a href="{% url 'privacy_policy' %}" target="_blank">Privacy Policy</a>
-                    <small>(open in a new tab)</small> <span style="color: red;">*</span>
+                <label for="id_terms_of_service">
+                    {{ form.terms_of_service }}
+                    <span>
+                        I agree with the <a href="{% url 'terms_of_service' %}" target="_blank">Terms of Service</a>
+                        <small>(opens in a new tab)</small> <span style="color: red;">*</span>
+                    </span>
                 </label>
+            </div>
+
+            <div class="agreement-field">
                 {{ form.privacy_policy.errors }}
-                {{ form.privacy_policy }}
-            </p>
-
-            <p>
-                <label for="id_age_confirmation">
-                    I confirm I am over 18 years old <span style="color: red;">*</span>
+                <label for="id_privacy_policy">
+                    {{ form.privacy_policy }}
+                    <span>
+                        I agree with the <a href="{% url 'privacy_policy' %}" target="_blank">Privacy Policy</a>
+                        <small>(opens in a new tab)</small> <span style="color: red;">*</span>
+                    </span>
                 </label>
+            </div>
+
+            <div class="agreement-field">
                 {{ form.age_confirmation.errors }}
-                {{ form.age_confirmation }}
-                <span class="helptext">
-                    <br>If you are below 18 but wish to submit your school memory, you can ask a
-                    responsible adult that you trust (it could be a parent/guardian, sibling, friend
-                    or other) to make the submission on your behalf.
-                </span>
-            </p>
+                <label for="id_age_confirmation">
+                    {{ form.age_confirmation }}
+                    <span>
+                        I confirm I am over 18 years old <span style="color: red;">*</span>
+                        <span class="helptext">
+                            If you are below 18 but wish to submit your school memory, you can ask a
+                            responsible adult that you trust (it could be a parent/guardian, sibling, friend
+                            or other) to make the submission on your behalf.
+                        </span>
+                    </span>
+                </label>
+            </div>
 
             {% csrf_token %}
 

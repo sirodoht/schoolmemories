@@ -119,6 +119,42 @@ textarea { width: 100%; box-sizing: border-box; border: 1px solid #ced4da; }
     border-color: #2f6d1e;
 }
 
+/* agreement checkboxes */
+.agreement-field {
+    margin: 12px 0;
+    padding: 12px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    background: #fff;
+    transition: all 0.2s ease;
+}
+.agreement-field:hover { border-color: #c6521e; background: #fefefe; }
+.agreement-field:has(input:checked) { border-color: #2f6d1e; background: #f8fff8; }
+
+.agreement-field label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    margin: 0;
+    font-size: 17px;
+}
+
+.agreement-field input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin: 2px 0 0 0;
+    accent-color: #2f6d1e;
+    cursor: pointer;
+}
+
+.agreement-field .helptext {
+    font-size: 15px;
+    color: #757575;
+    margin-top: 4px;
+    display: block;
+}
+
 /* memory list */
 .memory-grid {
     display: grid;
