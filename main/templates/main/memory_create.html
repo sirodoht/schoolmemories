@@ -10,6 +10,8 @@
     <div style="max-width: 800px;">
         <h1>Submit a memory</h1>
         <form method="post">
+            {{ form.non_field_errors }}
+
             <p>
                 <label for="id_gender">Gender <span style="color: red;">*</span></label>
                 {{ form.gender.errors }}
@@ -61,6 +63,26 @@
                 {{ form.school_type_other }}
                 <span class="helptext">
                     Please describe the school type that best corresponds to your case.
+                </span>
+            </p>
+
+            <div>
+                <label for="id_memory_themes">Memory Themes <span style="color: red;">*</span></label>
+                <span class="helptext">
+                    Please choose one or more themes that you believe best reflect your memory's content.
+                    Additionally, you can type your own themes (up to 5) in the dedicated field below,
+                    separated by semicolons.
+                </span>
+                {{ form.memory_themes.errors }}
+                {{ form.memory_themes }}
+            </div>
+
+            <p>
+                <label for="id_memory_themes_additional">Additional Memory Themes</label>
+                {{ form.memory_themes_additional.errors }}
+                {{ form.memory_themes_additional }}
+                <span class="helptext">
+                    Enter up to 5 custom themes separated by semicolons (;)
                 </span>
             </p>
 

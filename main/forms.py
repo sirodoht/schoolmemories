@@ -50,6 +50,36 @@ class MemoryForm(forms.ModelForm):
     privacy_policy = forms.BooleanField()
     turnstile_response = forms.CharField(required=False)
 
+    MEMORY_THEMES_CHOICES = [
+        ("teacher-student relationships", "Teacher-student relationships"),
+        ("school canteen", "School canteen"),
+        ("break", "Break"),
+        ("school yard", "School yard"),
+        ("desk", "Desk"),
+        ("classroom", "Classroom"),
+        ("celebrations", "Celebrations"),
+        ("excursions", "Excursions"),
+        ("friendships", "Friendships"),
+        ("school uniform", "School uniform"),
+        ("school norms", "School norms"),
+        ("school expulsion", "School expulsion"),
+        ("mental health", "Mental health"),
+        ("food", "Food"),
+        ("learning styles", "Learning styles"),
+        ("gendered toilets", "Gendered toilets"),
+        ("nature", "Nature"),
+        ("exams", "Exams"),
+        ("hairstyles", "Hairstyles"),
+    ]
+    memory_themes = forms.MultipleChoiceField(
+        choices=MEMORY_THEMES_CHOICES,
+        widget=forms.CheckboxSelectMultiple(),
+    )
+    memory_themes_additional = forms.CharField(
+        required=False,
+        max_length=500,
+    )
+
     class Meta:
         model = models.Memory
         fields = [
@@ -59,6 +89,8 @@ class MemoryForm(forms.ModelForm):
             "school_grade",
             "school_type",
             "school_type_other",
+            "memory_themes",
+            "memory_themes_additional",
             "category",
             "tags",
             "title",
@@ -67,14 +99,44 @@ class MemoryForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
+
+        # handle school type
         school_type = cleaned_data.get("school_type")
         school_type_other = cleaned_data.get("school_type_other")
         if school_type == "OTHER" and not school_type_other:
-            raise forms.ValidationError(
-                'Please specify the school type when selecting "Other".'
+            self.add_error(
+                "school_type_other",
+                'Please specify the school type when selecting "Other".',
             )
         if school_type != "OTHER":
             cleaned_data["school_type_other"] = None
+
+        # handle memory themes
+        memory_themes = cleaned_data.get("memory_themes")
+        if memory_themes:
+            cleaned_data["memory_themes"] = ",".join(memory_themes)
+
+        # handle additional memory themes
+        memory_themes_additional = cleaned_data.get("memory_themes_additional", "")
+        if memory_themes_additional:
+            additional_themes_list = [
+                theme.strip()
+                for theme in memory_themes_additional.split(";")
+                if theme.strip()
+            ]
+            if len(additional_themes_list) > 5:
+                self.add_error(
+                    "memory_themes_additional",
+                    "You can add a maximum of 5 custom themes.",
+                )
+            for theme in additional_themes_list:
+                if len(theme) > 50:
+                    self.add_error(
+                        "memory_themes_additional",
+                        f"Each theme must be 50 characters or less. Custom theme '{theme}' is too long.",
+                    )
+            cleaned_data["memory_themes_additional"] = ",".join(additional_themes_list)
+
         return cleaned_data
 
 

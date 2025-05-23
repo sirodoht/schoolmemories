@@ -15,7 +15,7 @@
         </div>
         <ul style="padding-left: 16px; margin: 8px 0;">
             {% for page in page_list %}
-            <li>
+            <li style="font-size: 16px;">
                 <a href="{{ blog_url }}{% url 'page_detail' page.slug %}">{{ page.title }}</a>
             </li>
             {% empty %}

@@ -42,3 +42,17 @@ class MemoryAdmin(admin.ModelAdmin):
     )
     search_fields = ("title", "body", "tags", "category", "school_type_other")
     list_filter = ("country", "gender", "school_type", "school_grade")
+    readonly_fields = (
+        "country",
+        "gender",
+        "ethnicity",
+        "category",
+        "tags",
+        "school_grade",
+        "school_type",
+        "school_type_other",
+        "memory_themes",
+        "memory_themes_additional",
+        "title",
+        "body",
+    )

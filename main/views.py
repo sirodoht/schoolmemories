@@ -393,6 +393,11 @@ class MemoryCreate(FormView):
             message += f"Ethnicity: {memory.ethnicity}\n"
             message += f"School Grade: {memory.school_grade}\n"
             message += f"School Type: {memory.get_school_type_display()}\n"
+            message += f"Memory Themes: {memory.memory_themes}\n"
+            if memory.memory_themes_additional:
+                message += (
+                    f"Additional Memory Themes: {memory.memory_themes_additional}\n"
+                )
             message += f"Category: {memory.category}\n"
             message += f"Tags: {memory.tags}\n\n"
             message += f"Body:\n{memory.body}"

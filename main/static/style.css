@@ -38,7 +38,7 @@ aside { max-width: 1100px; margin: 8px auto; border: 1px dashed black; padding: 
 img { width: 100%; }
 
 /* forms */
-label { display: block; }
+label { display: block; font-size: 19px; }
 input[type="text"],
 input[type="email"],
 input[type="password"] {
@@ -67,7 +67,8 @@ input[type="submit"] {
     font-size: 16px;
 }
 textarea { width: 100%; box-sizing: border-box; border: 1px solid #ced4da; }
-.helptext { color: #757575; }
+.helptext { font-size: 19px; color: #757575; }
+.errorlist { color: red; }
 .form-inline { display: inline-block; }
 .form-inline input[type="submit"] {
     border: none;
@@ -78,6 +79,45 @@ textarea { width: 100%; box-sizing: border-box; border: 1px solid #ced4da; }
     cursor: pointer;
 }
 .form-inline input[type="submit"]:hover { text-decoration: underline; }
+
+/* memory themes */
+#id_memory_themes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 8px;
+    margin: 8px 0;
+}
+@media (max-width: 768px) {
+    #id_memory_themes { gap: 4px; }
+}
+
+#id_memory_themes input[type="checkbox"] {
+    margin-right: 8px;
+    transform: scale(1.2);
+    accent-color: #2f6d1e;
+}
+
+#id_memory_themes label {
+    font-family: sans-serif;
+    font-size: 17px;
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    min-height: 44px;
+    user-select: none;
+}
+#id_memory_themes label:hover { background: #e9ecef; }
+
+#id_memory_themes input[type="checkbox"]:checked+label,
+#id_memory_themes label:has(input[type="checkbox"]:checked) {
+    background: #6ec26c73;
+    border-color: #2f6d1e;
+}
 
 /* memory list */
 .memory-grid {

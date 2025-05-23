@@ -142,6 +142,12 @@ class Memory(models.Model):
     ]
     school_type = models.CharField(max_length=100, choices=SCHOOL_TYPE_CHOICES)
     school_type_other = models.CharField(max_length=100, blank=True, null=True)
+    memory_themes = models.CharField(max_length=500)
+    memory_themes_additional = models.CharField(
+        max_length=500,
+        blank=True,
+        null=True,
+    )
     title = models.CharField(max_length=100)
     body = models.TextField("Memory content")
 
