@@ -29,19 +29,10 @@ from main import forms, models
 def index(request):
     # filters
     country_filter = request.GET.get("country", "")
-    category_filter = request.GET.get("category", "")
     memories = models.Memory.objects.all()
     if country_filter:
         memories = memories.filter(country=country_filter)
-    if category_filter:
-        memories = memories.filter(category=category_filter)
-    filters_active = bool(country_filter or category_filter)
-
-    categories = (
-        models.Memory.objects.values_list("category", flat=True)
-        .distinct()
-        .order_by("category")
-    )
+    filters_active = bool(country_filter)
 
     # exclude countries of which there are no memories
     used_countries = models.Memory.objects.values_list("country", flat=True).distinct()
@@ -60,8 +51,6 @@ def index(request):
             "site_settings": models.SiteSettings.objects.first(),
             "countries": countries,
             "selected_country": country_filter,
-            "categories": categories,
-            "selected_category": category_filter,
             "filters_active": filters_active,
         },
     )
@@ -398,8 +387,6 @@ class MemoryCreate(FormView):
                 message += (
                     f"Additional Memory Themes: {memory.memory_themes_additional}\n"
                 )
-            message += f"Category: {memory.category}\n"
-            message += f"Tags: {memory.tags}\n\n"
             message += f"Body:\n{memory.body}"
             send_mail(
                 subject,

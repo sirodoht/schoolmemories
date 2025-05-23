@@ -28,28 +28,12 @@
                     {% endfor %}
                 </select>
             </div>
-
-            <div class="filter-group">
-                <label for="category-filter">Filter by category:</label>
-                <select name="category" id="category-filter" onchange="this.form.submit()">
-                    <option value="">All Categories</option>
-                    {% for category in categories %}
-                    <option value="{{ category }}" {% if selected_category == category %}selected{% endif %}>{{ category }}</option>
-                    {% endfor %}
-                </select>
-            </div>
         </form>
 
         <div class="filter-results">
             Showing {{ memory_list|length }} memories
-            {% if selected_country or selected_category %}
-                {% if selected_country and selected_category %}
-                    in {{ selected_category }} category from {{ selected_country|country_name }}
-                {% elif selected_country %}
-                    from {{ selected_country|country_name }}
-                {% elif selected_category %}
-                    in {{ selected_category }} category
-                {% endif %}
+            {% if selected_country %}
+                from {{ selected_country|country_name }}
             {% endif %}
 
             {% if filters_active %}

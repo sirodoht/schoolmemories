@@ -91,8 +91,6 @@ class MemoryForm(forms.ModelForm):
             "school_type_other",
             "memory_themes",
             "memory_themes_additional",
-            "category",
-            "tags",
             "title",
             "body",
         ]

@@ -126,8 +126,6 @@ class Memory(models.Model):
     ]
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     ethnicity = models.CharField(max_length=100)
-    category = models.CharField(max_length=100)
-    tags = models.CharField(max_length=300)
     school_grade = models.CharField(max_length=16)
     SCHOOL_TYPE_CHOICES = [
         ("STATE", "State School"),
