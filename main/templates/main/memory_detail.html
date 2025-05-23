@@ -6,7 +6,6 @@
 {% include 'partials/nav.html' %}
 <main>
     <div class="memory-detail">
-        <!-- Header section with improved typography -->
         <div class="memory-detail-header">
             <div class="memory-id">
                 #{{ memory.id }}
@@ -14,43 +13,42 @@
             <h1 class="memory-title">{{ memory.title }}</h1>
         </div>
 
-        <!-- Metadata table -->
-        <div class="memory-metadata-table">
-            <table>
-                <tr>
-                    <td class="metadata-label">Themes</td>
-                    <td class="metadata-value">{{ memory.memory_themes }}</td>
-                </tr>
+        <div class="memory-metadata-flow">
+            <div class="metadata-section">
+                <span class="metadata-category">Themes</span>
+                <span class="metadata-content">{{ memory.memory_themes }}</span>
                 {% if memory.memory_themes_additional %}
-                <tr>
-                    <td class="metadata-label">Additional Themes</td>
-                    <td class="metadata-value">{{ memory.memory_themes_additional }}</td>
-                </tr>
+                <span class="metadata-additional">{{ memory.memory_themes_additional }}</span>
                 {% endif %}
-                <tr>
-                    <td class="metadata-label">Gender</td>
-                    <td class="metadata-value">{{ memory.get_gender_display }}</td>
-                </tr>
-                <tr>
-                    <td class="metadata-label">Ethnicity</td>
-                    <td class="metadata-value">{{ memory.ethnicity }}</td>
-                </tr>
-                <tr>
-                    <td class="metadata-label">Location</td>
-                    <td class="metadata-value">{{ memory.get_country_display }}</td>
-                </tr>
-                <tr>
-                    <td class="metadata-label">School Grade</td>
-                    <td class="metadata-value">{{ memory.school_grade }}</td>
-                </tr>
-                <tr>
-                    <td class="metadata-label">School Type</td>
-                    <td class="metadata-value">{{ memory.get_school_type_display }}</td>
-                </tr>
-            </table>
+            </div>
+
+            <div class="metadata-row">
+                <div class="metadata-group">
+                    <span class="metadata-label">Gender</span>
+                    <span class="metadata-value">{{ memory.get_gender_display }}</span>
+                </div>
+                <div class="metadata-group">
+                    <span class="metadata-label">Ethnicity</span>
+                    <span class="metadata-value">{{ memory.ethnicity }}</span>
+                </div>
+            </div>
+
+            <div class="metadata-row">
+                <div class="metadata-group">
+                    <span class="metadata-label">Location</span>
+                    <span class="metadata-value">{{ memory.get_country_display }}</span>
+                </div>
+                <div class="metadata-group">
+                    <span class="metadata-label">Grade</span>
+                    <span class="metadata-value">{{ memory.school_grade }}</span>
+                </div>
+                <div class="metadata-group">
+                    <span class="metadata-label">School Type</span>
+                    <span class="metadata-value">{{ memory.get_school_type_display }}</span>
+                </div>
+            </div>
         </div>
 
-        <!-- Main memory content -->
         <div class="memory-content-card">
             <h2>The Memory</h2>
             <div class="memory-body">
@@ -58,7 +56,6 @@
             </div>
         </div>
 
-        <!-- Navigation -->
         <div class="memory-navigation">
             <a href="{% url 'index' %}" class="back-link">
                 <span class="back-arrow">←</span>
