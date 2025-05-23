@@ -6,29 +6,64 @@
 {% include 'partials/nav.html' %}
 <main>
     <div class="memory-detail">
-        <h1>
-            <span style="color: #b1b1b1;">
+        <!-- Header section with improved typography -->
+        <div class="memory-detail-header">
+            <div class="memory-id">
                 #{{ memory.id }}
-            </span>
-            {{ memory.title }}
-        </h1>
-
-        <div class="memory-metadata">
-            <p><strong>Themes:</strong> {{ memory.memory_themes }}</p>
-            <p><strong>Additional Themes:</strong> {{ memory.memory_themes_additional }}</p>
-            <p><strong>Gender:</strong> {{ memory.get_gender_display }}</p>
-            <p><strong>Country:</strong> {{ memory.get_country_display }}</p>
-            <p><strong>School Grade:</strong> {{ memory.school_grade }}</p>
-            <p><strong>School Type:</strong> {{ memory.get_school_type_display }}</p>
+            </div>
+            <h1 class="memory-title">{{ memory.title }}</h1>
         </div>
 
-        <div class="memory-content">
-            <h2>Memory Content</h2>
-            <p>{{ memory.body|linebreaks }}</p>
+        <!-- Metadata table -->
+        <div class="memory-metadata-table">
+            <table>
+                <tr>
+                    <td class="metadata-label">Themes</td>
+                    <td class="metadata-value">{{ memory.memory_themes }}</td>
+                </tr>
+                {% if memory.memory_themes_additional %}
+                <tr>
+                    <td class="metadata-label">Additional Themes</td>
+                    <td class="metadata-value">{{ memory.memory_themes_additional }}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <td class="metadata-label">Gender</td>
+                    <td class="metadata-value">{{ memory.get_gender_display }}</td>
+                </tr>
+                <tr>
+                    <td class="metadata-label">Ethnicity</td>
+                    <td class="metadata-value">{{ memory.ethnicity }}</td>
+                </tr>
+                <tr>
+                    <td class="metadata-label">Location</td>
+                    <td class="metadata-value">{{ memory.get_country_display }}</td>
+                </tr>
+                <tr>
+                    <td class="metadata-label">School Grade</td>
+                    <td class="metadata-value">{{ memory.school_grade }}</td>
+                </tr>
+                <tr>
+                    <td class="metadata-label">School Type</td>
+                    <td class="metadata-value">{{ memory.get_school_type_display }}</td>
+                </tr>
+            </table>
         </div>
 
-        <div class="memory-back">
-            <a href="{% url 'index' %}">Back to memories list</a>
+        <!-- Main memory content -->
+        <div class="memory-content-card">
+            <h2>The Memory</h2>
+            <div class="memory-body">
+                {{ memory.body|linebreaks }}
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="memory-navigation">
+            <a href="{% url 'index' %}" class="back-link">
+                <span class="back-arrow">←</span>
+                Back to memories
+            </a>
         </div>
     </div>
 </main>

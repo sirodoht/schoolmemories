@@ -340,7 +340,10 @@ class MemoryCreate(FormView):
         body_text = form.cleaned_data.get("body")
         word_count = len(body_text.split())
         if word_count > 300:
-            form.add_error("body", "Your memory cannot exceed 300 words.")
+            form.add_error(
+                "body",
+                f"Your memory text was {word_count} but has to be less than 300 words.",
+            )
             return self.form_invalid(form)
 
         # check ToS and privacy policy
