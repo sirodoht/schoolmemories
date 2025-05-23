@@ -48,6 +48,7 @@ class ContactForm(forms.Form):
 class MemoryForm(forms.ModelForm):
     terms_of_service = forms.BooleanField()
     privacy_policy = forms.BooleanField()
+    age_confirmation = forms.BooleanField()
     turnstile_response = forms.CharField(required=False)
 
     MEMORY_THEMES_CHOICES = [

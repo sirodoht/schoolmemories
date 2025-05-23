@@ -355,6 +355,11 @@ class MemoryCreate(FormView):
                 "privacy_policy", "You must accept the Privacy Policy to continue."
             )
             return self.form_invalid(form)
+        if not form.cleaned_data.get("age_confirmation"):
+            form.add_error(
+                "age_confirmation", "You must be over 18 years old to continue."
+            )
+            return self.form_invalid(form)
 
         obj = form.save()
         message = (
