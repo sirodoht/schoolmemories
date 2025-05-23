@@ -90,12 +90,25 @@
                 <label for="id_title">Title <span style="color: red;">*</span></label>
                 {{ form.title.errors }}
                 {{ form.title }}
+                <span class="helptext">
+                    Here you can give a title to your memory.
+                </span>
             </p>
 
             <p>
                 <label for="id_body">Memory content (max 300 words) <span style="color: red;">*</span></label>
                 {{ form.body.errors }}
                 {{ form.body }}
+                <span class="helptext">
+                    Here you can type your selected school memory in as much
+                    detail as you want but without naming anyone involved. Some
+                    prompts to assist your writing might include questions like:
+                    What happens in your school memory? How did it make you
+                    feel? Where did it take place, when, and who else was
+                    involved? Was it a recurring or one-off event? Can you
+                    recall any images, smells or sensations? Why do you think
+                    this memory can make possible just futures of education?
+                </span>
             </p>
 
             <p>
