@@ -374,7 +374,9 @@ class MemoryCreate(FormView):
             "something concerning your memory in the future"
         )
         messages.success(self.request, message)
-        if settings.EMAIL_HOST_USER and settings.EMAIL_HOST_PASSWORD:
+        if settings.LOCALDEV or (
+            settings.EMAIL_HOST_USER and settings.EMAIL_HOST_PASSWORD
+        ):
             self.send_notification_email(obj)
         return self.form_valid(form)
 
