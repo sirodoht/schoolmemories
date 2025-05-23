@@ -54,14 +54,28 @@ class MemoryForm(forms.ModelForm):
         model = models.Memory
         fields = [
             "gender",
+            "ethnicity",
             "country",
-            "category",
-            "tags",
             "school_grade",
             "school_type",
+            "school_type_other",
+            "category",
+            "tags",
             "title",
             "body",
         ]
+
+    def clean(self):
+        cleaned_data = super().clean()
+        school_type = cleaned_data.get("school_type")
+        school_type_other = cleaned_data.get("school_type_other")
+        if school_type == "OTHER" and not school_type_other:
+            raise forms.ValidationError(
+                'Please specify the school type when selecting "Other".'
+            )
+        if school_type != "OTHER":
+            cleaned_data["school_type_other"] = None
+        return cleaned_data
 
 
 class IntroductionForm(forms.ModelForm):

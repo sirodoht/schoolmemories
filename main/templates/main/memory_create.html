@@ -17,9 +17,51 @@
             </p>
 
             <p>
-                <label for="id_country">Country <span style="color: red;">*</span></label>
+                <label for="id_ethnicity">Racial and/or Ethnic background <span style="color: red;">*</span></label>
+                {{ form.ethnicity.errors }}
+                {{ form.ethnicity }}
+                <span class="helptext">
+                    Please type how you prefer to self-describe. Otherwise, type N/A.
+                </span>
+            </p>
+
+            <p>
+                <label for="id_country">Location <span style="color: red;">*</span></label>
                 {{ form.country.errors }}
                 {{ form.country }}
+                <span class="helptext">
+                    <br>Please indicate the country in which your memory took place.
+                </span>
+            </p>
+
+            <p>
+                <label for="id_school_grade">School Grade <span style="color: red;">*</span></label>
+                {{ form.school_grade.errors }}
+                {{ form.school_grade }}
+                <span class="helptext">
+                    Please indicate the educational grade your memory refers to.
+                </span>
+            </p>
+
+            <p>
+                <label for="id_school_type">School Type <span style="color: red;">*</span></label>
+                {{ form.school_type.errors }}
+                {{ form.school_type }}
+                <span class="helptext">
+                    <br>Please indicate the school type your memory refers to. The provided options
+                    are more relevant to the UK context but you can add what best corresponds to
+                    your case by typing in the respective field. Otherwise, please type N/A.
+                </span>
+            </p>
+
+            <p id="school_type_other_field" style="display: none;">
+                <label for="id_school_type_other">Please specify other school type <span
+                        style="color: red;">*</span></label>
+                {{ form.school_type_other.errors }}
+                {{ form.school_type_other }}
+                <span class="helptext">
+                    Please describe the school type that best corresponds to your case.
+                </span>
             </p>
 
             <p>
@@ -32,18 +74,6 @@
                 <label for="id_tags">Tags <span style="color: red;">*</span></label>
                 {{ form.tags.errors }}
                 {{ form.tags }}
-            </p>
-
-            <p>
-                <label for="id_school_grade">School Grade <span style="color: red;">*</span></label>
-                {{ form.school_grade.errors }}
-                {{ form.school_grade }}
-            </p>
-
-            <p>
-                <label for="id_school_type">School Type <span style="color: red;">*</span></label>
-                {{ form.school_type.errors }}
-                {{ form.school_type }}
             </p>
 
             <p>
@@ -60,7 +90,8 @@
 
             <p>
                 <label for="id_terms_of_service">
-                    I agree with the <a href="{% url 'terms_of_service' %}" target="_blank">Terms of Service</a> <small>(open in a new tab)</small> <span style="color: red;">*</span>
+                    I agree with the <a href="{% url 'terms_of_service' %}" target="_blank">Terms of Service</a>
+                    <small>(open in a new tab)</small> <span style="color: red;">*</span>
                 </label>
                 {{ form.terms_of_service.errors }}
                 {{ form.terms_of_service }}
@@ -68,7 +99,8 @@
 
             <p>
                 <label for="id_privacy_policy">
-                    I agree with the <a href="{% url 'privacy_policy' %}" target="_blank">Privacy Policy</a> <small>(open in a new tab)</small> <span style="color: red;">*</span>
+                    I agree with the <a href="{% url 'privacy_policy' %}" target="_blank">Privacy Policy</a>
+                    <small>(open in a new tab)</small> <span style="color: red;">*</span>
                 </label>
                 {{ form.privacy_policy.errors }}
                 {{ form.privacy_policy }}
@@ -77,7 +109,8 @@
             {% csrf_token %}
 
             {% if enable_turnstile %}
-            <div class="cf-turnstile" data-sitekey="0x4AAAAAABM4uMpeJqzaXTok" data-callback="turnstileCallback" style="margin-bottom: 12px;"></div>
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAABM4uMpeJqzaXTok" data-callback="turnstileCallback"
+                style="margin-bottom: 12px;"></div>
             <input type="hidden" name="turnstile_response" id="id_turnstile_response">
             {% endif %}
 
@@ -88,6 +121,7 @@
 {% endblock content %}
 
 {% block scripts %}
+
 {% if enable_turnstile %}
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <script>
@@ -96,4 +130,24 @@
     }
 </script>
 {% endif %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const schoolTypeSelect = document.getElementById('id_school_type');
+        const schoolTypeOtherField = document.getElementById('school_type_other_field');
+        const schoolTypeOtherInput = document.getElementById('id_school_type_other');
+        function toggleOtherField() {
+            if (schoolTypeSelect.value === 'OTHER') {
+                schoolTypeOtherField.style.display = 'block';
+                schoolTypeOtherInput.required = true;
+            } else {
+                schoolTypeOtherField.style.display = 'none';
+                schoolTypeOtherInput.required = false;
+                schoolTypeOtherInput.value = '';
+            }
+        }
+        toggleOtherField();
+        schoolTypeSelect.addEventListener('change', toggleOtherField);
+    });
+</script>
 {% endblock scripts %}

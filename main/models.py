@@ -125,12 +125,31 @@ class Memory(models.Model):
         ("N", "Prefer not to say"),
     ]
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+    ethnicity = models.CharField(max_length=100)
     category = models.CharField(max_length=100)
     tags = models.CharField(max_length=300)
-    school_grade = models.CharField(max_length=100)
-    school_type = models.CharField(max_length=100)
+    school_grade = models.CharField(max_length=16)
+    SCHOOL_TYPE_CHOICES = [
+        ("STATE", "State School"),
+        ("PRIVATE", "Private School"),
+        ("HOME", "Homeschooling"),
+        ("COLLEGE", "College"),
+        ("MONTESSORI", "Montessori School"),
+        ("BOARDING", "Boarding School"),
+        ("RELIGIOUS", "Religious School"),
+        ("VOCATIONAL", "Vocational Education"),
+        ("OTHER", "Other"),
+    ]
+    school_type = models.CharField(max_length=100, choices=SCHOOL_TYPE_CHOICES)
+    school_type_other = models.CharField(max_length=100, blank=True, null=True)
     title = models.CharField(max_length=100)
     body = models.TextField("Memory content")
+
+    def get_school_type_display(self):
+        if self.school_type == "OTHER" and self.school_type_other:
+            return self.school_type_other
+        choices = dict(self.SCHOOL_TYPE_CHOICES)
+        return choices.get(self.school_type, self.school_type)
 
     def __str__(self):
         return self.title

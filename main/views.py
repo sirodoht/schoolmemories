@@ -368,7 +368,11 @@ class MemoryCreate(FormView):
             return self.form_invalid(form)
 
         obj = form.save()
-        message = f"Thank you for your submission. Here’s your memory ID number #{obj.id}. Please, save this number in case you wish to reach out about sth concerning your memory in the future"
+        message = (
+            "Thank you for your submission. Here’s your memory ID number "
+            f"#{obj.id}. Please, save this number in case you wish to reach out about "
+            "something concerning your memory in the future"
+        )
         messages.success(self.request, message)
         if settings.EMAIL_HOST_USER and settings.EMAIL_HOST_PASSWORD:
             self.send_notification_email(obj)
@@ -382,12 +386,13 @@ class MemoryCreate(FormView):
             message = "A new memory has been submitted:\n\n"
             message += f"ID: {memory.id}\n"
             message += f"Title: {memory.title}\n"
-            message += f"Country: {memory.get_country_display()}\n"
+            message += f"Location: {memory.get_country_display()}\n"
             message += f"Gender: {memory.get_gender_display()}\n"
-            message += f"Category: {memory.category}\n"
-            message += f"Tags: {memory.tags}\n"
+            message += f"Ethnicity: {memory.ethnicity}\n"
             message += f"School Grade: {memory.school_grade}\n"
-            message += f"School Type: {memory.school_type}\n\n"
+            message += f"School Type: {memory.get_school_type_display()}\n"
+            message += f"Category: {memory.category}\n"
+            message += f"Tags: {memory.tags}\n\n"
             message += f"Body:\n{memory.body}"
             send_mail(
                 subject,
