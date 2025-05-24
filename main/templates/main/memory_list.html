@@ -91,7 +91,7 @@
             {% endif %}
             {% if selected_school_type %}
                 {% if selected_country or selected_gender or selected_ethnicity or selected_school_grade %} and {% endif %}
-                from {{ selected_school_type }}
+                from {{ selected_school_type|school_type_name }}
             {% endif %}
             {% if selected_memory_theme %}
                 {% if selected_country or selected_gender or selected_ethnicity or selected_school_grade or selected_school_type %} and {% endif %}
