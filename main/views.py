@@ -518,16 +518,16 @@ class MemoryCreate(FormView):
         superusers = models.User.objects.filter(is_superuser=True)
         superuser_emails = [user.email for user in superusers if user.email]
         if superuser_emails:
-            subject = f"[schoolmemories] New Memory Submission #{memory.id}"
+            subject = f"[schoolmemories] New Memory Submission #{memory.code}"
             message = "A new memory has been submitted:\n\n"
-            message += f"ID: {memory.id}\n"
             message += f"Code: {memory.code}\n"
-            message += f"Title: {memory.title}\n"
+            message += f"Link: {memory.get_absolute_url()}\n\n"
             message += f"Location: {memory.get_country_display()}\n"
             message += f"Gender: {memory.get_gender_display()}\n"
-            message += f"Ethnicity: {memory.ethnicity}\n"
+            message += f"Ethnicity: {memory.ethnicity}\n\n"
             message += f"School Grade: {memory.school_grade}\n"
             message += f"School Type: {memory.get_school_type_display()}\n"
+            message += f"\nTitle: {memory.title}\n"
             message += f"Memory Themes: {memory.memory_themes}\n"
             if memory.memory_themes_additional:
                 message += (
