@@ -1,4 +1,5 @@
 import base64
+import random
 
 import mistune
 from django.conf import settings
@@ -76,6 +77,10 @@ class Page(models.Model):
         markdown = mistune.create_markdown(plugins=["task_lists", "footnotes"])
         return markdown(self.body)
 
+    def get_absolute_url(self):
+        path = reverse("page_detail", kwargs={"slug": self.slug})
+        return f"{settings.PROTOCOL}//{settings.CANONICAL_HOST}{path}"
+
     def __str__(self):
         return self.title
 
@@ -148,12 +153,26 @@ class Memory(models.Model):
     )
     title = models.CharField(max_length=100)
     body = models.TextField("Memory content")
+    code = models.CharField(max_length=20, blank=True, null=True)
 
     def get_school_type_display(self):
         if self.school_type == "OTHER" and self.school_type_other:
             return self.school_type_other
         choices = dict(self.SCHOOL_TYPE_CHOICES)
         return choices.get(self.school_type, self.school_type)
+
+    def get_absolute_url(self):
+        path = reverse("memory_detail", kwargs={"pk": self.pk})
+        return f"{settings.PROTOCOL}//{settings.CANONICAL_HOST}{path}"
+
+    def save(self, *args, **kwargs):
+        # Save first to get the ID
+        super().save(*args, **kwargs)
+        # Generate code if it doesn't exist
+        if not self.code:
+            random_num = random.randint(100, 999)
+            self.code = f"{self.id}-{random_num}"
+            super().save(update_fields=["code"])
 
     def __str__(self):
         return self.title

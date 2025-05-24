@@ -503,9 +503,9 @@ class MemoryCreate(FormView):
 
         obj = form.save()
         message = (
-            "Thank you for your submission. Here’s your memory ID number "
-            f"#{obj.id}. Please, save this number in case you wish to reach out about "
-            "something concerning your memory in the future"
+            "Thank you for your submission. Here’s your memory code number "
+            f"#{obj.code}. Please, save this number in case you wish to reach out about"
+            " something concerning your memory in the future."
         )
         messages.success(self.request, message)
         if settings.LOCALDEV or (
@@ -521,6 +521,7 @@ class MemoryCreate(FormView):
             subject = f"[schoolmemories] New Memory Submission #{memory.id}"
             message = "A new memory has been submitted:\n\n"
             message += f"ID: {memory.id}\n"
+            message += f"Code: {memory.code}\n"
             message += f"Title: {memory.title}\n"
             message += f"Location: {memory.get_country_display()}\n"
             message += f"Gender: {memory.get_gender_display()}\n"
@@ -532,7 +533,7 @@ class MemoryCreate(FormView):
                 message += (
                     f"Additional Memory Themes: {memory.memory_themes_additional}\n"
                 )
-            message += f"Body:\n{memory.body}"
+            message += f"Memory Text:\n{memory.body}"
             send_mail(
                 subject,
                 message,

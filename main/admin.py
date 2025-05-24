@@ -33,6 +33,7 @@ class ImageAdmin(admin.ModelAdmin):
 class MemoryAdmin(admin.ModelAdmin):
     list_display = (
         "title",
+        "code",
         "country",
         "gender",
         "school_grade",
@@ -49,6 +50,8 @@ class MemoryAdmin(admin.ModelAdmin):
     )
     list_filter = ("country", "gender", "school_type", "school_grade")
     readonly_fields = (
+        "id",
+        "code",
         "country",
         "gender",
         "ethnicity",
