@@ -7,14 +7,50 @@
 {% include 'partials/nav.html' %}
 
 <main>
-    <div style="max-width: 600px;">
+    <div style="max-width: 600px; margin: 0 auto;">
         <h1>Contact</h1>
 
-        <form method="post">
-            {{ form.as_p }}
+        <p style="margin-bottom: 24px; font-size: 19px; color: #516176;">
+            Please use the form below to get in touch with us.
+        </p>
+
+        <form method="post" style="background: white; padding: 24px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+            {% if form.non_field_errors %}
+                <div style="color: red; margin-bottom: 16px;">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            {% for field in form %}
+                <p style="margin-bottom: 20px;">
+                    <label for="{{ field.id_for_label }}" style="display: block; font-size: 19px; margin-bottom: 6px; color: #3c4858;">
+                        {{ field.label }}
+                        {% if field.field.required %}<span style="color: red;">*</span>{% endif %}
+                    </label>
+
+                    {% if field.errors %}
+                        {% for error in field.errors %}
+                            <span style="color: red; font-size: 16px; display: block; margin-bottom: 6px;">{{ error|escape }}</span>
+                        {% endfor %}
+                    {% endif %}
+
+                    {{ field }}
+
+                    {% if field.help_text %}
+                        <span class="helptext" style="display: block; margin-top: 4px;">
+                            {{ field.help_text }}
+                        </span>
+                    {% endif %}
+                </p>
+            {% endfor %}
+
             {% csrf_token %}
-            <input type="submit" value="Submit">
+
+            <div style="margin-top: 24px;">
+                <input type="submit" value="Send Message" style="background: #5a6268; border: 2px solid #6c757d; border-radius: 5px; cursor: pointer; color: white; padding: 8px 16px; font-size: 16px;">
+            </div>
         </form>
+
     </div>
 </main>
 
