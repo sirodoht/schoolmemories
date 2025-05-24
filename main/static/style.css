@@ -37,7 +37,173 @@ main { max-width: 1100px; margin: 16px auto; padding: 0 8px; }
 aside { max-width: 1100px; margin: 8px auto; border: 1px dashed black; padding: 0 8px; }
 img { width: 100%; }
 
-/* forms */
+/* memory create */
+#memory-create {
+    .memory-submission-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+    }
+    @media (max-width: 768px) {
+        .memory-submission-container { margin: 8px; border-radius: 6px; }
+    }
+
+    .memory-submission-header {
+        padding: 32px 32px 24px 32px;
+        border-bottom: 1px solid #e8e5e0;
+    }
+    @media (max-width: 768px) {
+        .memory-submission-header { padding: 20px 24px; }
+    }
+
+    .memory-submission-header h1 {
+        margin: 0;
+        font-size: 32px;
+        color: #1a1a1a;
+        font-weight: 400;
+        letter-spacing: -0.02em;
+        line-height: 1.1;
+    }
+    @media (max-width: 768px) {
+        .memory-submission-header h1 { font-size: 24px; }
+    }
+
+    .memory-submission-form { padding: 32px; }
+    @media (max-width: 768px) {
+        .memory-submission-form { padding: 24px 20px; }
+    }
+
+    .form-section {
+        margin-bottom: 32px;
+        padding-bottom: 24px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+    .form-section:last-child { border-bottom: none; margin-bottom: 0; }
+
+    .section-title {
+        font-size: 20px;
+        color: #2d3748;
+        margin: 0 0 20px 0;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+    }
+    .section-title::before {
+        content: '';
+        width: 20px;
+        height: 20px;
+        background: #c6521e;
+        margin-right: 10px;
+        border-radius: 2px;
+    }
+    @media (max-width: 768px) {
+        .section-title { font-size: 18px; }
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+    @media (max-width: 768px) {
+        .form-row { grid-template-columns: 1fr; gap: 16px; }
+    }
+
+    .form-field { margin-bottom: 20px; }
+
+    label {
+        display: block;
+        font-size: 16px;
+        font-weight: 500;
+        color: #2d3748;
+        margin-bottom: 6px;
+    }
+
+    .required { color: #e53e3e; font-weight: bold; }
+
+    input[type="text"],
+    input[type="email"],
+    select,
+    textarea {
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        padding: 10px 12px;
+        font-size: 15px;
+        background: #fafafa;
+        transition: all 0.2s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    select:focus,
+    textarea:focus {
+        outline: none;
+        border-color: #c6521e;
+        background: white;
+        box-shadow: 0 0 0 2px rgba(198, 82, 30, 0.1);
+    }
+
+    textarea {
+        min-height: 100px;
+        resize: vertical;
+        font-family: inherit;
+    }
+
+    .helptext {
+        font-size: 14px;
+        color: #6b7280;
+        margin-top: 4px;
+        line-height: 1.4;
+    }
+
+    .form-submit {
+        text-align: center;
+        margin-top: 24px;
+        padding-top: 20px;
+        border-top: 1px solid #e2e8f0;
+    }
+
+    .submit-button {
+        background: linear-gradient(135deg, #c6521e 0%, #a0421a 100%);
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        color: white;
+        padding: 12px 24px;
+        font-size: 16px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        min-width: 160px;
+    }
+    .submit-button:hover {
+        background: linear-gradient(135deg, #a0421a 0%, #8a3817 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px rgba(198, 82, 30, 0.25);
+    }
+
+    .errorlist {
+        color: #e53e3e;
+        font-size: 13px;
+        margin: 3px 0;
+        list-style: none;
+        padding: 0;
+    }
+
+    .errorlist li {
+        background: #fed7d7;
+        padding: 6px 10px;
+        border-radius: 4px;
+        margin-bottom: 3px;
+    }
+}
+
+/* forms - general (for other pages) */
 label { display: block; font-size: 19px; }
 input[type="text"],
 input[type="email"],
@@ -126,6 +292,7 @@ textarea { width: 100%; box-sizing: border-box; border: 1px solid #ced4da; }
     border: 1px solid #dee2e6;
     border-radius: 6px;
     background: #fff;
+    user-select: none;
     transition: all 0.2s ease;
 }
 .agreement-field:hover { border-color: #c6521e; background: #fefefe; }

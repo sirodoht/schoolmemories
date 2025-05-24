@@ -6,155 +6,176 @@
 
 {% include 'partials/nav.html' %}
 
-<main>
-    <div style="max-width: 800px;">
-        <h1>Submit a memory</h1>
-        <form method="post">
+<main id="memory-create">
+    <div class="memory-submission-container">
+        <header class="memory-submission-header">
+            <h1>Submit a memory</h1>
+        </header>
+
+        <form method="post" class="memory-submission-form">
             {{ form.non_field_errors }}
 
-            <p>
-                <label for="id_gender">Gender <span style="color: red;">*</span></label>
-                {{ form.gender.errors }}
-                {{ form.gender }}
-            </p>
-
-            <p>
-                <label for="id_ethnicity">Racial and/or Ethnic background <span style="color: red;">*</span></label>
-                {{ form.ethnicity.errors }}
-                {{ form.ethnicity }}
-                <span class="helptext">
-                    Please type how you prefer to self-describe. Otherwise, type N/A.
-                </span>
-            </p>
-
-            <p>
-                <label for="id_country">Location <span style="color: red;">*</span></label>
-                {{ form.country.errors }}
-                {{ form.country }}
-                <span class="helptext">
-                    <br>Please indicate the country in which your memory took place.
-                </span>
-            </p>
-
-            <p>
-                <label for="id_school_grade">School Grade <span style="color: red;">*</span></label>
-                {{ form.school_grade.errors }}
-                {{ form.school_grade }}
-                <span class="helptext">
-                    Please indicate the educational grade your memory refers to.
-                </span>
-            </p>
-
-            <p>
-                <label for="id_school_type">School Type <span style="color: red;">*</span></label>
-                {{ form.school_type.errors }}
-                {{ form.school_type }}
-                <span class="helptext">
-                    <br>Please indicate the school type your memory refers to. The provided options
-                    are more relevant to the UK context but you can add what best corresponds to
-                    your case by typing in the respective field. Otherwise, please type N/A.
-                </span>
-            </p>
-
-            <p id="school_type_other_field" style="display: none;">
-                <label for="id_school_type_other">Please specify other school type <span
-                        style="color: red;">*</span></label>
-                {{ form.school_type_other.errors }}
-                {{ form.school_type_other }}
-                <span class="helptext">
-                    Please describe the school type that best corresponds to your case.
-                </span>
-            </p>
-
-            <div>
-                <label for="id_memory_themes">Memory Themes <span style="color: red;">*</span></label>
-                <span class="helptext">
-                    Please choose one or more themes that you believe best reflect your memory's content.
-                    Additionally, you can type your own themes (up to 5) in the dedicated field below,
-                    separated by semicolons.
-                </span>
-                {{ form.memory_themes.errors }}
-                {{ form.memory_themes }}
-            </div>
-
-            <p>
-                <label for="id_memory_themes_additional">Additional Memory Themes</label>
-                {{ form.memory_themes_additional.errors }}
-                {{ form.memory_themes_additional }}
-                <span class="helptext">
-                    Enter up to 5 custom themes separated by semicolons (;)
-                </span>
-            </p>
-
-            <p>
-                <label for="id_title">Title <span style="color: red;">*</span></label>
-                {{ form.title.errors }}
-                {{ form.title }}
-                <span class="helptext">
-                    Here you can give a title to your memory.
-                </span>
-            </p>
-
-            <p>
-                <label for="id_body">The Memory (max 300 words) <span style="color: red;">*</span></label>
-                {{ form.body.errors }}
-                {{ form.body }}
-                <span class="helptext">
-                    Here you can type your selected school memory in as much detail as you want but
-                    without naming anyone involved. Some prompts to assist your writing might
-                    include questions like: What happens in your school memory? How did it make you
-                    feel? Where did it take place, when, and who else was involved? Was it a
-                    recurring or one-off event? Can you recall any images, smells or sensations? Why
-                    do you think this memory can make possible just futures of education?
-                </span>
-            </p>
-
-            <div class="agreement-field">
-                {{ form.terms_of_service.errors }}
-                <label for="id_terms_of_service">
-                    {{ form.terms_of_service }}
-                    <span>
-                        I agree with the <a href="{% url 'terms_of_service' %}" target="_blank">Terms of Service</a>
-                        <small>(opens in a new tab)</small> <span style="color: red;">*</span>
-                    </span>
-                </label>
-            </div>
-
-            <div class="agreement-field">
-                {{ form.privacy_policy.errors }}
-                <label for="id_privacy_policy">
-                    {{ form.privacy_policy }}
-                    <span>
-                        I agree with the <a href="{% url 'privacy_policy' %}" target="_blank">Privacy Policy</a>
-                        <small>(opens in a new tab)</small> <span style="color: red;">*</span>
-                    </span>
-                </label>
-            </div>
-
-            <div class="agreement-field">
-                {{ form.age_confirmation.errors }}
-                <label for="id_age_confirmation">
-                    {{ form.age_confirmation }}
-                    <span>
-                        I confirm I am over 18 years old <span style="color: red;">*</span>
+            <div class="form-section">
+                <h2 class="section-title">About You</h2>
+                <div class="form-row" style="grid-template-columns: 1fr 1.2fr;">
+                    <div class="form-field">
+                        <label for="id_gender">Gender <span class="required">*</span></label>
+                        {{ form.gender.errors }}
+                        {{ form.gender }}
+                    </div>
+                    <div class="form-field">
+                        <label for="id_ethnicity">Racial and/or Ethnic background <span class="required">*</span></label>
+                        {{ form.ethnicity.errors }}
+                        {{ form.ethnicity }}
                         <span class="helptext">
-                            If you are below 18 but wish to submit your school memory, you can ask a
-                            responsible adult that you trust (it could be a parent/guardian, sibling, friend
-                            or other) to make the submission on your behalf.
+                            Please type how you prefer to self-describe. Otherwise, type N/A.
                         </span>
-                    </span>
-                </label>
+                    </div>
+                </div>
             </div>
+
+            <div class="form-section">
+                <h2 class="section-title">School Context</h2>
+                <div class="form-row">
+                    <div class="form-field">
+                        <label for="id_country">Location <span class="required">*</span></label>
+                        {{ form.country.errors }}
+                        {{ form.country }}
+                        <span class="helptext">
+                            Please indicate the country in which your memory took place.
+                        </span>
+                    </div>
+                    <div class="form-field">
+                        <label for="id_school_grade">School Grade <span class="required">*</span></label>
+                        {{ form.school_grade.errors }}
+                        {{ form.school_grade }}
+                        <span class="helptext">
+                            Please indicate the educational grade your memory refers to.
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-field">
+                    <label for="id_school_type">School Type <span class="required">*</span></label>
+                    {{ form.school_type.errors }}
+                    {{ form.school_type }}
+                    <span class="helptext">
+                        Please indicate the school type your memory refers to. The provided options
+                        are more relevant to the UK context but you can add what best corresponds to
+                        your case by typing in the respective field. Otherwise, please type N/A.
+                    </span>
+                </div>
+
+                <div class="form-field" id="school_type_other_field" style="display: none;">
+                    <label for="id_school_type_other">Please specify other school type <span class="required">*</span></label>
+                    {{ form.school_type_other.errors }}
+                    {{ form.school_type_other }}
+                    <span class="helptext">
+                        Please describe the school type that best corresponds to your case.
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="section-title">Your Memory</h2>
+
+                <div class="form-field">
+                    <label for="id_memory_themes">Memory Themes <span class="required">*</span></label>
+                    <span class="helptext">
+                        Please choose one or more themes that you believe best reflect your memory's content.
+                        Additionally, you can type your own themes (up to 5) in the dedicated field below,
+                        separated by semicolons.
+                    </span>
+                    {{ form.memory_themes.errors }}
+                    {{ form.memory_themes }}
+                </div>
+
+                <div class="form-field">
+                    <label for="id_memory_themes_additional">Additional Memory Themes</label>
+                    {{ form.memory_themes_additional.errors }}
+                    {{ form.memory_themes_additional }}
+                    <span class="helptext">
+                        Enter up to 5 custom themes separated by semicolons (;)
+                    </span>
+                </div>
+
+                <div class="form-field">
+                    <label for="id_title">Title <span class="required">*</span></label>
+                    {{ form.title.errors }}
+                    {{ form.title }}
+                    <span class="helptext">
+                        Here you can give a title to your memory.
+                    </span>
+                </div>
+
+                <div class="form-field">
+                    <label for="id_body">The Memory (max 300 words) <span class="required">*</span></label>
+                    {{ form.body.errors }}
+                    {{ form.body }}
+                    <span class="helptext">
+                        Here you can type your selected school memory in as much detail as you want but
+                        without naming anyone involved. Some prompts to assist your writing might
+                        include questions like: What happens in your school memory? How did it make you
+                        feel? Where did it take place, when, and who else was involved? Was it a
+                        recurring or one-off event? Can you recall any images, smells or sensations? Why
+                        do you think this memory can make possible just futures of education?
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2 class="section-title">Agreements & Confirmation</h2>
+
+                <div class="agreement-field">
+                    {{ form.terms_of_service.errors }}
+                    <label for="id_terms_of_service">
+                        {{ form.terms_of_service }}
+                        <span>
+                            I agree with the <a href="{% url 'terms_of_service' %}" target="_blank">Terms of Service</a>
+                            <small>(opens in a new tab)</small> <span class="required">*</span>
+                        </span>
+                    </label>
+                </div>
+
+                <div class="agreement-field">
+                    {{ form.privacy_policy.errors }}
+                    <label for="id_privacy_policy">
+                        {{ form.privacy_policy }}
+                        <span>
+                            I agree with the <a href="{% url 'privacy_policy' %}" target="_blank">Privacy Policy</a>
+                            <small>(opens in a new tab)</small> <span class="required">*</span>
+                        </span>
+                    </label>
+                </div>
+
+                <div class="agreement-field">
+                    {{ form.age_confirmation.errors }}
+                    <label for="id_age_confirmation">
+                        {{ form.age_confirmation }}
+                        <span>
+                            I confirm I am over 18 years old <span class="required">*</span>
+                            <span class="helptext">
+                                If you are below 18 but wish to submit your school memory, you can ask a
+                                responsible adult that you trust (it could be a parent/guardian, sibling, friend
+                                or other) to make the submission on your behalf.
+                            </span>
+                        </span>
+                    </label>
+                </div>
+            </div>
+
+            {% if enable_turnstile %}
+            <div class="form-section">
+                <div class="cf-turnstile" data-sitekey="0x4AAAAAABM4uMpeJqzaXTok" data-callback="turnstileCallback"></div>
+                <input type="hidden" name="turnstile_response" id="id_turnstile_response">
+            </div>
+            {% endif %}
 
             {% csrf_token %}
 
-            {% if enable_turnstile %}
-            <div class="cf-turnstile" data-sitekey="0x4AAAAAABM4uMpeJqzaXTok" data-callback="turnstileCallback"
-                style="margin-bottom: 12px;"></div>
-            <input type="hidden" name="turnstile_response" id="id_turnstile_response">
-            {% endif %}
-
-            <input type="submit" value="Submit memory">
+            <div class="form-submit">
+                <input type="submit" value="Submit memory" class="submit-button">
+            </div>
         </form>
     </div>
 </main>
