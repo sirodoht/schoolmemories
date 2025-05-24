@@ -122,7 +122,7 @@ class Memory(models.Model):
         ("M", "Male"),
         ("N", "Nonbinary"),
         ("O", "Other"),
-        ("N", "Prefer not to say"),
+        ("P", "Prefer not to say"),
     ]
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     ethnicity = models.CharField(max_length=100)

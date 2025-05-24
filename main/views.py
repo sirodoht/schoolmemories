@@ -29,10 +29,51 @@ from main import forms, models
 def index(request):
     # filters
     country_filter = request.GET.get("country", "")
+    gender_filter = request.GET.get("gender", "")
+    ethnicity_filter = request.GET.get("ethnicity", "")
+    school_grade_filter = request.GET.get("school_grade", "")
+    school_type_filter = request.GET.get("school_type", "")
+    memory_theme_filter = request.GET.get("memory_theme", "")
     memories = models.Memory.objects.all()
     if country_filter:
         memories = memories.filter(country=country_filter)
-    filters_active = bool(country_filter)
+    if gender_filter:
+        memories = memories.filter(gender=gender_filter)
+    if ethnicity_filter:
+        memories = memories.filter(ethnicity=ethnicity_filter)
+    if school_grade_filter:
+        memories = memories.filter(school_grade=school_grade_filter)
+    if school_type_filter:
+        # Handle both predefined choices and custom "other" entries
+        if school_type_filter == "OTHER":
+            memories = memories.filter(school_type="OTHER")
+        else:
+            # Check if it's a custom school type (from school_type_other field)
+            custom_school_types = models.Memory.objects.filter(
+                school_type="OTHER", school_type_other=school_type_filter
+            ).values_list("id", flat=True)
+            if custom_school_types.exists():
+                memories = memories.filter(
+                    school_type="OTHER", school_type_other=school_type_filter
+                )
+            else:
+                memories = memories.filter(school_type=school_type_filter)
+    if memory_theme_filter:
+        # Search in both memory_themes and memory_themes_additional fields
+        from django.db.models import Q
+
+        memories = memories.filter(
+            Q(memory_themes__icontains=memory_theme_filter)
+            | Q(memory_themes_additional__icontains=memory_theme_filter)
+        )
+    filters_active = bool(
+        country_filter
+        or gender_filter
+        or ethnicity_filter
+        or school_grade_filter
+        or school_type_filter
+        or memory_theme_filter
+    )
 
     # exclude countries of which there are no memories
     used_countries = models.Memory.objects.values_list("country", flat=True).distinct()
@@ -41,6 +82,88 @@ def index(request):
         for code, name in models.Memory.COUNTRY_CHOICES
         if code in used_countries
     ]
+
+    # show all gender options (not just those with memories)
+    genders = models.Memory.GENDER_CHOICES
+
+    # get unique ethnicity values (excluding empty/whitespace-only values)
+    used_ethnicities = (
+        models.Memory.objects.exclude(ethnicity__isnull=True)
+        .exclude(ethnicity__exact="")
+        .exclude(ethnicity__regex=r"^\s*$")
+        .values_list("ethnicity", flat=True)
+        .distinct()
+        .order_by("ethnicity")
+    )
+    ethnicities = [(ethnicity, ethnicity) for ethnicity in used_ethnicities]
+
+    # get unique school grade values (excluding empty/whitespace-only values)
+    used_school_grades = (
+        models.Memory.objects.exclude(school_grade__isnull=True)
+        .exclude(school_grade__exact="")
+        .exclude(school_grade__regex=r"^\s*$")
+        .values_list("school_grade", flat=True)
+        .distinct()
+        .order_by("school_grade")
+    )
+    school_grades = [(grade, grade) for grade in used_school_grades]
+
+    # get school type options (predefined choices + custom ones)
+    school_types = []
+    # Add predefined choices that have memories
+    used_predefined_types = (
+        models.Memory.objects.exclude(school_type="OTHER")
+        .values_list("school_type", flat=True)
+        .distinct()
+    )
+    for code, name in models.Memory.SCHOOL_TYPE_CHOICES:
+        if code in used_predefined_types:
+            school_types.append((code, name))
+
+    # Add custom school types from school_type_other field
+    custom_school_types = (
+        models.Memory.objects.filter(school_type="OTHER")
+        .exclude(school_type_other__isnull=True)
+        .exclude(school_type_other__exact="")
+        .exclude(school_type_other__regex=r"^\s*$")
+        .values_list("school_type_other", flat=True)
+        .distinct()
+        .order_by("school_type_other")
+    )
+    for custom_type in custom_school_types:
+        school_types.append((custom_type, custom_type))
+
+    # get all unique memory themes (from both fields)
+    all_themes = set()
+
+    # Get themes from memory_themes field
+    memory_themes_data = (
+        models.Memory.objects.exclude(memory_themes__isnull=True)
+        .exclude(memory_themes__exact="")
+        .values_list("memory_themes", flat=True)
+    )
+    for themes_string in memory_themes_data:
+        if themes_string:
+            themes_list = [
+                theme.strip() for theme in themes_string.split(",") if theme.strip()
+            ]
+            all_themes.update(themes_list)
+
+    # Get themes from memory_themes_additional field
+    additional_themes_data = (
+        models.Memory.objects.exclude(memory_themes_additional__isnull=True)
+        .exclude(memory_themes_additional__exact="")
+        .values_list("memory_themes_additional", flat=True)
+    )
+    for themes_string in additional_themes_data:
+        if themes_string:
+            themes_list = [
+                theme.strip() for theme in themes_string.split(",") if theme.strip()
+            ]
+            all_themes.update(themes_list)
+
+    # Convert to sorted list of tuples
+    memory_themes = [(theme, theme) for theme in sorted(all_themes)]
 
     return render(
         request,
@@ -51,6 +174,16 @@ def index(request):
             "site_settings": models.SiteSettings.objects.first(),
             "countries": countries,
             "selected_country": country_filter,
+            "genders": genders,
+            "selected_gender": gender_filter,
+            "ethnicities": ethnicities,
+            "selected_ethnicity": ethnicity_filter,
+            "school_grades": school_grades,
+            "selected_school_grade": school_grade_filter,
+            "school_types": school_types,
+            "selected_school_type": school_type_filter,
+            "memory_themes": memory_themes,
+            "selected_memory_theme": memory_theme_filter,
             "filters_active": filters_active,
         },
     )

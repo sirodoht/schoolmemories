@@ -18,13 +18,55 @@
     </div>
 
     <div class="filter-section">
+        <h3>Filters</h3>
         <form method="get" action="{% url 'index' %}" class="filter-form">
             <div class="filter-group">
-                <label for="country-filter">Filter by country:</label>
+                <select name="memory_theme" id="memory-theme-filter" onchange="this.form.submit()">
+                    <option value="">All Themes</option>
+                    {% for value, display in memory_themes %}
+                    <option value="{{ value }}" {% if selected_memory_theme == value %}selected{% endif %}>{{ display }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <select name="school_type" id="school-type-filter" onchange="this.form.submit()">
+                    <option value="">All School Types</option>
+                    {% for value, display in school_types %}
+                    <option value="{{ value }}" {% if selected_school_type == value %}selected{% endif %}>{{ display }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filter-group">
+                <select name="school_grade" id="school-grade-filter" onchange="this.form.submit()">
+                    <option value="">All Grades</option>
+                    {% for value, display in school_grades %}
+                    <option value="{{ value }}" {% if selected_school_grade == value %}selected{% endif %}>{{ display }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filter-group">
                 <select name="country" id="country-filter" onchange="this.form.submit()">
-                    <option value="">All Countries</option>
+                    <option value="">All Locations</option>
                     {% for code, name in countries %}
                     <option value="{{ code }}" {% if selected_country == code %}selected{% endif %}>{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filter-group">
+                <select name="gender" id="gender-filter" onchange="this.form.submit()">
+                    <option value="">All Genders</option>
+                    {% for code, name in genders %}
+                    <option value="{{ code }}" {% if selected_gender == code %}selected{% endif %}>{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filter-group">
+                <select name="ethnicity" id="ethnicity-filter" onchange="this.form.submit()">
+                    <option value="">All Backgrounds</option>
+                    {% for value, display in ethnicities %}
+                    <option value="{{ value }}" {% if selected_ethnicity == value %}selected{% endif %}>{{ display }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -34,6 +76,26 @@
             Showing {{ memory_list|length }} memories
             {% if selected_country %}
                 from {{ selected_country|country_name }}
+            {% endif %}
+            {% if selected_gender %}
+                {% if selected_country %} and {% endif %}
+                from {{ selected_gender|gender_name }} contributors
+            {% endif %}
+            {% if selected_ethnicity %}
+                {% if selected_country or selected_gender %} and {% endif %}
+                from {{ selected_ethnicity }} background
+            {% endif %}
+            {% if selected_school_grade %}
+                {% if selected_country or selected_gender or selected_ethnicity %} and {% endif %}
+                from grade {{ selected_school_grade }}
+            {% endif %}
+            {% if selected_school_type %}
+                {% if selected_country or selected_gender or selected_ethnicity or selected_school_grade %} and {% endif %}
+                from {{ selected_school_type }}
+            {% endif %}
+            {% if selected_memory_theme %}
+                {% if selected_country or selected_gender or selected_ethnicity or selected_school_grade or selected_school_type %} and {% endif %}
+                with "{{ selected_memory_theme }}" theme
             {% endif %}
 
             {% if filters_active %}
