@@ -37,3 +37,5 @@ jobs:
         LOCALDEV: ${{ vars.LOCALDEV }}
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
         TURNSTILE_SECRET: ${{ secrets.TURNSTILE_SECRET }}
+        EMAIL_HOST_USER: ${{ EMAIL_HOST_USER }}
+        EMAIL_HOST_PASSWORD: ${{ EMAIL_HOST_PASSWORD }}
