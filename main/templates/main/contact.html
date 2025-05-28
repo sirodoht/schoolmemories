@@ -44,6 +44,13 @@
                 </p>
             {% endfor %}
 
+            {% if enable_turnstile %}
+            <div class="form-section">
+                <div class="cf-turnstile" data-sitekey="0x4AAAAAABM4uMpeJqzaXTok" data-callback="turnstileCallback"></div>
+                <input type="hidden" name="turnstile_response" id="id_turnstile_response">
+            </div>
+            {% endif %}
+
             {% csrf_token %}
 
             <div style="margin-top: 24px;">
@@ -55,3 +62,14 @@
 </main>
 
 {% endblock content %}
+
+{% block scripts %}
+{% if enable_turnstile %}
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script>
+    function turnstileCallback(token) {
+        document.getElementById('id_turnstile_response').value = token;
+    }
+</script>
+{% endif %}
+{% endblock scripts %}
