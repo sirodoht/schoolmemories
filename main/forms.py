@@ -43,6 +43,7 @@ class ContactForm(forms.Form):
     name = forms.CharField()
     email = forms.EmailField()
     message = forms.CharField(widget=forms.Textarea)
+    turnstile_response = forms.CharField(required=False)
 
 
 class MemoryForm(forms.ModelForm):

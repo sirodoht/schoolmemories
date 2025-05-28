@@ -424,31 +424,49 @@ class Contact(FormView):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         if form.is_valid():
-            superusers = models.User.objects.filter(is_superuser=True)
-            superuser_emails = [user.email for user in superusers if user.email]
-            if not superuser_emails:
-                return self.form_valid(form)
-
-            subject = f"[schoolmemories] Contact from {form.cleaned_data.get('name')}"
-            message = f"Name: {form.cleaned_data.get('name')}\n"
-            message += f"Email: {form.cleaned_data.get('email')}\n\n"
-            message += f"Message:\n{form.cleaned_data.get('message')}"
-            send_mail(
-                subject,
-                message,
-                settings.DEFAULT_FROM_EMAIL,
-                superuser_emails,
-            )
-
-            messages.success(self.request, self.success_message)
-            return self.form_valid(form)
-        else:
             return self.form_invalid(form)
+
+        # check if spam
+        if settings.TURNSTILE_SECRET:
+            turnstile_token = form.cleaned_data.get("turnstile_response")
+            remote_ip = request.META.get("HTTP_X_FORWARDED_FOR")
+            if not self.verify_turnstile(turnstile_token, remote_ip):
+                form.add_error(None, "Captcha verification failed. Please try again.")
+                return self.form_invalid(form)
+
+        # process contact form
+        superusers = models.User.objects.filter(is_superuser=True)
+        superuser_emails = [user.email for user in superusers if user.email]
+        if not superuser_emails:
+            return self.form_valid(form)
+
+        subject = f"[schoolmemories] Contact from {form.cleaned_data.get('name')}"
+        message = f"Name: {form.cleaned_data.get('name')}\n"
+        message += f"Email: {form.cleaned_data.get('email')}\n\n"
+        message += f"Message:\n{form.cleaned_data.get('message')}"
+        send_mail(
+            subject,
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            superuser_emails,
+        )
+
+        messages.success(self.request, self.success_message)
+        return self.form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["page_list"] = models.Page.objects.all()
         return context
+
+    def verify_turnstile(self, token, remote_ip):
+        data = {
+            "secret": settings.TURNSTILE_SECRET,
+            "response": token,
+            "remoteip": remote_ip,
+        }
+        response = httpx.post(url=settings.TURNSTILE_URL, data=data, timeout=5.0)
+        return response.json().get("success", False)
 
 
 # Memories
