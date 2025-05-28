@@ -21,34 +21,74 @@
                 </div>
             {% endif %}
 
-            {% for field in form %}
-                <p style="margin-bottom: 20px;">
-                    <label for="{{ field.id_for_label }}" style="display: block; font-size: 19px; margin-bottom: 6px; color: #3c4858;">
-                        {{ field.label }}
-                        {% if field.field.required %}<span style="color: red;">*</span>{% endif %}
-                    </label>
+            <p style="margin-bottom: 20px;">
+                <label for="{{ form.name.id_for_label }}" style="display: block; font-size: 19px; margin-bottom: 6px; color: #3c4858;">
+                    {{ form.name.label }}
+                    {% if form.name.form.name.required %}<span style="color: red;">*</span>{% endif %}
+                </label>
 
-                    {% if field.errors %}
-                        {% for error in field.errors %}
-                            <span style="color: red; font-size: 16px; display: block; margin-bottom: 6px;">{{ error|escape }}</span>
-                        {% endfor %}
-                    {% endif %}
+                {% if form.name.errors %}
+                    {% for error in form.name.errors %}
+                        <span style="color: red; font-size: 16px; display: block; margin-bottom: 6px;">{{ error|escape }}</span>
+                    {% endfor %}
+                {% endif %}
 
-                    {{ field }}
+                {{ form.name }}
 
-                    {% if field.help_text %}
-                        <span class="helptext" style="display: block; margin-top: 4px;">
-                            {{ field.help_text }}
-                        </span>
-                    {% endif %}
-                </p>
-            {% endfor %}
+                {% if form.name.help_text %}
+                    <span class="helptext" style="display: block; margin-top: 4px;">
+                        {{ form.name.help_text }}
+                    </span>
+                {% endif %}
+            </p>
+
+            <p style="margin-bottom: 20px;">
+                <label for="{{ form.email.id_for_label }}" style="display: block; font-size: 19px; margin-bottom: 6px; color: #3c4858;">
+                    {{ form.email.label }}
+                    {% if form.email.form.email.required %}<span style="color: red;">*</span>{% endif %}
+                </label>
+
+                {% if form.email.errors %}
+                    {% for error in form.email.errors %}
+                        <span style="color: red; font-size: 16px; display: block; margin-bottom: 6px;">{{ error|escape }}</span>
+                    {% endfor %}
+                {% endif %}
+
+                {{ form.email }}
+
+                {% if form.email.help_text %}
+                    <span class="helptext" style="display: block; margin-top: 4px;">
+                        {{ form.email.help_text }}
+                    </span>
+                {% endif %}
+            </p>
+
+            <p style="margin-bottom: 20px;">
+                <label for="{{ form.message.id_for_label }}" style="display: block; font-size: 19px; margin-bottom: 6px; color: #3c4858;">
+                    {{ form.message.label }}
+                    {% if form.message.form.message.required %}<span style="color: red;">*</span>{% endif %}
+                </label>
+
+                {% if form.message.errors %}
+                    {% for error in form.message.errors %}
+                        <span style="color: red; font-size: 16px; display: block; margin-bottom: 6px;">{{ error|escape }}</span>
+                    {% endfor %}
+                {% endif %}
+
+                {{ form.message }}
+
+                {% if form.message.help_text %}
+                    <span class="helptext" style="display: block; margin-top: 4px;">
+                        {{ form.message.help_text }}
+                    </span>
+                {% endif %}
+            </p>
 
             {% if enable_turnstile %}
-            <div class="form-section">
+            <p>
                 <div class="cf-turnstile" data-sitekey="0x4AAAAAABM4uMpeJqzaXTok" data-callback="turnstileCallback"></div>
                 <input type="hidden" name="turnstile_response" id="id_turnstile_response">
-            </div>
+            </p>
             {% endif %}
 
             {% csrf_token %}
