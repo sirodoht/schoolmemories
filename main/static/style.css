@@ -365,15 +365,6 @@ textarea { width: 100%; box-sizing: border-box; border: 1px solid #ced4da; }
     font-size: 17px;
 }
 
-.memory-grid-item-epigraph {
-    text-align: left;
-    display: flex;
-    flex-direction: row;
-    font-size: 14px;
-}
-
-.memory-grid-item-epigraph > div { background: lightgoldenrodyellow; margin-right: 8px; }
-
 /* memory list filters */
 .filter-section {
     font-family: sans-serif;
