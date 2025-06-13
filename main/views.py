@@ -495,10 +495,10 @@ class MemoryCreate(FormView):
         # process memory form data
         body_text = form.cleaned_data.get("body")
         word_count = len(body_text.split())
-        if word_count > 300:
+        if word_count > 1000:
             form.add_error(
                 "body",
-                f"Your memory text is {word_count} words but has to be less than 300",
+                f"Your memory text is {word_count} words but has to be less than 1000",
             )
             return self.form_invalid(form)
 
