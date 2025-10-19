@@ -316,8 +316,9 @@ textarea { width: 100%; box-sizing: border-box; border: 1px solid #ced4da; }
 .agreement-field input[type="checkbox"] {
     width: 18px;
     height: 18px;
-    margin: 2px 0 0 0;
+    margin-right: 6px;
     accent-color: #2f6d1e;
+    transform: translateY(3px);
     cursor: pointer;
 }
 
