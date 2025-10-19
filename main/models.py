@@ -122,15 +122,16 @@ class Image(models.Model):
 class Memory(models.Model):
     COUNTRY_CHOICES = [(code, name) for code, name in country.COUNTRIES.items()]
     country = models.CharField(max_length=2, choices=COUNTRY_CHOICES)
+    age = models.IntegerField(choices=[(i, str(i)) for i in range(1, 19)], default=10)
     GENDER_CHOICES = [
-        ("F", "Female"),
-        ("M", "Male"),
-        ("N", "Nonbinary"),
-        ("O", "Other"),
-        ("P", "Prefer not to say"),
+        ("BOY", "Boy"),
+        ("GIRL", "Girl"),
+        ("OTHER", "Other"),
+        ("PREFER_NOT_TO_SAY", "Prefer not to say"),
     ]
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
-    ethnicity = models.CharField(max_length=100)
+    gender = models.CharField(max_length=20, choices=GENDER_CHOICES, default="PREFER_NOT_TO_SAY")
+    gender_other = models.CharField(max_length=100, blank=True, null=True)
+    heritage = models.CharField(max_length=100)
     school_grade = models.CharField(max_length=16)
     SCHOOL_TYPE_CHOICES = [
         ("STATE", "State School"),

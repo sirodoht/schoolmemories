@@ -35,6 +35,7 @@ class MemoryAdmin(admin.ModelAdmin):
         "title",
         "code",
         "country",
+        "age",
         "gender",
         "school_grade",
         "school_type",
@@ -48,13 +49,15 @@ class MemoryAdmin(admin.ModelAdmin):
         "memory_themes",
         "memory_themes_additional",
     )
-    list_filter = ("country", "gender", "school_type", "school_grade")
+    list_filter = ("country", "age", "gender", "school_type", "school_grade")
     readonly_fields = (
         "id",
         "code",
+        "age",
         "country",
         "gender",
-        "ethnicity",
+        "gender_other",
+        "heritage",
         "school_grade",
         "school_type",
         "school_type_other",

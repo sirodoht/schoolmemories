@@ -32,7 +32,7 @@ def extract_filters_from_request(request):
     return {
         "country": request.GET.get("country", ""),
         "gender": request.GET.get("gender", ""),
-        "ethnicity": request.GET.get("ethnicity", ""),
+        "heritage": request.GET.get("heritage", ""),
         "school_grade": request.GET.get("school_grade", ""),
         "school_type": request.GET.get("school_type", ""),
         "memory_theme": request.GET.get("memory_theme", ""),
@@ -65,8 +65,8 @@ def apply_memory_filters(queryset, filters):
         queryset = queryset.filter(country=filters["country"])
     if filters["gender"]:
         queryset = queryset.filter(gender=filters["gender"])
-    if filters["ethnicity"]:
-        queryset = queryset.filter(ethnicity=filters["ethnicity"])
+    if filters["heritage"]:
+        queryset = queryset.filter(heritage=filters["heritage"])
     if filters["school_grade"]:
         queryset = queryset.filter(school_grade=filters["school_grade"])
     if filters["school_type"]:
@@ -155,9 +155,9 @@ def build_filter_options():
     return {
         "countries": countries,
         "genders": models.Memory.GENDER_CHOICES,
-        "ethnicities": [
-            (ethnicity, ethnicity)
-            for ethnicity in get_non_empty_field_values(models.Memory, "ethnicity")
+        "heritages": [
+            (heritage, heritage)
+            for heritage in get_non_empty_field_values(models.Memory, "heritage")
         ],
         "school_grades": [
             (grade, grade)
@@ -180,8 +180,8 @@ def index(request):
         "selected_country": filters["country"],
         "genders": filter_options["genders"],
         "selected_gender": filters["gender"],
-        "ethnicities": filter_options["ethnicities"],
-        "selected_ethnicity": filters["ethnicity"],
+        "heritages": filter_options["heritages"],
+        "selected_heritage": filters["heritage"],
         "school_grades": filter_options["school_grades"],
         "selected_school_grade": filters["school_grade"],
         "school_types": filter_options["school_types"],
@@ -541,9 +541,12 @@ class MemoryCreate(FormView):
             message = "A new memory has been submitted:\n\n"
             message += f"Code: {memory.code}\n"
             message += f"Link: {memory.get_absolute_url()}\n\n"
+            message += f"Age: {memory.age} years old\n"
             message += f"Location: {memory.get_country_display()}\n"
-            message += f"Gender: {memory.get_gender_display()}\n"
-            message += f"Ethnicity: {memory.ethnicity}\n\n"
+            message += f"Gender: {memory.get_gender_display()}"
+            if memory.gender_other:
+                message += f" ({memory.gender_other})"
+            message += f"\nHeritage: {memory.heritage}\n\n"
             message += f"School Grade: {memory.school_grade}\n"
             message += f"School Type: {memory.get_school_type_display()}\n"
             message += f"\nTitle: {memory.title}\n"

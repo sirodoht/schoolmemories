@@ -63,10 +63,10 @@
                 </select>
             </div>
             <div class="filter-group">
-                <select name="ethnicity" id="ethnicity-filter" onchange="this.form.submit()">
-                    <option value="">All Backgrounds</option>
-                    {% for value, display in ethnicities %}
-                    <option value="{{ value }}" {% if selected_ethnicity == value %}selected{% endif %}>{{ display }}</option>
+                <select name="heritage" id="heritage-filter" onchange="this.form.submit()">
+                    <option value="">All Heritages</option>
+                    {% for value, display in heritages %}
+                    <option value="{{ value }}" {% if selected_heritage == value %}selected{% endif %}>{{ display }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -81,20 +81,20 @@
                 {% if selected_country %} and {% endif %}
                 from {{ selected_gender|gender_name }} contributors
             {% endif %}
-            {% if selected_ethnicity %}
+            {% if selected_heritage %}
                 {% if selected_country or selected_gender %} and {% endif %}
-                from {{ selected_ethnicity }} background
+                from {{ selected_heritage }} heritage
             {% endif %}
             {% if selected_school_grade %}
-                {% if selected_country or selected_gender or selected_ethnicity %} and {% endif %}
+                {% if selected_country or selected_gender or selected_heritage %} and {% endif %}
                 from grade {{ selected_school_grade }}
             {% endif %}
             {% if selected_school_type %}
-                {% if selected_country or selected_gender or selected_ethnicity or selected_school_grade %} and {% endif %}
+                {% if selected_country or selected_gender or selected_heritage or selected_school_grade %} and {% endif %}
                 from {{ selected_school_type|school_type_name }}
             {% endif %}
             {% if selected_memory_theme %}
-                {% if selected_country or selected_gender or selected_ethnicity or selected_school_grade or selected_school_type %} and {% endif %}
+                {% if selected_country or selected_gender or selected_heritage or selected_school_grade or selected_school_type %} and {% endif %}
                 with "{{ selected_memory_theme }}" theme
             {% endif %}
 

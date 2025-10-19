@@ -16,21 +16,43 @@
             {{ form.non_field_errors }}
 
             <div class="form-section">
-                <h2 class="section-title">About You</h2>
-                <div class="form-row">
-                    <div class="form-field">
-                        <label for="id_gender">Gender <span class="required">*</span></label>
-                        {{ form.gender.errors }}
-                        {{ form.gender }}
-                    </div>
-                    <div class="form-field">
-                        <label for="id_ethnicity">Racial and/or Ethnic background <span class="required">*</span></label>
-                        {{ form.ethnicity.errors }}
-                        {{ form.ethnicity }}
-                        <span class="helptext">
-                            Please type how you prefer to self-describe. Otherwise, type N/A.
+                <h2 class="section-title">About You (when your memory occurred)</h2>
+                <p class="helptext">The information below is used to contextualize your memory.</p>
+
+                <div class="form-field">
+                    <p style="font-size: 17px; line-height: 1.8;">
+                        The memory happened when I was
+                        <span style="display: inline-block; min-width: 80px;">
+                            {{ form.age.errors }}
+                            {{ form.age }}
                         </span>
-                    </div>
+                        years old, when I self-identified as
+                        <span style="display: inline-block; min-width: 150px;">
+                            {{ form.gender.errors }}
+                            {{ form.gender }}
+                        </span>
+                    </p>
+                </div>
+
+                <div class="form-field" id="gender_other_field" style="display: none; margin-top: 12px;">
+                    {{ form.gender_other.errors }}
+                    {{ form.gender_other }}
+                    <span class="helptext">
+                        Please type how you would like to self describe in whatever identity terms are most
+                        salient to you.
+                    </span>
+                </div>
+
+                <div class="form-field" style="margin-top: 20px;">
+                    <p style="font-size: 17px; line-height: 1.8; margin-bottom: 8px;">
+                        At the time I used to describe myself as:
+                    </p>
+                    {{ form.heritage.errors }}
+                    {{ form.heritage }}
+                    <span class="helptext">
+                        Fill out the heritage that best describes you at the time of your memory,
+                        e.g. Greek, Catholic Northern-Irish, Urban Indigenous Peoples etc.
+                    </span>
                 </div>
             </div>
 
@@ -194,10 +216,30 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        // Handle gender other field
+        const genderSelect = document.getElementById('id_gender');
+        const genderOtherField = document.getElementById('gender_other_field');
+        const genderOtherInput = document.getElementById('id_gender_other');
+
+        function toggleGenderOtherField() {
+            if (genderSelect.value === 'OTHER') {
+                genderOtherField.style.display = 'block';
+                genderOtherInput.required = true;
+            } else {
+                genderOtherField.style.display = 'none';
+                genderOtherInput.required = false;
+                genderOtherInput.value = '';
+            }
+        }
+        toggleGenderOtherField();
+        genderSelect.addEventListener('change', toggleGenderOtherField);
+
+        // Handle school type other field
         const schoolTypeSelect = document.getElementById('id_school_type');
         const schoolTypeOtherField = document.getElementById('school_type_other_field');
         const schoolTypeOtherInput = document.getElementById('id_school_type_other');
-        function toggleOtherField() {
+
+        function toggleSchoolTypeOtherField() {
             if (schoolTypeSelect.value === 'OTHER') {
                 schoolTypeOtherField.style.display = 'block';
                 schoolTypeOtherInput.required = true;
@@ -207,8 +249,8 @@
                 schoolTypeOtherInput.value = '';
             }
         }
-        toggleOtherField();
-        schoolTypeSelect.addEventListener('change', toggleOtherField);
+        toggleSchoolTypeOtherField();
+        schoolTypeSelect.addEventListener('change', toggleSchoolTypeOtherField);
     });
 </script>
 {% endblock scripts %}

@@ -38,8 +38,9 @@ class Command(BaseCommand):
             "IN",
             "ZA",
         ]
-        genders = ["F", "M", "N", "O", "P"]
-        ethnicities = [
+        ages = list(range(1, 19))
+        genders = ["BOY", "GIRL", "OTHER", "PREFER_NOT_TO_SAY"]
+        heritages = [
             "White/Caucasian",
             "Black/African American",
             "Hispanic/Latino",
@@ -226,9 +227,10 @@ class Command(BaseCommand):
                     memory_themes_additional = ", ".join(additional_themes)
 
             memory = Memory.objects.create(
+                age=random.choice(ages),
                 country=random.choice(countries),
                 gender=random.choice(genders),
-                ethnicity=random.choice(ethnicities),
+                heritage=random.choice(heritages),
                 school_grade=random.choice(school_grades),
                 school_type=school_type,
                 school_type_other=school_type_other,
@@ -251,13 +253,16 @@ class Command(BaseCommand):
         # Print summary statistics
         self.stdout.write("\n--- Filter Test Coverage ---")
         self.stdout.write(
+            f"Ages: {Memory.objects.values_list('age', flat=True).distinct().count()}"
+        )
+        self.stdout.write(
             f"Countries: {Memory.objects.values_list('country', flat=True).distinct().count()}"
         )
         self.stdout.write(
             f"Genders: {Memory.objects.values_list('gender', flat=True).distinct().count()}"
         )
         self.stdout.write(
-            f"Ethnicities: {Memory.objects.values_list('ethnicity', flat=True).distinct().count()}"
+            f"Heritages: {Memory.objects.values_list('heritage', flat=True).distinct().count()}"
         )
         self.stdout.write(
             f"School Grades: {Memory.objects.values_list('school_grade', flat=True).distinct().count()}"

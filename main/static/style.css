@@ -79,17 +79,18 @@ img { width: 100%; }
     .form-section {
         margin-bottom: 32px;
         padding-bottom: 24px;
-        border-bottom: 1px solid #e2e8f0;
     }
     .form-section:last-child { border-bottom: none; margin-bottom: 0; }
 
     .section-title {
-        font-size: 20px;
-        color: #2d3748;
-        margin: 0 0 20px 0;
+        font-size: 22px;
+        color: #1a1a1a;
+        margin: 0 0 16px 0;
+        padding-bottom: 8px;
         font-weight: 500;
         display: flex;
         align-items: center;
+        border-bottom: 2px solid #e2e8f0;
     }
     @media (max-width: 768px) {
         .section-title { font-size: 18px; }

@@ -85,8 +85,10 @@ class MemoryForm(forms.ModelForm):
     class Meta:
         model = models.Memory
         fields = [
+            "age",
             "gender",
-            "ethnicity",
+            "gender_other",
+            "heritage",
             "country",
             "school_grade",
             "school_type",
@@ -99,6 +101,17 @@ class MemoryForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
+
+        # handle gender
+        gender = cleaned_data.get("gender")
+        gender_other = cleaned_data.get("gender_other")
+        if gender == "OTHER" and not gender_other:
+            self.add_error(
+                "gender_other",
+                'Please specify how you self-identify when selecting "Other".',
+            )
+        if gender != "OTHER":
+            cleaned_data["gender_other"] = None
 
         # handle school type
         school_type = cleaned_data.get("school_type")
