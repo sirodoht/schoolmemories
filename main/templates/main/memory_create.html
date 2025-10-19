@@ -17,7 +17,7 @@
 
             <div class="form-section">
                 <h2 class="section-title">About You (when your memory occurred)</h2>
-                <p class="helptext">The information below is used to contextualize your memory.</p>
+                <p class="section-helptext">The information below is used to contextualize your memory.</p>
 
                 <div class="form-field">
                     <p style="font-size: 17px; line-height: 1.8;">
@@ -35,30 +35,30 @@
                 </div>
 
                 <div class="form-field" id="gender_other_field" style="display: none; margin-top: 12px;">
-                    {{ form.gender_other.errors }}
-                    {{ form.gender_other }}
                     <span class="helptext">
                         Please type how you would like to self describe in whatever identity terms are most
                         salient to you.
                     </span>
+                    {{ form.gender_other.errors }}
+                    {{ form.gender_other }}
                 </div>
 
                 <div class="form-field" style="margin-top: 20px;">
                     <p style="font-size: 17px; line-height: 1.8; margin-bottom: 8px;">
                         At the time I used to describe myself as:
                     </p>
-                    {{ form.heritage.errors }}
-                    {{ form.heritage }}
                     <span class="helptext">
                         Fill out the heritage that best describes you at the time of your memory,
                         e.g. Greek, Catholic Northern-Irish, Urban Indigenous Peoples etc.
                     </span>
+                    {{ form.heritage.errors }}
+                    {{ form.heritage }}
                 </div>
             </div>
 
             <div class="form-section">
                 <h2 class="section-title">About your school context</h2>
-                <p class="helptext">
+                <p class="section-helptext">
                     Some of the provided options are more relevant to the UK context but you can add what best
                     corresponds to your case by typing in the respective field. Otherwise, please type N/A.
                     The options provided have been designed to be as generic as possible but may not fit every
@@ -67,6 +67,9 @@
                 </p>
 
                 <div class="form-field">
+                    <span class="helptext">
+                        Please type your city/town/village and select the country where your memory took place.
+                    </span>
                     <p style="font-size: 17px; line-height: 1.8; margin-bottom: 12px;">
                         Back then, I lived in
                         <span style="display: inline-block; min-width: 200px;">
@@ -79,12 +82,12 @@
                             {{ form.country }}
                         </span>
                     </p>
-                    <span class="helptext">
-                        Please type your city/town/village and select the country where your memory took place.
-                    </span>
                 </div>
 
                 <div class="form-field" style="margin-top: 20px;">
+                    <span class="helptext">
+                        Please indicate the educational grade your memory refers to.
+                    </span>
                     <p style="font-size: 17px; line-height: 1.8; margin-bottom: 12px;">
                         My memory occurred in grade
                         <span style="display: inline-block; min-width: 150px;">
@@ -92,9 +95,6 @@
                             {{ form.school_grade }}
                         </span>
                     </p>
-                    <span class="helptext">
-                        Please indicate the educational grade your memory refers to.
-                    </span>
                 </div>
 
                 <div class="form-field" style="margin-top: 20px;">
@@ -108,11 +108,11 @@
                 </div>
 
                 <div class="form-field" id="school_funding_other_field" style="display: none; margin-top: 12px;">
-                    {{ form.school_funding_other.errors }}
-                    {{ form.school_funding_other }}
                     <span class="helptext">
                         Please specify the funding type.
                     </span>
+                    {{ form.school_funding_other.errors }}
+                    {{ form.school_funding_other }}
                 </div>
 
                 <div class="form-field" style="margin-top: 24px;">
@@ -120,37 +120,37 @@
                         <strong>Other details about my school include:</strong>
                     </p>
                     <p style="font-size: 16px; margin-bottom: 8px;">It was a:</p>
-                    {{ form.educational_philosophy.errors }}
-                    {{ form.educational_philosophy }}
                     <span class="helptext">
                         Choose the educational philosophies that best describe your school (you can select multiple).
                         If you choose 'other', please write down your answer in the text box below.
                     </span>
+                    {{ form.educational_philosophy.errors }}
+                    {{ form.educational_philosophy }}
                 </div>
 
                 <div class="form-field" id="educational_philosophy_other_field" style="display: none; margin-top: 12px;">
-                    {{ form.educational_philosophy_other.errors }}
-                    {{ form.educational_philosophy_other }}
                     <span class="helptext">
                         Please specify the educational philosophy.
                     </span>
+                    {{ form.educational_philosophy_other.errors }}
+                    {{ form.educational_philosophy_other }}
                 </div>
 
                 <div class="form-field" style="margin-top: 20px;">
                     <p style="font-size: 16px; margin-bottom: 8px;">Religious/Spiritual Tradition (optional):</p>
-                    {{ form.religious_tradition.errors }}
-                    {{ form.religious_tradition }}
                     <span class="helptext">
                         Choose the religious/spiritual tradition that describes your school.
                     </span>
+                    {{ form.religious_tradition.errors }}
+                    {{ form.religious_tradition }}
                 </div>
 
                 <div class="form-field" id="religious_tradition_other_field" style="display: none; margin-top: 12px;">
-                    {{ form.religious_tradition_other.errors }}
-                    {{ form.religious_tradition_other }}
                     <span class="helptext">
                         Please specify the religious/spiritual tradition.
                     </span>
+                    {{ form.religious_tradition_other.errors }}
+                    {{ form.religious_tradition_other }}
                 </div>
             </div>
 
@@ -161,8 +161,10 @@
                     <label for="id_memory_themes">Memory Themes <span class="required">*</span></label>
                     <span class="helptext">
                         Please choose one or more themes that you believe best reflect your memory's content.
-                        Additionally, you can type your own themes (up to 5) in the dedicated field below,
-                        separated by semicolons.
+                        The examples below come from research conducted with children and young people living and 
+                        studying in the UK between 2019 and 2023 and you can read more about it in the
+                        <a href="/about/">About</a> page. Additionally, you can type your own
+                        themes (up to 5) in the dedicated field below, separated by semicolons.
                     </span>
                     {{ form.memory_themes.errors }}
                     {{ form.memory_themes }}
@@ -170,26 +172,24 @@
 
                 <div class="form-field">
                     <label for="id_memory_themes_additional">Additional Memory Themes</label>
-                    {{ form.memory_themes_additional.errors }}
-                    {{ form.memory_themes_additional }}
                     <span class="helptext">
                         Enter up to 5 custom themes separated by semicolons (;)
                     </span>
+                    {{ form.memory_themes_additional.errors }}
+                    {{ form.memory_themes_additional }}
                 </div>
 
                 <div class="form-field">
                     <label for="id_title">Title <span class="required">*</span></label>
-                    {{ form.title.errors }}
-                    {{ form.title }}
                     <span class="helptext">
                         Here you can give a title to your memory.
                     </span>
+                    {{ form.title.errors }}
+                    {{ form.title }}
                 </div>
 
                 <div class="form-field">
                     <label for="id_body">The Memory (max 1000 words) <span class="required">*</span></label>
-                    {{ form.body.errors }}
-                    {{ form.body }}
                     <span class="helptext">
                         Here you can type your selected school memory in as much detail as you want but
                         without naming anyone involved. Some prompts to assist your writing might
@@ -198,6 +198,8 @@
                         recurring or one-off event? Can you recall any images, smells or sensations? Why
                         do you think this memory can make possible just futures of education?
                     </span>
+                    {{ form.body.errors }}
+                    {{ form.body }}
                 </div>
             </div>
 
@@ -232,11 +234,6 @@
                         {{ form.age_confirmation }}
                         <span>
                             I confirm I am over 18 years old <span class="required">*</span>
-                            <span class="helptext">
-                                If you are below 18 but wish to submit your school memory, you can ask a
-                                responsible adult that you trust (it could be a parent/guardian, sibling, friend
-                                or other) to make the submission on your behalf.
-                            </span>
                         </span>
                     </label>
                 </div>

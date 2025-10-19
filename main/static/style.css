@@ -106,14 +106,14 @@ img { width: 100%; }
         .form-row { grid-template-columns: 1fr; gap: 16px; }
     }
 
-    .form-field { margin-bottom: 20px; }
+    .form-field { margin-bottom: 24px; }
 
     label {
         display: block;
         font-size: 16px;
         font-weight: 500;
         color: #2d3748;
-        margin-bottom: 6px;
+        margin-bottom: 8px;
     }
 
     .required { color: #e53e3e; font-weight: bold; }
@@ -151,8 +151,21 @@ img { width: 100%; }
     .helptext {
         font-size: 14px;
         color: #6b7280;
-        margin-top: 4px;
-        line-height: 1.4;
+        margin: 6px 0 10px 0;
+        line-height: 1.5;
+        display: block;
+    }
+
+    .section-helptext {
+        font-size: 15px;
+        color: #5a5a5a;
+        line-height: 1.6;
+        margin: 16px 0 28px 0;
+        padding: 14px 18px;
+        background: #f8f9fa;
+        border: 3px solid #cbd5e0;
+        border-radius: 2px;
+        display: block;
     }
 
     .form-submit {
