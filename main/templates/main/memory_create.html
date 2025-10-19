@@ -57,43 +57,99 @@
             </div>
 
             <div class="form-section">
-                <h2 class="section-title">School Context</h2>
-                <div class="form-row">
-                    <div class="form-field">
-                        <label for="id_country">Location <span class="required">*</span></label>
-                        {{ form.country.errors }}
-                        {{ form.country }}
-                        <span class="helptext">
-                            Please indicate the country in which your memory took place.
-                        </span>
-                    </div>
-                    <div class="form-field">
-                        <label for="id_school_grade">School Grade <span class="required">*</span></label>
-                        {{ form.school_grade.errors }}
-                        {{ form.school_grade }}
-                        <span class="helptext">
-                            Please indicate the educational grade your memory refers to.
-                        </span>
-                    </div>
-                </div>
+                <h2 class="section-title">About your school context</h2>
+                <p class="helptext">
+                    Some of the provided options are more relevant to the UK context but you can add what best
+                    corresponds to your case by typing in the respective field. Otherwise, please type N/A.
+                    The options provided have been designed to be as generic as possible but may not fit every
+                    country's context. If you can't fit your memory into one of the existing categories,
+                    please specify the school type that best applies to your case.
+                </p>
 
                 <div class="form-field">
-                    <label for="id_school_type">School Type <span class="required">*</span></label>
-                    {{ form.school_type.errors }}
-                    {{ form.school_type }}
+                    <p style="font-size: 17px; line-height: 1.8; margin-bottom: 12px;">
+                        Back then, I lived in
+                        <span style="display: inline-block; min-width: 200px;">
+                            {{ form.location.errors }}
+                            {{ form.location }}
+                        </span>
+                        in
+                        <span style="display: inline-block; min-width: 200px; max-width: 360px;">
+                            {{ form.country.errors }}
+                            {{ form.country }}
+                        </span>
+                    </p>
                     <span class="helptext">
-                        Please indicate the school type your memory refers to. The provided options
-                        are more relevant to the UK context but you can add what best corresponds to
-                        your case by typing in the respective field. Otherwise, please type N/A.
+                        Please type your city/town/village and select the country where your memory took place.
                     </span>
                 </div>
 
-                <div class="form-field" id="school_type_other_field" style="display: none;">
-                    <label for="id_school_type_other">Please specify other school type <span class="required">*</span></label>
-                    {{ form.school_type_other.errors }}
-                    {{ form.school_type_other }}
+                <div class="form-field" style="margin-top: 20px;">
+                    <p style="font-size: 17px; line-height: 1.8; margin-bottom: 12px;">
+                        My memory occurred in grade
+                        <span style="display: inline-block; min-width: 150px;">
+                            {{ form.school_grade.errors }}
+                            {{ form.school_grade }}
+                        </span>
+                    </p>
                     <span class="helptext">
-                        Please describe the school type that best corresponds to your case.
+                        Please indicate the educational grade your memory refers to.
+                    </span>
+                </div>
+
+                <div class="form-field" style="margin-top: 20px;">
+                    <p style="font-size: 17px; line-height: 1.8; margin-bottom: 12px;">
+                        The school I went to was funded by
+                        <span style="display: inline-block; min-width: 200px;">
+                            {{ form.school_funding.errors }}
+                            {{ form.school_funding }}
+                        </span>
+                    </p>
+                </div>
+
+                <div class="form-field" id="school_funding_other_field" style="display: none; margin-top: 12px;">
+                    {{ form.school_funding_other.errors }}
+                    {{ form.school_funding_other }}
+                    <span class="helptext">
+                        Please specify the funding type.
+                    </span>
+                </div>
+
+                <div class="form-field" style="margin-top: 24px;">
+                    <p style="font-size: 17px; line-height: 1.8; margin-bottom: 8px;">
+                        <strong>Other details about my school include:</strong>
+                    </p>
+                    <p style="font-size: 16px; margin-bottom: 8px;">It was a:</p>
+                    {{ form.educational_philosophy.errors }}
+                    {{ form.educational_philosophy }}
+                    <span class="helptext">
+                        Choose the educational philosophies that best describe your school (you can select multiple).
+                        If you choose 'other', please write down your answer in the text box below.
+                    </span>
+                </div>
+
+                <div class="form-field" id="educational_philosophy_other_field" style="display: none; margin-top: 12px;">
+                    {{ form.educational_philosophy_other.errors }}
+                    {{ form.educational_philosophy_other }}
+                    <span class="helptext">
+                        Please specify the educational philosophy.
+                    </span>
+                </div>
+
+                <div class="form-field" style="margin-top: 20px;">
+                    <p style="font-size: 16px; margin-bottom: 8px;">Religious/Spiritual Tradition (optional):</p>
+                    {{ form.religious_tradition.errors }}
+                    {{ form.religious_tradition }}
+                    <span class="helptext">
+                        Choose the religious/spiritual tradition that describes your school.
+                    </span>
+                </div>
+
+                <div class="form-field" id="religious_tradition_other_field" style="display: none; margin-top: 12px;">
+                    {{ form.religious_tradition_other.errors }}
+                    {{ form.religious_tradition_other }}
+                    <span class="helptext">
+                        Please specify the religious/spiritual tradition.
                     </span>
                 </div>
             </div>
@@ -234,23 +290,67 @@
         toggleGenderOtherField();
         genderSelect.addEventListener('change', toggleGenderOtherField);
 
-        // Handle school type other field
-        const schoolTypeSelect = document.getElementById('id_school_type');
-        const schoolTypeOtherField = document.getElementById('school_type_other_field');
-        const schoolTypeOtherInput = document.getElementById('id_school_type_other');
+        // Handle school funding other field
+        const schoolFundingSelect = document.getElementById('id_school_funding');
+        const schoolFundingOtherField = document.getElementById('school_funding_other_field');
+        const schoolFundingOtherInput = document.getElementById('id_school_funding_other');
 
-        function toggleSchoolTypeOtherField() {
-            if (schoolTypeSelect.value === 'OTHER') {
-                schoolTypeOtherField.style.display = 'block';
-                schoolTypeOtherInput.required = true;
+        function toggleSchoolFundingOtherField() {
+            if (schoolFundingSelect.value === 'OTHER') {
+                schoolFundingOtherField.style.display = 'block';
+                schoolFundingOtherInput.required = true;
             } else {
-                schoolTypeOtherField.style.display = 'none';
-                schoolTypeOtherInput.required = false;
-                schoolTypeOtherInput.value = '';
+                schoolFundingOtherField.style.display = 'none';
+                schoolFundingOtherInput.required = false;
+                schoolFundingOtherInput.value = '';
             }
         }
-        toggleSchoolTypeOtherField();
-        schoolTypeSelect.addEventListener('change', toggleSchoolTypeOtherField);
+        toggleSchoolFundingOtherField();
+        schoolFundingSelect.addEventListener('change', toggleSchoolFundingOtherField);
+
+        // Handle educational philosophy other field
+        const educationalPhilosophyCheckboxes = document.querySelectorAll('input[name="educational_philosophy"]');
+        const educationalPhilosophyOtherField = document.getElementById('educational_philosophy_other_field');
+        const educationalPhilosophyOtherInput = document.getElementById('id_educational_philosophy_other');
+
+        function toggleEducationalPhilosophyOtherField() {
+            let otherSelected = false;
+            educationalPhilosophyCheckboxes.forEach(function(checkbox) {
+                if (checkbox.value === 'OTHER' && checkbox.checked) {
+                    otherSelected = true;
+                }
+            });
+            if (otherSelected) {
+                educationalPhilosophyOtherField.style.display = 'block';
+                educationalPhilosophyOtherInput.required = true;
+            } else {
+                educationalPhilosophyOtherField.style.display = 'none';
+                educationalPhilosophyOtherInput.required = false;
+                educationalPhilosophyOtherInput.value = '';
+            }
+        }
+        toggleEducationalPhilosophyOtherField();
+        educationalPhilosophyCheckboxes.forEach(function(checkbox) {
+            checkbox.addEventListener('change', toggleEducationalPhilosophyOtherField);
+        });
+
+        // Handle religious tradition other field
+        const religiousTraditionSelect = document.getElementById('id_religious_tradition');
+        const religiousTraditionOtherField = document.getElementById('religious_tradition_other_field');
+        const religiousTraditionOtherInput = document.getElementById('id_religious_tradition_other');
+
+        function toggleReligiousTraditionOtherField() {
+            if (religiousTraditionSelect.value === 'OTHER') {
+                religiousTraditionOtherField.style.display = 'block';
+                religiousTraditionOtherInput.required = true;
+            } else {
+                religiousTraditionOtherField.style.display = 'none';
+                religiousTraditionOtherInput.required = false;
+                religiousTraditionOtherInput.value = '';
+            }
+        }
+        toggleReligiousTraditionOtherField();
+        religiousTraditionSelect.addEventListener('change', toggleReligiousTraditionOtherField);
     });
 </script>
 {% endblock scripts %}

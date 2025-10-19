@@ -121,6 +121,7 @@ class Image(models.Model):
 
 class Memory(models.Model):
     COUNTRY_CHOICES = [(code, name) for code, name in country.COUNTRIES.items()]
+    location = models.CharField(max_length=200, help_text="City/town/village")
     country = models.CharField(max_length=2, choices=COUNTRY_CHOICES)
     age = models.IntegerField(choices=[(i, str(i)) for i in range(1, 19)], default=10)
     GENDER_CHOICES = [
@@ -133,19 +134,41 @@ class Memory(models.Model):
     gender_other = models.CharField(max_length=100, blank=True, null=True)
     heritage = models.CharField(max_length=100)
     school_grade = models.CharField(max_length=16)
-    SCHOOL_TYPE_CHOICES = [
-        ("STATE", "State School"),
-        ("PRIVATE", "Private School"),
-        ("HOME", "Homeschooling"),
-        ("COLLEGE", "College"),
-        ("MONTESSORI", "Montessori School"),
-        ("BOARDING", "Boarding School"),
-        ("RELIGIOUS", "Religious School"),
-        ("VOCATIONAL", "Vocational Education"),
+    SCHOOL_FUNDING_CHOICES = [
+        ("GOVERNMENT_STATE", "Government/State"),
+        ("FAMILY", "Family"),
+        ("SCHOLARSHIP_DONATIONS", "Scholarship/Donations"),
         ("OTHER", "Other"),
     ]
-    school_type = models.CharField(max_length=100, choices=SCHOOL_TYPE_CHOICES)
-    school_type_other = models.CharField(max_length=100, blank=True, null=True)
+    school_funding = models.CharField(max_length=100, choices=SCHOOL_FUNDING_CHOICES, default="GOVERNMENT_STATE")
+    school_funding_other = models.CharField(max_length=200, blank=True, null=True)
+    EDUCATIONAL_PHILOSOPHY_CHOICES = [
+        ("MONTESSORI", "Montessori"),
+        ("WALDORF", "Waldorf"),
+        ("REGGIO_EMILIA", "Reggio Emilia"),
+        ("PROGRESSIVE", "Progressive"),
+        ("INTERNATIONAL_BACCALAUREATE", "International Baccalaureate"),
+        ("FOREST_SCHOOL", "Forest School"),
+        ("HOMESCHOOLING", "Homeschooling"),
+        ("DOES_NOT_APPLY", "Does not apply"),
+        ("OTHER", "Other"),
+    ]
+    educational_philosophy = models.CharField(max_length=500, blank=True, null=True)
+    educational_philosophy_other = models.CharField(max_length=200, blank=True, null=True)
+    RELIGIOUS_TRADITION_CHOICES = [
+        ("QUAKER", "Quaker"),
+        ("CATHOLIC", "Catholic"),
+        ("PROTESTANT_CHRISTIAN", "Protestant/Christian"),
+        ("JEWISH", "Jewish"),
+        ("MUSLIM", "Muslim"),
+        ("HINDU", "Hindu"),
+        ("BUDDHIST", "Buddhist"),
+        ("GREEK_ORTHODOX", "Greek Orthodox"),
+        ("DOES_NOT_APPLY", "Does not apply"),
+        ("OTHER", "Other"),
+    ]
+    religious_tradition = models.CharField(max_length=100, choices=RELIGIOUS_TRADITION_CHOICES, blank=True, null=True)
+    religious_tradition_other = models.CharField(max_length=200, blank=True, null=True)
     memory_themes = models.CharField(max_length=500)
     memory_themes_additional = models.CharField(
         max_length=500,
@@ -156,11 +179,33 @@ class Memory(models.Model):
     body = models.TextField("Memory content")
     code = models.CharField(max_length=20, blank=True, null=True)
 
-    def get_school_type_display(self):
-        if self.school_type == "OTHER" and self.school_type_other:
-            return self.school_type_other
-        choices = dict(self.SCHOOL_TYPE_CHOICES)
-        return choices.get(self.school_type, self.school_type)
+    def get_school_funding_display(self):
+        if self.school_funding == "OTHER" and self.school_funding_other:
+            return self.school_funding_other
+        choices = dict(self.SCHOOL_FUNDING_CHOICES)
+        return choices.get(self.school_funding, self.school_funding)
+
+    def get_educational_philosophy_display(self):
+        if not self.educational_philosophy:
+            return "Not specified"
+        philosophies = self.educational_philosophy.split(",")
+        display_names = []
+        for phil in philosophies:
+            phil = phil.strip()
+            if phil == "OTHER" and self.educational_philosophy_other:
+                display_names.append(self.educational_philosophy_other)
+            else:
+                choices = dict(self.EDUCATIONAL_PHILOSOPHY_CHOICES)
+                display_names.append(choices.get(phil, phil))
+        return ", ".join(display_names)
+
+    def get_religious_tradition_display(self):
+        if not self.religious_tradition:
+            return "Not specified"
+        if self.religious_tradition == "OTHER" and self.religious_tradition_other:
+            return self.religious_tradition_other
+        choices = dict(self.RELIGIOUS_TRADITION_CHOICES)
+        return choices.get(self.religious_tradition, self.religious_tradition)
 
     def get_absolute_url(self):
         path = reverse("memory_detail", kwargs={"pk": self.pk})

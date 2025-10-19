@@ -34,7 +34,7 @@ def extract_filters_from_request(request):
         "gender": request.GET.get("gender", ""),
         "heritage": request.GET.get("heritage", ""),
         "school_grade": request.GET.get("school_grade", ""),
-        "school_type": request.GET.get("school_type", ""),
+        "school_funding": request.GET.get("school_funding", ""),
         "memory_theme": request.GET.get("memory_theme", ""),
     }
 
@@ -69,29 +69,29 @@ def apply_memory_filters(queryset, filters):
         queryset = queryset.filter(heritage=filters["heritage"])
     if filters["school_grade"]:
         queryset = queryset.filter(school_grade=filters["school_grade"])
-    if filters["school_type"]:
-        queryset = apply_school_type_filter(queryset, filters["school_type"])
+    if filters["school_funding"]:
+        queryset = apply_school_funding_filter(queryset, filters["school_funding"])
     if filters["memory_theme"]:
         queryset = apply_memory_theme_filter(queryset, filters["memory_theme"])
     return queryset
 
 
-def apply_school_type_filter(queryset, school_type_filter):
-    """Apply school type filter handling both predefined choices and custom 'other' entries."""
-    if school_type_filter == "OTHER":
-        return queryset.filter(school_type="OTHER")
+def apply_school_funding_filter(queryset, school_funding_filter):
+    """Apply school funding filter handling both predefined choices and custom 'other' entries."""
+    if school_funding_filter == "OTHER":
+        return queryset.filter(school_funding="OTHER")
 
-    # Check if it's a custom school type (from school_type_other field)
-    custom_school_types = models.Memory.objects.filter(
-        school_type="OTHER", school_type_other=school_type_filter
+    # Check if it's a custom school funding (from school_funding_other field)
+    custom_school_fundings = models.Memory.objects.filter(
+        school_funding="OTHER", school_funding_other=school_funding_filter
     ).values_list("id", flat=True)
 
-    if custom_school_types.exists():
+    if custom_school_fundings.exists():
         return queryset.filter(
-            school_type="OTHER", school_type_other=school_type_filter
+            school_funding="OTHER", school_funding_other=school_funding_filter
         )
     else:
-        return queryset.filter(school_type=school_type_filter)
+        return queryset.filter(school_funding=school_funding_filter)
 
 
 def apply_memory_theme_filter(queryset, memory_theme_filter):
@@ -112,23 +112,23 @@ def build_filter_options():
         if code in used_countries
     ]
 
-    # School types - predefined choices + custom ones
-    school_types = []
+    # School funding - predefined choices + custom ones
+    school_fundings = []
     # Add predefined choices that have memories
-    used_predefined_types = (
-        models.Memory.objects.exclude(school_type="OTHER")
-        .values_list("school_type", flat=True)
+    used_predefined_fundings = (
+        models.Memory.objects.exclude(school_funding="OTHER")
+        .values_list("school_funding", flat=True)
         .distinct()
     )
-    for code, name in models.Memory.SCHOOL_TYPE_CHOICES:
-        if code in used_predefined_types:
-            school_types.append((code, name))
-    # Add custom school types from school_type_other field
-    custom_school_types = get_non_empty_field_values(
-        models.Memory.objects.filter(school_type="OTHER"), "school_type_other"
+    for code, name in models.Memory.SCHOOL_FUNDING_CHOICES:
+        if code in used_predefined_fundings:
+            school_fundings.append((code, name))
+    # Add custom school fundings from school_funding_other field
+    custom_school_fundings = get_non_empty_field_values(
+        models.Memory.objects.filter(school_funding="OTHER"), "school_funding_other"
     )
-    for custom_type in custom_school_types:
-        school_types.append((custom_type, custom_type))
+    for custom_funding in custom_school_fundings:
+        school_fundings.append((custom_funding, custom_funding))
 
     # Memory themes - extract from both fields
     all_themes = set()
@@ -163,7 +163,7 @@ def build_filter_options():
             (grade, grade)
             for grade in get_non_empty_field_values(models.Memory, "school_grade")
         ],
-        "school_types": school_types,
+        "school_fundings": school_fundings,
         "memory_themes": memory_themes,
     }
 
@@ -184,8 +184,8 @@ def index(request):
         "selected_heritage": filters["heritage"],
         "school_grades": filter_options["school_grades"],
         "selected_school_grade": filters["school_grade"],
-        "school_types": filter_options["school_types"],
-        "selected_school_type": filters["school_type"],
+        "school_fundings": filter_options["school_fundings"],
+        "selected_school_funding": filters["school_funding"],
         "memory_themes": filter_options["memory_themes"],
         "selected_memory_theme": filters["memory_theme"],
         "filters_active": any(filters.values()),
@@ -542,13 +542,17 @@ class MemoryCreate(FormView):
             message += f"Code: {memory.code}\n"
             message += f"Link: {memory.get_absolute_url()}\n\n"
             message += f"Age: {memory.age} years old\n"
-            message += f"Location: {memory.get_country_display()}\n"
+            message += f"Location: {memory.location}, {memory.get_country_display()}\n"
             message += f"Gender: {memory.get_gender_display()}"
             if memory.gender_other:
                 message += f" ({memory.gender_other})"
             message += f"\nHeritage: {memory.heritage}\n\n"
             message += f"School Grade: {memory.school_grade}\n"
-            message += f"School Type: {memory.get_school_type_display()}\n"
+            message += f"School Funding: {memory.get_school_funding_display()}\n"
+            if memory.educational_philosophy:
+                message += f"Educational Philosophy: {memory.get_educational_philosophy_display()}\n"
+            if memory.religious_tradition:
+                message += f"Religious Tradition: {memory.get_religious_tradition_display()}\n"
             message += f"\nTitle: {memory.title}\n"
             message += f"Memory Themes: {memory.memory_themes}\n"
             if memory.memory_themes_additional:

@@ -30,10 +30,10 @@
             </div>
 
             <div class="filter-group">
-                <select name="school_type" id="school-type-filter" onchange="this.form.submit()">
-                    <option value="">All School Types</option>
-                    {% for value, display in school_types %}
-                    <option value="{{ value }}" {% if selected_school_type == value %}selected{% endif %}>{{ display }}</option>
+                <select name="school_funding" id="school-funding-filter" onchange="this.form.submit()">
+                    <option value="">All Funding Types</option>
+                    {% for value, display in school_fundings %}
+                    <option value="{{ value }}" {% if selected_school_funding == value %}selected{% endif %}>{{ display }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -89,12 +89,12 @@
                 {% if selected_country or selected_gender or selected_heritage %} and {% endif %}
                 from grade {{ selected_school_grade }}
             {% endif %}
-            {% if selected_school_type %}
+            {% if selected_school_funding %}
                 {% if selected_country or selected_gender or selected_heritage or selected_school_grade %} and {% endif %}
-                from {{ selected_school_type|school_type_name }}
+                with {{ selected_school_funding }} funding
             {% endif %}
             {% if selected_memory_theme %}
-                {% if selected_country or selected_gender or selected_heritage or selected_school_grade or selected_school_type %} and {% endif %}
+                {% if selected_country or selected_gender or selected_heritage or selected_school_grade or selected_school_funding %} and {% endif %}
                 with "{{ selected_memory_theme }}" theme
             {% endif %}
 

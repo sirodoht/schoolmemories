@@ -84,25 +84,53 @@ class Command(BaseCommand):
             "Year 11",
             "Year 12",
         ]
-        school_types = [
-            "STATE",
-            "PRIVATE",
-            "HOME",
-            "COLLEGE",
-            "MONTESSORI",
-            "BOARDING",
-            "RELIGIOUS",
-            "VOCATIONAL",
+        school_fundings = [
+            "GOVERNMENT_STATE",
+            "FAMILY",
+            "SCHOLARSHIP_DONATIONS",
             "OTHER",
         ]
-        custom_school_types = [
-            "Charter School",
-            "International School",
-            "Art School",
-            "STEM Academy",
-            "Language Immersion School",
-            "Waldorf School",
-            "Alternative School",
+        custom_school_fundings = [
+            "Mixed Funding",
+            "Church Funding",
+            "Community Funded",
+        ]
+        locations = [
+            "London",
+            "Manchester",
+            "New York City",
+            "Los Angeles",
+            "Chicago",
+            "Toronto",
+            "Vancouver",
+            "Sydney",
+            "Melbourne",
+            "Berlin",
+            "Paris",
+            "Tokyo",
+            "Mumbai",
+            "São Paulo",
+        ]
+        educational_philosophies = [
+            "MONTESSORI",
+            "WALDORF",
+            "REGGIO_EMILIA",
+            "PROGRESSIVE",
+            "INTERNATIONAL_BACCALAUREATE",
+            "FOREST_SCHOOL",
+            "HOMESCHOOLING",
+            "DOES_NOT_APPLY",
+        ]
+        religious_traditions = [
+            "QUAKER",
+            "CATHOLIC",
+            "PROTESTANT_CHRISTIAN",
+            "JEWISH",
+            "MUSLIM",
+            "HINDU",
+            "BUDDHIST",
+            "GREEK_ORTHODOX",
+            "DOES_NOT_APPLY",
         ]
 
         # Memory themes for variety
@@ -202,11 +230,22 @@ class Command(BaseCommand):
                 f"When {base_memory['title'].lower()} happened",
             ]
 
-            # Select school type and handle custom types
-            school_type = random.choice(school_types)
-            school_type_other = None
-            if school_type == "OTHER":
-                school_type_other = random.choice(custom_school_types)
+            # Select school funding and handle custom types
+            school_funding = random.choice(school_fundings)
+            school_funding_other = None
+            if school_funding == "OTHER":
+                school_funding_other = random.choice(custom_school_fundings)
+
+            # Select educational philosophy (0-3 philosophies)
+            educational_philosophy_count = random.randint(0, 3)
+            if educational_philosophy_count > 0:
+                selected_philosophies = random.sample(educational_philosophies, educational_philosophy_count)
+                educational_philosophy = ",".join(selected_philosophies)
+            else:
+                educational_philosophy = None
+
+            # Select religious tradition (optional)
+            religious_tradition = random.choice(religious_traditions) if random.random() < 0.5 else None
 
             # Create main themes (1-3 themes)
             main_themes_count = random.randint(1, 3)
@@ -228,12 +267,15 @@ class Command(BaseCommand):
 
             memory = Memory.objects.create(
                 age=random.choice(ages),
+                location=random.choice(locations),
                 country=random.choice(countries),
                 gender=random.choice(genders),
                 heritage=random.choice(heritages),
                 school_grade=random.choice(school_grades),
-                school_type=school_type,
-                school_type_other=school_type_other,
+                school_funding=school_funding,
+                school_funding_other=school_funding_other,
+                educational_philosophy=educational_philosophy,
+                religious_tradition=religious_tradition,
                 memory_themes=memory_themes,
                 memory_themes_additional=memory_themes_additional,
                 title=random.choice(title_variations),
@@ -256,6 +298,9 @@ class Command(BaseCommand):
             f"Ages: {Memory.objects.values_list('age', flat=True).distinct().count()}"
         )
         self.stdout.write(
+            f"Locations: {Memory.objects.values_list('location', flat=True).distinct().count()}"
+        )
+        self.stdout.write(
             f"Countries: {Memory.objects.values_list('country', flat=True).distinct().count()}"
         )
         self.stdout.write(
@@ -268,7 +313,7 @@ class Command(BaseCommand):
             f"School Grades: {Memory.objects.values_list('school_grade', flat=True).distinct().count()}"
         )
         self.stdout.write(
-            f"School Types: {Memory.objects.values_list('school_type', flat=True).distinct().count()}"
+            f"School Fundings: {Memory.objects.values_list('school_funding', flat=True).distinct().count()}"
         )
 
         # Count unique themes across both fields

@@ -82,6 +82,12 @@ class MemoryForm(forms.ModelForm):
         max_length=500,
     )
 
+    educational_philosophy = forms.MultipleChoiceField(
+        choices=models.Memory.EDUCATIONAL_PHILOSOPHY_CHOICES,
+        widget=forms.CheckboxSelectMultiple(),
+        required=False,
+    )
+
     class Meta:
         model = models.Memory
         fields = [
@@ -89,10 +95,15 @@ class MemoryForm(forms.ModelForm):
             "gender",
             "gender_other",
             "heritage",
+            "location",
             "country",
             "school_grade",
-            "school_type",
-            "school_type_other",
+            "school_funding",
+            "school_funding_other",
+            "educational_philosophy",
+            "educational_philosophy_other",
+            "religious_tradition",
+            "religious_tradition_other",
             "memory_themes",
             "memory_themes_additional",
             "title",
@@ -113,16 +124,38 @@ class MemoryForm(forms.ModelForm):
         if gender != "OTHER":
             cleaned_data["gender_other"] = None
 
-        # handle school type
-        school_type = cleaned_data.get("school_type")
-        school_type_other = cleaned_data.get("school_type_other")
-        if school_type == "OTHER" and not school_type_other:
+        # handle school funding
+        school_funding = cleaned_data.get("school_funding")
+        school_funding_other = cleaned_data.get("school_funding_other")
+        if school_funding == "OTHER" and not school_funding_other:
             self.add_error(
-                "school_type_other",
-                'Please specify the school type when selecting "Other".',
+                "school_funding_other",
+                'Please specify the funding type when selecting "Other".',
             )
-        if school_type != "OTHER":
-            cleaned_data["school_type_other"] = None
+        if school_funding != "OTHER":
+            cleaned_data["school_funding_other"] = None
+
+        # handle educational philosophy
+        educational_philosophy = cleaned_data.get("educational_philosophy")
+        educational_philosophy_other = cleaned_data.get("educational_philosophy_other")
+        if educational_philosophy:
+            cleaned_data["educational_philosophy"] = ",".join(educational_philosophy)
+            if "OTHER" in educational_philosophy and not educational_philosophy_other:
+                self.add_error(
+                    "educational_philosophy_other",
+                    'Please specify the educational philosophy when selecting "Other".',
+                )
+
+        # handle religious tradition
+        religious_tradition = cleaned_data.get("religious_tradition")
+        religious_tradition_other = cleaned_data.get("religious_tradition_other")
+        if religious_tradition == "OTHER" and not religious_tradition_other:
+            self.add_error(
+                "religious_tradition_other",
+                'Please specify the religious tradition when selecting "Other".',
+            )
+        if religious_tradition != "OTHER":
+            cleaned_data["religious_tradition_other"] = None
 
         # handle memory themes
         memory_themes = cleaned_data.get("memory_themes")

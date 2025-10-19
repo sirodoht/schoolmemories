@@ -43,16 +43,31 @@
             <div class="metadata-row">
                 <div class="metadata-group">
                     <span class="metadata-label">Location</span>
-                    <span class="metadata-value">{{ memory.get_country_display }}</span>
+                    <span class="metadata-value">{{ memory.location }}, {{ memory.get_country_display }}</span>
                 </div>
                 <div class="metadata-group">
                     <span class="metadata-label">School Grade</span>
                     <span class="metadata-value">{{ memory.school_grade }}</span>
                 </div>
+            </div>
+
+            <div class="metadata-row">
                 <div class="metadata-group">
-                    <span class="metadata-label">School Type</span>
-                    <span class="metadata-value">{{ memory.get_school_type_display }}</span>
+                    <span class="metadata-label">School Funding</span>
+                    <span class="metadata-value">{{ memory.get_school_funding_display }}</span>
                 </div>
+                {% if memory.educational_philosophy %}
+                <div class="metadata-group">
+                    <span class="metadata-label">Educational Philosophy</span>
+                    <span class="metadata-value">{{ memory.get_educational_philosophy_display }}</span>
+                </div>
+                {% endif %}
+                {% if memory.religious_tradition %}
+                <div class="metadata-group">
+                    <span class="metadata-label">Religious/Spiritual Tradition</span>
+                    <span class="metadata-value">{{ memory.get_religious_tradition_display }}</span>
+                </div>
+                {% endif %}
             </div>
         </div>
 
