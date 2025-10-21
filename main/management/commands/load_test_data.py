@@ -239,13 +239,17 @@ class Command(BaseCommand):
             # Select educational philosophy (0-3 philosophies)
             educational_philosophy_count = random.randint(0, 3)
             if educational_philosophy_count > 0:
-                selected_philosophies = random.sample(educational_philosophies, educational_philosophy_count)
+                selected_philosophies = random.sample(
+                    educational_philosophies, educational_philosophy_count
+                )
                 educational_philosophy = ",".join(selected_philosophies)
             else:
                 educational_philosophy = None
 
             # Select religious tradition (optional)
-            religious_tradition = random.choice(religious_traditions) if random.random() < 0.5 else None
+            religious_tradition = (
+                random.choice(religious_traditions) if random.random() < 0.5 else None
+            )
 
             # Create main themes (1-3 themes)
             main_themes_count = random.randint(1, 3)

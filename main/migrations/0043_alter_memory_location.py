@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('main', '0042_rename_school_type_other_memory_religious_tradition_and_more'),
+        ("main", "0042_rename_school_type_other_memory_religious_tradition_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='memory',
-            name='location',
-            field=models.CharField(help_text='City/town/village', max_length=200),
+            model_name="memory",
+            name="location",
+            field=models.CharField(help_text="City/town/village", max_length=200),
         ),
     ]

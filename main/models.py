@@ -130,7 +130,9 @@ class Memory(models.Model):
         ("OTHER", "Other"),
         ("PREFER_NOT_TO_SAY", "Prefer not to say"),
     ]
-    gender = models.CharField(max_length=20, choices=GENDER_CHOICES, default="PREFER_NOT_TO_SAY")
+    gender = models.CharField(
+        max_length=20, choices=GENDER_CHOICES, default="PREFER_NOT_TO_SAY"
+    )
     gender_other = models.CharField(max_length=100, blank=True, null=True)
     heritage = models.CharField(max_length=100)
     school_grade = models.CharField(max_length=16)
@@ -140,7 +142,9 @@ class Memory(models.Model):
         ("SCHOLARSHIP_DONATIONS", "Scholarship/Donations"),
         ("OTHER", "Other"),
     ]
-    school_funding = models.CharField(max_length=100, choices=SCHOOL_FUNDING_CHOICES, default="GOVERNMENT_STATE")
+    school_funding = models.CharField(
+        max_length=100, choices=SCHOOL_FUNDING_CHOICES, default="GOVERNMENT_STATE"
+    )
     school_funding_other = models.CharField(max_length=200, blank=True, null=True)
     EDUCATIONAL_PHILOSOPHY_CHOICES = [
         ("MONTESSORI", "Montessori"),
@@ -154,7 +158,9 @@ class Memory(models.Model):
         ("OTHER", "Other"),
     ]
     educational_philosophy = models.CharField(max_length=500, blank=True, null=True)
-    educational_philosophy_other = models.CharField(max_length=200, blank=True, null=True)
+    educational_philosophy_other = models.CharField(
+        max_length=200, blank=True, null=True
+    )
     RELIGIOUS_TRADITION_CHOICES = [
         ("QUAKER", "Quaker"),
         ("CATHOLIC", "Catholic"),
@@ -167,7 +173,9 @@ class Memory(models.Model):
         ("DOES_NOT_APPLY", "Does not apply"),
         ("OTHER", "Other"),
     ]
-    religious_tradition = models.CharField(max_length=100, choices=RELIGIOUS_TRADITION_CHOICES, blank=True, null=True)
+    religious_tradition = models.CharField(
+        max_length=100, choices=RELIGIOUS_TRADITION_CHOICES, blank=True, null=True
+    )
     religious_tradition_other = models.CharField(max_length=200, blank=True, null=True)
     memory_themes = models.CharField(max_length=500)
     memory_themes_additional = models.CharField(

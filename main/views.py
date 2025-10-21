@@ -552,7 +552,9 @@ class MemoryCreate(FormView):
             if memory.educational_philosophy:
                 message += f"Educational Philosophy: {memory.get_educational_philosophy_display()}\n"
             if memory.religious_tradition:
-                message += f"Religious Tradition: {memory.get_religious_tradition_display()}\n"
+                message += (
+                    f"Religious Tradition: {memory.get_religious_tradition_display()}\n"
+                )
             message += f"\nTitle: {memory.title}\n"
             message += f"Memory Themes: {memory.memory_themes}\n"
             if memory.memory_themes_additional:

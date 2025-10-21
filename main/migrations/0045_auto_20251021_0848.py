@@ -5,9 +5,11 @@ from django.db import migrations
 
 def fix_empty_educational_philosophy(apps, schema_editor):
     """Fix records where educational_philosophy is stored as '[]' instead of None."""
-    Memory = apps.get_model('main', 'Memory')
+    Memory = apps.get_model("main", "Memory")
     # Update records where educational_philosophy is '[]' or empty string to None
-    Memory.objects.filter(educational_philosophy__in=['[]', '']).update(educational_philosophy=None)
+    Memory.objects.filter(educational_philosophy__in=["[]", ""]).update(
+        educational_philosophy=None
+    )
 
 
 def reverse_fix(apps, schema_editor):
@@ -16,9 +18,8 @@ def reverse_fix(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('main', '0044_alter_memory_religious_tradition'),
+        ("main", "0044_alter_memory_religious_tradition"),
     ]
 
     operations = [
