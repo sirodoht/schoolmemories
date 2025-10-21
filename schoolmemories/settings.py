@@ -41,7 +41,7 @@ CSRF_TRUSTED_ORIGINS = [
     "https://schoolmemories.org",
 ]
 
-CANONICAL_HOST = "schoolmemories.01z.io"
+CANONICAL_HOST = "schoolmemories.org"
 if LOCALDEV:
     CANONICAL_HOST = "localhost:8000"
 
