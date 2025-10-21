@@ -208,7 +208,7 @@
 
                 <div class="agreement-field">
                     {{ form.terms_of_service.errors }}
-                    <label for="id_terms_of_service">
+                    <label for="id_terms_of_service" style="margin-bottom: 0;">
                         {{ form.terms_of_service }}
                         <span>
                             I agree with the <a href="{% url 'terms_of_service' %}" target="_blank">Terms of Service</a>
@@ -219,7 +219,7 @@
 
                 <div class="agreement-field">
                     {{ form.privacy_policy.errors }}
-                    <label for="id_privacy_policy">
+                    <label for="id_privacy_policy" style="margin-bottom: 0;">
                         {{ form.privacy_policy }}
                         <span>
                             I agree with the <a href="{% url 'privacy_policy' %}" target="_blank">Privacy Policy</a>
@@ -230,7 +230,7 @@
 
                 <div class="agreement-field">
                     {{ form.age_confirmation.errors }}
-                    <label for="id_age_confirmation">
+                    <label for="id_age_confirmation" style="margin-bottom: 0;">
                         {{ form.age_confirmation }}
                         <span>
                             I confirm I am over 18 years old <span class="required">*</span>
