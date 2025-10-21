@@ -145,6 +145,9 @@ class MemoryForm(forms.ModelForm):
                     "educational_philosophy_other",
                     'Please specify the educational philosophy when selecting "Other".',
                 )
+        else:
+            # Explicitly set to None when empty to avoid saving "[]"
+            cleaned_data["educational_philosophy"] = None
 
         # handle religious tradition
         religious_tradition = cleaned_data.get("religious_tradition")
